@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "sincere-idea-480716-n4",
+  "private_key_id": "13d11b15e770cdacf616e8899cceed9620026631",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDUoVaa9EmyCxl8\nNNSESBwyYpdRyIbAR90ZHlg4+la8xk7//06/5ClqdyprxUq3XrfDTOz97qMHONRE\niunx3RIo7cFrqm8GiHA3McRoxEaOeeLadFNaolrNvfWmU4deke0JmYJD6OI0+e/o\np5I5n2LlitXN56zGBkzM0M3/KuAASaMKkLDZyH6bTkZtKjyES1Z4tE8Hf8m9c4mb\n17POgmFgwoz+WkEKM09zhpMdIIL/91MbCe1pj9SbjSuQa7hWFOq5US1Jc6ZEVVBr\n/I41bWVhTxteyUSDLWYptaM5pFc8sKUstscCWXKxP3pBnZqHdI0/JUM9xf2hJrDA\nUrudzttrAgMBAAECggEAK1r2YMQc3rvap3PSPWLCtRdbSWa86yn8ECoazQtmcjlx\nVEuHkCMCut2vfagN0xPyHlVqIWDuRwO0bIFysElmcYgBH2XyG3/oeaihJseWp2h8\n9BQyBtIB99+a3h48BPF2RrXRVO2AalLoMyUv8KXqMWm8rK5nkT0pnb2Zs0TXxdbe\npBu4Dwc2tZp8BK6drb4Jdh+aQRpeLaGeDMjgWJJN2bSNtyumBSuk/tmR3qdqz+a1\nxM7Kx8okbE/IWBXXXNEoSmGTngfpKozFjY9uQ6FZS5d8CGh6MghgJwJxcU5gmatf\n65bvrOBGZ/+jRQMsy8FhFl9nNYQrDjnYDn0bNqxWYQKBgQD3VPrabkIKdPEwwfXZ\nBlPtGvoypdEua7VIyl11vN482TcaL3VyDEhpZwwWg3aZmHxQl0UaPtjyaUCstmZb\nD/c6X5s32x0gaQZJYbJrTrm3zjcdWsUUU9ytM4Pwn9jFUDne3+Wek/cVf6gfVIlL\nQPHLOFVVahZKG0vGY9KJzBUt+wKBgQDcFQU8CRvKXI5dWjvB36Ldvn1bCCXRUu9S\nQ0/iDCZUAFMAtk7SYt08ejN5x6LLoKe/pUOsehqhx9tDSzzMFjGDwsqhKkzOan36\n8g5KxDnbkpSoDwC/W3ZORFNeHx1kmLByOBKEkAaJjpSNlbt7CD72hcckz2NKav+Y\nr+PC3Su9UQKBgHIOQDgmjFHiJ6+CYmsYXe+Dd0mP6ezsQoc0uvCmjh2lVaG/rPtQ\n6rugh5SCP1kJVpqbh4RY4xa2rtp2qrDnpezHVf7mDoJ5rCp+4RZXEZHPiN8CksuS\n+LrufLOkIwSqwGUk/vCn71N8sPzxsPaBFn/OlJt09p5qBAGS2u4srL+tAoGBAI/f\nYgOkRLmelibq5SPRqeviKprHEcnsuK0DegZhQPErIRfXFmIs5Uoy7NHQs1kA1ojP\nZhUr4ZsfRvSQC9ezLn1faw2+1GUgcukJMlSoQNaM1Yej/y4ZgZaazhE6sAFiW/7f\nLyPf75YfUnfYia5dbqPEQrKKrPMqTZsoaPGrmntxAoGBANTMAa7pzautn1IvGBLY\nUu0AxpJEnNBCfSpjCQ2OMOn+FNF4Dj1DSW4SCamjqmKznJxZGSgaW1q2lMX1zV5c\nUTucZ63fexda5LyJAwIjdWJAglSLrmMsoQ2i24q2TELG9Xv25QNldUQOr4tl5QJE\nEqFmRft6O0Q2ETBpaewmfeCf\n-----END PRIVATE KEY-----\n",
+  "client_email": "tripjoy-ai-service@sincere-idea-480716-n4.iam.gserviceaccount.com",
+  "client_id": "115482766558426188542",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tripjoy-ai-service%40sincere-idea-480716-n4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
