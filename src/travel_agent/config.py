@@ -7,7 +7,7 @@ load_dotenv()
 env = os.getenv
 
 # Vertex AI / Gemini
-VERTEX_PROJECT_ID = env("VERTEX_PROJECT_ID")          
+VERTEX_PROJECT_ID = env("VERTEX_PROJECT_ID")
 VERTEX_LOCATION = env("VERTEX_LOCATION", "us-central1")
 VERTEX_MODEL = env("VERTEX_MODEL", "gemini-1.5-flash")
 
