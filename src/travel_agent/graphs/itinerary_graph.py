@@ -1,27 +1,15 @@
-# src/travel_agent/graphs/itinerary_graph.py
+"""
+itinerary_graph.py - Tạo FinalItinerary từ TravelRequest
+"""
 
 import json
 import re
-from datetime import datetime
 from typing import List
 
-# Không cần numpy và embedding nữa
-from langgraph.graph import StateGraph, END
-
-from ..graphs.state import TravelState
 from ..tools.mapbox_places import MapboxPlacesTool
 from ..llm.llm_vertex import VertexLLM
-# from ..llm.embedding_vertex import VertexEmbedding  <-- Bỏ cái này
-from ..models.models import (
-    TripItemPlan,
-    ItineraryPlan,
-    TravelNotebook,
-    FinalItinerary,
-    LocationTip,
-)
+from ..models.models import TravelRequest, FinalItinerary
 
-
-# ========= Helper: safe JSON parse từ LLM =========
 
 def safe_json_loads(raw: str):
     """
@@ -40,256 +28,249 @@ def safe_json_loads(raw: str):
         return json.loads(raw)
     except json.JSONDecodeError as e:
         print(f"⚠ JSON Decode Error: {e}")
-        # In nhẹ log để debug nếu cần
-        # print(f"Raw content: {raw[:100]}...") 
         return {}
 
 
-# ========= NODE 1: LLM tạo plan (Entry Point) =========
-# Thay vì search trước, ta cho LLM "sáng tác" lịch trình trước
-
-def node_generate_plan(state: TravelState) -> TravelState:
-    req = state.request
+def generate_itinerary(request: TravelRequest) -> FinalItinerary:
+    """
+    Tạo FinalItinerary trực tiếp từ TravelRequest bằng LLM
+    Không fetch location, không bbox.
+    LLM sẽ tự tạo lịch trình và trả về JSON đúng structure FinalItinerary.
+    """
     llm = VertexLLM()
 
-    print(f"--- Generating Plan for {req.destination_name} ---")
+    print(f"\n--- Generating Itinerary for {request.destination_name} ---")
 
     prompt = f"""
-Bạn là Travel AI Planner chuyên nghiệp.
+Bạn là một Travel AI Planner chuyên nghiệp.
 
-Nhiệm vụ:
-- Tạo một lịch trình du lịch chi tiết từ "{req.origin_location}" đến "{req.destination_name}".
-- Themes (Chủ đề): {req.travel_type} (Phải tuân thủ đúng).
-- Ngân sách: {req.budget}.
-- Thời gian: {req.start_date} đến {req.end_date}.
-- Số người: {req.people_quantity}.
+Hãy tạo một lịch trình du lịch chi tiết dựa trên thông tin sau:
 
-YÊU CẦU QUAN TRỌNG:
-1. Mỗi 'trip_item' phải có 'location_name' là tên địa điểm cụ thể, chính xác (Ví dụ: "Nhà hàng Ngon", "Dinh Độc Lập", "Bãi Đầm Trầu"). 
-2. Đừng dùng tên chung chung như "Nhà hàng địa phương" hay "Quán cà phê".
-3. Trả về JSON HỢP LỆ, không giải thích thêm.
+Thông tin chuyến đi:
+- Destination: {request.destination_name}
+- Themes: {", ".join(request.travel_type)}
+- Budget: {request.budget}
+- Thời gian: {request.start_date} đến {request.end_date}
+- Số người: {request.people_quantity}
 
-Format JSON output:
+YÊU CẦU:
+1. Tạo lịch trình hợp lý theo số ngày thực tế.
+2. Mỗi trip_item phải là 1 địa điểm cụ thể và phải có:
+   - start_time (ISO format: YYYY-MM-DDTHH:MM:SS)
+   - duration (phút)
+   - note (mô tả hoạt động)
+   - location_name (tên địa điểm cụ thể. Nhất định phải là 1 địa điểm cụ thể tồn tại trên google map, không được hoặc... Chỉ duy nhất 1 địa điểm)
+3. Phân bổ thời gian hợp lý sáng / trưa / chiều / tối.
+4. Ước tính budget phù hợp với ngân sách đầu vào.
+5. Chỉ trả về JSON hợp lệ.
+6. Không được dùng markdown code block.
+
+JSON phải đúng format sau:
+
 {{
   "name": "Tên chuyến đi hấp dẫn",
-  "description": "Mô tả ngắn gọn",
+  "description": "Mô tả 2-3 câu về chuyến đi",
   "budget_estimate": 5000000,
-  "themes": {req.travel_type},
-  "destination": "{req.destination_name}",
+  "themes": {request.travel_type},
   "trip_items": [
     {{
-      "start_time": "2025-01-01T08:00:00",
+      "start_time": "2025-02-01T08:00:00",
       "duration": 120,
-      "note": "Mô tả hoạt động...",
-      "location_name": "Tên địa điểm cụ thể"
+      "note": "Tham quan địa điểm nổi tiếng",
+      "location_name": "Tên địa điểm"
     }}
   ]
 }}
 """
 
-    raw = llm.run(prompt)
-    data = safe_json_loads(raw)
-
-    # Parse dữ liệu từ JSON sang Object
-    trip_items: List[TripItemPlan] = []
-    for ti in data.get("trip_items", []):
-        try:
-            start_time = datetime.fromisoformat(ti["start_time"])
-        except ValueError:
-            # Fallback nếu LLM sinh sai format ngày
-            start_time = datetime.now()
-
-        trip_items.append(
-            TripItemPlan(
-                start_time=start_time,
-                duration=int(ti.get("duration", 60)),
-                note=ti.get("note", ""),
-                location_name=ti.get("location_name", "Địa điểm chưa xác định"),
-                mapbox_id=None, # Chưa có ID, sẽ lấy ở bước sau
-            )
-        )
-
-    state.plan = ItineraryPlan(
-        name=data.get("name", "Chuyến đi thú vị"),
-        description=data.get("description", ""),
-        start_date=req.start_date,
-        end_date=req.end_date,
-        people_quantity=req.people_quantity,
-        budget_estimate=float(data.get("budget_estimate", 0)),
-        themes=list(data.get("themes", [])),
-        destination=data.get("destination", req.destination_name),
-        trip_items=trip_items,
-    )
-
-    return state
-
-
-# ========= NODE 2: Resolve Mapbox Locations (Grounding) =========
-# Search Mapbox dựa trên tên địa điểm LLM đã sinh ra
-
-def node_resolve_locations(state: TravelState) -> TravelState:
-    if state.plan is None:
-        raise ValueError("Plan is missing")
-
-    print("--- Resolving Mapbox IDs ---")
-    
-    tool = MapboxPlacesTool()
-    resolved_items: List[TripItemPlan] = []
-    
-    # Destination context giúp search chính xác hơn 
-    # (VD: search "Highlands Coffee" sẽ ra tiệm ở Sài Gòn thay vì Hà Nội)
-    destination_context = state.plan.destination 
-
-    for item in state.plan.trip_items:
-        # Nếu tên quá chung chung hoặc rỗng thì bỏ qua
-        if not item.location_name or item.location_name.lower() in ["khách sạn", "nhà hàng", "sân bay"]:
-            resolved_items.append(item)
-            continue
-
-        # Tạo query: "Tên địa điểm + Tên thành phố du lịch"
-        search_query = f"{item.location_name} {destination_context}"
-        
-        try:
-            # Gọi Mapbox Search
-            # Lưu ý: Hàm tool.search của bạn trả về list dict [{"id":..., "name":...}]
-            results = tool.search(search_query, limit=1)
-            
-            if results:
-                best_match = results[0]
-                item.mapbox_id = best_match["id"]
-                # Nếu model TripItemPlan có latitude/longitude thì gán luôn ở đây:
-                # item.latitude = best_match["lat"]
-                # item.longitude = best_match["lng"]
-                print(f"Matched: '{item.location_name}' -> ID: {item.mapbox_id}")
-            else:
-                print(f"Not found: '{item.location_name}'")
-                
-        except Exception as e:
-            print(f"⚠ Error searching '{item.location_name}': {e}")
-        
-        resolved_items.append(item)
-
-    # Cập nhật lại danh sách đã có ID
-    state.matched_trip_items = resolved_items
-    return state
-
-
-# ========= NODE 3: Generate Travel Notebook (Structured) =========
-
-def node_generate_notebook(state: TravelState) -> TravelState:
-    if state.plan is None:
-        raise ValueError("Plan is missing")
-
-    print("--- Generating Notebook ---")
-    plan = state.plan
-    llm = VertexLLM()
-    
-    # Lấy danh sách tên địa điểm (đã lọc trùng)
-    loc_names = list(set([ti.location_name for ti in plan.trip_items if ti.location_name]))
-
-    prompt = f"""
-Bạn là chuyên gia du lịch.
-Hãy tạo "Travel Notebook" cho chuyến đi đến "{plan.destination}".
-
-Thông tin:
-- Thời gian: {plan.start_date} đến {plan.end_date}.
-- Địa điểm: {", ".join(loc_names)}
-
-Yêu cầu Output JSON (Không Markdown):
-{{
-  "weather_forecast": "Dự báo thời tiết...",
-  "culture_etiquette": "Lưu ý văn hóa...",
-  "emergency_contacts": "Số điện thoại khẩn cấp...",
-  "packing_guide": "Chuẩn bị hành lý...",
-  "location_specific_tips": [
-      {{ "location_name": "{loc_names[0] if loc_names else 'Địa điểm'}", "tip": "Mẹo..." }}
-  ]
-}}
-"""
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
-    except Exception as e:
-        print(f"Error gen notebook: {e}")
-        data = {}
 
-    # Map dữ liệu
-    loc_tips = []
-    for item in data.get("location_specific_tips", []):
-        loc_tips.append(LocationTip(
-            location_name=item.get("location_name", ""),
-            tip=item.get("tip", "")
-        ))
+        trip_items = []
+        for item in data.get("trip_items", []):
+            trip_items.append({
+                "start_time": item.get("start_time"),
+                "duration": item.get("duration"),
+                "note": item.get("note"),
+                "location_name": item.get("location_name")
+            })
 
-    notebook = TravelNotebook(
-        name=f"Sổ tay du lịch {plan.destination}",
-        weather_forecast=data.get("weather_forecast", "Đang cập nhật..."),
-        culture_etiquette=data.get("culture_etiquette", ""),
-        emergency_contacts=data.get("emergency_contacts", ""),
-        packing_guide=data.get("packing_guide", ""),
-        location_specific_tips=loc_tips
-    )
-
-    state.travel_notebook = notebook
-    return state
-
-
-# ========= NODE 4: Build Output =========
-
-def node_build_output(state: TravelState) -> TravelState:
-    print("--- Building Final Output ---")
-    
-    plan = state.plan
-    notebook = state.travel_notebook
-    
-    # Fallback nếu notebook lỗi
-    if not notebook:
-        notebook = TravelNotebook(
-            name="Sổ tay mặc định",
-            weather_forecast="", culture_etiquette="", 
-            emergency_contacts="", packing_guide="",
-            location_specific_tips=[]
+        final_itinerary = FinalItinerary(
+            name=data.get("name", "Chuyến đi thú vị"),
+            description=data.get("description", ""),
+            start_date=request.start_date,
+            end_date=request.end_date,
+            people_quantity=request.people_quantity,
+            budget_estimate=float(data.get("budget_estimate", request.budget or 0)),
+            themes=data.get("themes", request.travel_type),
+            destination=request.destination_name,
+            trip_items=trip_items
         )
 
-    # Ưu tiên dùng danh sách đã resolve Mapbox ID
-    final_items = state.matched_trip_items if state.matched_trip_items else plan.trip_items
+        print(f"✓ Itinerary generated: {final_itinerary.name}")
+        print(f"  Trip items: {len(final_itinerary.trip_items)}")
 
-    final = FinalItinerary(
-        name=plan.name,
-        description=plan.description,
-        start_date=plan.start_date,
-        end_date=plan.end_date,
-        people_quantity=plan.people_quantity,
-        budget_estimate=plan.budget_estimate,
-        themes=plan.themes,
-        origin_location=state.request.origin_location,
-        destination=plan.destination,
-        trip_items=final_items,
-        travel_notebook=notebook,
-    )
+        return final_itinerary
 
-    state.itinerary = final
-    return state
+    except Exception as e:
+        print(f"✗ Error generating itinerary: {e}")
+        return None
 
 
-# ========= Build LangGraph =========
+def modify_itinerary(itinerary: FinalItinerary, unwanted_locations: list[str]) -> FinalItinerary:
+    """
+    Sửa lịch trình bằng cách thay thế các địa điểm không muốn đi bằng địa điểm khác
+    
+    Args:
+        itinerary: FinalItinerary object hoàn chỉnh
+        unwanted_locations: Danh sách tên địa điểm khách hàng không muốn đi
+    
+    Returns:
+        FinalItinerary: Lịch trình mới đã sửa
+    """
+    llm = VertexLLM()
+    
+    print("="*80)
+    print("MODIFY ITINERARY")
+    print("="*80)
+    
+    if not unwanted_locations:
+        print("⚠ No locations to modify")
+        return itinerary
+    
+    print(f"\n--- Modifying Itinerary ---")
+    print(f"Unwanted locations: {unwanted_locations}")
+    
+    # Xác định các trip item cần thay thế
+    trip_items_to_keep = []
+    trip_items_to_replace = []
+    
+    for item in itinerary.trip_items:
+        location_name = item.get("location_name", "")
+        if location_name in unwanted_locations:
+            trip_items_to_replace.append(item)
+        else:
+            trip_items_to_keep.append(item)
+    
+    print(f"Items to keep: {len(trip_items_to_keep)}")
+    print(f"Items to replace: {len(trip_items_to_replace)}")
+    
+    if not trip_items_to_replace:
+        print("⚠ No matching unwanted locations found")
+        return itinerary
+    
+    # Chuẩn bị thông tin cho prompt
+    kept_items_text = "\n".join([
+        f"- {item.get('start_time')}: {item.get('location_name')} (Duration: {item.get('duration')} mins)"
+        for item in trip_items_to_keep
+    ])
+    
+    replace_items_text = "\n".join([
+        f"- {item.get('start_time')}: {item.get('location_name')} (Duration: {item.get('duration')} mins, note: {item.get('note')})"
+        for item in trip_items_to_replace
+    ])
+    
+    prompt = f"""
+Bạn là Travel AI Planner chuyên nghiệp.
 
-def build_itinerary_graph():
-    graph = StateGraph(TravelState)
+Hãy sửa lịch trình du lịch bằng cách thay thế các địa điểm không mong muốn bằng địa điểm khác tương tự.
 
-    # Đăng ký nodes
-    graph.add_node("generate_plan", node_generate_plan)
-    graph.add_node("resolve_locations", node_resolve_locations) # Node Mới
-    graph.add_node("generate_notebook", node_generate_notebook)
-    graph.add_node("build_output", node_build_output)
+Thông tin chuyến đi:
+- Destination: {itinerary.destination}
+- Themes: {", ".join(itinerary.themes)}
+- Budget: {itinerary.budget_estimate}
+- Thời gian: {itinerary.start_date} đến {itinerary.end_date}
+- Số người: {itinerary.people_quantity}
 
-    # Entry Point: Bắt đầu bằng việc tạo kế hoạch luôn
-    graph.set_entry_point("generate_plan")
+Các trip item giữ nguyên (KHÔNG được thay đổi):
+{kept_items_text}
 
-    # Edges (Luồng đi mới)
-    graph.add_edge("generate_plan", "resolve_locations")
-    graph.add_edge("resolve_locations", "generate_notebook")
-    graph.add_edge("generate_notebook", "build_output")
-    graph.add_edge("build_output", END)
+Các trip item cần thay thế (PHẢI thay thế bằng địa điểm khác tương tự):
+{replace_items_text}
 
-    return graph
+YÊU CẦU:
+1. Chỉ thay thế các trip item trong danh sách "cần thay thế"
+2. Không thay đổi các trip item "giữ nguyên"
+3. Giữ nguyên start_time, duration, và cấu trúc của các trip item được thay thế
+4. Mỗi trip item thay thế phải có:
+   - start_time (giữ nguyên từ item cũ)
+   - duration (giữ nguyên từ item cũ)
+   - note (mô tả mới phù hợp với địa điểm mới)
+   - location_name (địa điểm mới, phải là địa điểm cụ thể tồn tại)
+5. Chỉ trả về JSON hợp lệ, không có markdown code block
+6. JSON phải chứa TẤT CẢ trip items (cả giữ nguyên và thay thế)
+
+JSON output:
+{{
+  "trip_items": [
+    {{
+      "start_time": "2025-02-01T08:00:00",
+      "duration": 120,
+      "note": "Mô tả hoạt động",
+      "location_name": "Tên địa điểm"
+    }},
+    ...
+  ]
+}}
+"""
+    
+    try:
+        raw = llm.run(prompt)
+        data = safe_json_loads(raw)
+        
+        new_trip_items = []
+        for item in data.get("trip_items", []):
+            new_trip_items.append({
+                "start_time": item.get("start_time"),
+                "duration": item.get("duration"),
+                "note": item.get("note"),
+                "location_name": item.get("location_name")
+            })
+        
+        # Tạo FinalItinerary mới với trip items đã sửa
+        modified_itinerary = FinalItinerary(
+            name=itinerary.name,
+            description=itinerary.description,
+            start_date=itinerary.start_date,
+            end_date=itinerary.end_date,
+            people_quantity=itinerary.people_quantity,
+            budget_estimate=itinerary.budget_estimate,
+            themes=itinerary.themes,
+            destination=itinerary.destination,
+            trip_items=new_trip_items,
+            travel_notebook=itinerary.travel_notebook  # Giữ notebook cũ
+        )
+        
+        print(f"✓ Itinerary modified successfully")
+        print(f"  New trip items: {len(modified_itinerary.trip_items)}")
+        
+        return modified_itinerary
+        
+    except Exception as e:
+        print(f"✗ Error modifying itinerary: {e}")
+        return itinerary
+
+
+def create_itinerary(request: TravelRequest) -> FinalItinerary:
+    """
+    Main function: Tạo FinalItinerary từ TravelRequest
+    
+    Args:
+        request: TravelRequest object
+    
+    Returns:
+        FinalItinerary: Lịch trình chi tiết (chưa có travel_notebook)
+    """
+    print("="*80)
+    print("CREATE ITINERARY")
+    print("="*80)
+    
+    # Generate itinerary (combine fetch locations + generate in one step)
+    itinerary = generate_itinerary(request)
+    
+    print("="*80)
+    print(f"✓ Itinerary created successfully!")
+    print("="*80)
+    
+    return itinerary

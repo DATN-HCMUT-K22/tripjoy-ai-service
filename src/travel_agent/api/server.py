@@ -2,39 +2,73 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from datetime import date
 
-from ..models.models import TravelRequest
-from ..graphs.state import TravelState
-from ..graphs.itinerary_graph import build_itinerary_graph
+from ..models.models import TravelRequest, FinalItinerary
+from ..graphs.itinerary_graph import create_itinerary, modify_itinerary
+from ..graphs.notebook_graph import create_notebook
 
 
 app = FastAPI(title="Travel AI Agent")
 
-graph = build_itinerary_graph().compile()
-
-
-class GenerateItineraryRequest(BaseModel):
-    origin_location: str
-    destination_name: str
-    travel_type: list[str]
-    budget: str
-    start_date: date
-    end_date: date
-    people_quantity: int
-
 
 @app.post("/generate-itinerary")
-def generate_itinerary(payload: GenerateItineraryRequest):
-    req = TravelRequest(
-        origin_location=payload.origin_location,
-        destination_name=payload.destination_name,
-        travel_type=payload.travel_type,
-        budget=payload.budget,
-        start_date=payload.start_date,
-        end_date=payload.end_date,
-        people_quantity=payload.people_quantity,
-    )
+def generate_itinerary_api(payload: TravelRequest):
+    """
+    API 1: Tạo FinalItinerary từ TravelRequest
+    """
+    itinerary = create_itinerary(payload)
+    
+    if itinerary:
+        return itinerary
+    else:
+        return {"error": "Failed to generate itinerary"}
 
-    state = TravelState(request=req)
-    result = graph.invoke(state)
 
-    return result["itinerary"]
+@app.post("/generate-notebook")
+def generate_notebook_api(itinerary_data: dict):
+    """
+    API 2: Tạo TravelNotebook từ FinalItinerary
+    
+    Nhận FinalItinerary object và trả về TravelNotebook
+    """
+    try:
+        # Chuyển dict thành FinalItinerary object
+        itinerary = FinalItinerary(
+            name=itinerary_data.get("name", ""),
+            description=itinerary_data.get("description", ""),
+            start_date=itinerary_data.get("start_date"),
+            end_date=itinerary_data.get("end_date"),
+            people_quantity=itinerary_data.get("people_quantity", 1),
+            budget_estimate=itinerary_data.get("budget_estimate", 0),
+            themes=itinerary_data.get("themes", []),
+            destination=itinerary_data.get("destination", ""),
+            trip_items=itinerary_data.get("trip_items", []),
+            travel_notebook=None
+        )
+        
+        notebook = create_notebook(itinerary)
+        
+        if notebook:
+            return notebook
+        else:
+            return {"error": "Failed to generate notebook"}
+    except Exception as e:
+        return {"error": f"Error processing itinerary: {str(e)}"}
+
+
+@app.post("/modify-itinerary")
+def modify_itinerary_api(itinerary: FinalItinerary, unwanted_locations: list[str]):
+    """
+    API 3: Sửa lịch trình bằng cách thay thế các địa điểm không muốn đi
+    
+    Nhận FinalItinerary + danh sách unwanted_locations, trả về FinalItinerary mới đã sửa
+    """
+    try:
+        # Sửa lịch trình
+        modified_itinerary = modify_itinerary(itinerary, unwanted_locations)
+        
+        if modified_itinerary:
+            return modified_itinerary
+        else:
+            return {"error": "Failed to modify itinerary"}
+    except Exception as e:
+        return {"error": f"Error modifying itinerary: {str(e)}"}

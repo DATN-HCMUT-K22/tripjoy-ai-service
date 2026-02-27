@@ -5,29 +5,37 @@ import os
 
 class MapboxPlacesTool:
     BASE_URL = "https://api.mapbox.com/search/searchbox/v1/suggest"
+    RETRIEVE_URL = "https://api.mapbox.com/search/searchbox/v1/retrieve"
 
-    def search(self, text: str, limit: int = 20):
+    def search(self, text: str, proximity: str = None):
         token = os.getenv("MAPBOX_TOKEN")
         session_token = str(uuid.uuid4())
 
         params = {
             "q": text,
-            "limit": limit,
+            "proximity": proximity,
+            "limit": 10,
             "session_token": session_token,
             "access_token": token,
         }
 
-        res = requests.get(self.BASE_URL, params=params).json()
-        suggestions = res.get("suggestions", [])
+        res = requests.get(self.BASE_URL, params=params)
+        res.raise_for_status()
 
-        out = []
-        for s in suggestions:
-            out.append({
-                "id": s.get("mapbox_id"),
-                "name": s.get("name"),
-                "lat": s.get("coordinates", {}).get("latitude"),
-                "lng": s.get("coordinates", {}).get("longitude"),
-                "category": s.get("feature_type"),
-            })
+        return res.json()
 
-        return out
+    def retrieve(self, mapbox_id: str):
+        token = os.getenv("MAPBOX_TOKEN")
+        session_token = str(uuid.uuid4())
+
+        url = f"{self.RETRIEVE_URL}/{mapbox_id}"
+        params = {
+            "session_token": session_token,
+            "access_token": token,
+        }
+
+        res = requests.get(url, params=params)
+        res.raise_for_status()
+
+        return res.json()
+
