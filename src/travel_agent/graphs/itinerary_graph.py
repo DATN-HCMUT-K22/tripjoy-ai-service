@@ -156,16 +156,16 @@ Danh sách địa điểm (đã tối ưu thứ tự di chuyển):
 Yêu cầu:
 
 - Mỗi địa điểm tạo ra 1 TripItem
-- start_time bắt đầu từ 09:00 ngày {request.start_date}
-- Các địa điểm tiếp theo tăng dần theo thời gian
-- duration từ 60 đến 180 phút
+- start_time bắt đầu từ ngày {request.start_date}
+- Các địa điểm tiếp theo tăng dần theo thời gian, phân bố đều qua các ngày và kết thúc vào ngày {request.end_date}
+- duration tính bằng phút
 - location_name lấy từ Name
 - place_id lấy từ Place ID
 - review là tóm tắt từ danh sách review của địa điểm (chuyển qua tiếng việt nhé)
 
 ⚠️ Chỉ trả JSON hợp lệ.
 
-Format:
+Format tham khảo:
 
 {{
   "trip_items": [
