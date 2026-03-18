@@ -61,14 +61,14 @@ def modify_itinerary_api(itinerary_data: FinalItinerary, unwanted_locations: lis
 
 
 @app.post("/chat")
-def chat_api(payload: ChatRequest):
+def chat_api(chat_request: ChatRequest):
     """
     API 4: Chatbot du lịch
     
     Nhận câu hỏi từ người dùng, trả về phản hồi từ AI
     """
     try:
-        response = chat(payload.message)
+        response = chat(chat_request)
         
         if response:
             return {"message": response}
