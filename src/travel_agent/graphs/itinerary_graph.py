@@ -19,7 +19,7 @@ def places_to_text_block(places):
         )
 
         block = f"""
-Place {i}
+Place_id {p.id}
 Name: {p.displayName}
 Type: {", ".join(p.types)}
 Location: ({p.location.latitude}, {p.location.longitude})
@@ -98,106 +98,61 @@ def generate_itinerary(request: TravelRequest) -> FinalItinerary:
         
         # TODO: Bước 2: Xây dựng prompt để LLM chọn địa điểm từ danh sách
         prompt = f"""
-Tôi có danh sách các địa điểm mà chúng tôi dự định sẽ ghé thăm.
-{places_text}
-
-Tôi cần bạn chọn cho tôi những địa điểm từ danh sách trên để tôi ghé thăm những địa điểm đó từ ngày {request.start_date} đến ngày {request.end_date} và phải phù hợp với các tiêu chí sau: ngân sách {request.budget}, số lượng {request.people_quantity} người, chủ đề du lịch {", ".join(request.travel_type)}.
-
-Tôi chỉ cần bạn trả về 1 list chứa các số nguyên là id của từng địa điểm là được nhé.
-Yêu cầu trả về dạng JSON hợp lệ, có cấu trúc như sau:
-{{
-  "selected_place_ids": [0,1,2]
-}}
-"""
-        # Step 3: Gọi LLM để chọn địa điểm
-        print("\n--- Step 2: Asking LLM to choose places ---")
-
-        raw_response = llm.run(prompt)
-
-        result = safe_json_loads(raw_response)
-
-        place_indexes = result.get("selected_place_ids", [])
-
-        if not place_indexes:
-            print("⚠ LLM returned empty selection, using first 5 places")
-            place_indexes = list(range(min(5, len(nearby_places))))
-
-        # Map index → Place
-        selected_places = []
-
-        for idx in place_indexes:
-            if isinstance(idx, int) and 0 <= idx < len(nearby_places):
-                selected_places.append(nearby_places[idx])
-
-        print(f"\n✓ Selected {len(selected_places)} places")
-        
-        or_tool_place = []
-        for i, place in enumerate(selected_places):
-            or_tool_place.append(OrToolPlace(index=i, coordinate=place.location))
-
-        optimized_route = optimize_route(or_tool_place)
-        ordered_places = [selected_places[i] for i in optimized_route]
-
-        places_for_prompt = ordered_places_to_prompt(ordered_places)
-
-        prompt2 = f"""
 Bạn là một AI Travel Planner.
-
-Hãy tạo các TripItem cho lịch trình du lịch.
 
 Thông tin chuyến đi:
 
-Start date: {request.start_date}
+- Destination: {request.destination_name}
+- Start date: {request.start_date}
+- End date: {request.end_date}
+- Budget: {request.budget}
+- People: {request.people_quantity}
+- Travel themes: {", ".join(request.travel_type)}
 
-Danh sách địa điểm (đã tối ưu thứ tự di chuyển):
+Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 
-{places_for_prompt}
-
-Yêu cầu:
-
-- Mỗi địa điểm tạo ra 1 TripItem
-- start_time bắt đầu từ ngày {request.start_date}
-- Các địa điểm tiếp theo tăng dần theo thời gian, phân bố đều qua các ngày và kết thúc vào ngày {request.end_date}
+Bước 1: Chọn các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi)
+Bước 2: Sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng
+Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
+- start_time bắt đầu từ {request.start_date}
+- Các địa điểm tiếp theo tăng dần theo thời gian
+- Phân bố đều các địa điểm trong các ngày cho đến {request.end_date}
 - duration tính bằng phút
 - location_name lấy từ Name
 - place_id lấy từ Place ID
-- review là tóm tắt từ danh sách review của địa điểm (chuyển qua tiếng việt nhé)
+- review là tóm tắt từ danh sách review của địa điểm (viết bằng tiếng Việt) và đầy đủ ý từ các review gốc (bằng tiếng Anh) để tôi có thể hiểu rõ về địa điểm đó
 
-⚠️ Chỉ trả JSON hợp lệ.
-
-Format tham khảo:
-
+⚠️ Chỉ trả về list các TripItem với JSON hợp lệ có Format như sau:
 {{
   "trip_items": [
     {{
       "start_time": "2026-05-01T09:00:00",
       "duration": 120,
-      "review": "tóm tắt từ danh sách review của địa điểm",
+      "review": "tóm tắt review bằng tiếng Việt",
       "location_name": "place name",
       "place_id": "place id"
     }}
   ]
 }}
 """
-        
-        print("\n--- Step 3: Generating itinerary ---")
+        print("\n--- Generating itinerary ---")
 
-        raw_response2 = llm.run(prompt2)
+        raw_response = llm.run(prompt)
 
-        result2 = safe_json_loads(raw_response2)
+        result = safe_json_loads(raw_response)
 
         itinerary = FinalItinerary(
-        name=f"Trip to {request.destination_name}",
-        start_date=request.start_date,
-        end_date=request.end_date,
-        people_quantity=request.people_quantity,
-        budget_estimate=request.budget,
-        themes=request.travel_type,
-        destination=request.destination_name,
-        trip_items=[]
-    )
+            name=f"Trip to {request.destination_name}",
+            start_date=request.start_date,
+            end_date=request.end_date,
+            people_quantity=request.people_quantity,
+            budget_estimate=request.budget,
+            themes=request.travel_type,
+            destination=request.destination_name,
+            trip_items=[]
+        )
 
-        for item in result2.get("trip_items", []):
+        for item in result.get("trip_items", []):
             itinerary.trip_items.append(
                 TripItem(
                     start_time=datetime.fromisoformat(item["start_time"]),
@@ -207,6 +162,7 @@ Format tham khảo:
                     place_id=item["place_id"]
                 )
             )
+
         return itinerary
 
     except Exception as e:
@@ -346,51 +302,51 @@ JSON output:
         print(f"✗ Error modifying itinerary: {e}")
         return itinerary
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     print("\n=== TEST GENERATE ITINERARY ===\n")
+    print("\n=== TEST GENERATE ITINERARY ===\n")
 
-#     # Tọa độ Đà Lạt
-#     coordinate = Coordinate(
-#         latitude=11.9465,
-#         longitude=108.4419
-#     )
+    # Tọa độ Đà Lạt
+    coordinate = Coordinate(
+        latitude=11.9465,
+        longitude=108.4419
+    )
 
-#     # Mock request
-#     request = TravelRequest(
-#         destination_name="Da Lat",
-#         coordinate=coordinate,
-#         travel_type=["tourist_attraction"],
-#         budget="medium",
-#         start_date=date(2026, 5, 1),
-#         end_date=date(2026, 5, 3),
-#         people_quantity=2
-#     )
+    # Mock request
+    request = TravelRequest(
+        destination_name="Da Lat",
+        coordinate=coordinate,
+        travel_type=["tourist_attraction"],
+        budget="medium",
+        start_date=date(2026, 5, 1),
+        end_date=date(2026, 5, 3),
+        people_quantity=2
+    )
 
-#     itinerary = generate_itinerary(request)
+    itinerary = generate_itinerary(request)
 
-#     if not itinerary:
-#         print("❌ Failed to generate itinerary")
-#     else:
+    if not itinerary:
+        print("❌ Failed to generate itinerary")
+    else:
 
-#         print("\n=== FINAL ITINERARY ===\n")
+        print("\n=== FINAL ITINERARY ===\n")
 
-#         print("Trip name:", itinerary.name)
-#         print("Destination:", itinerary.destination)
-#         print("Start date:", itinerary.start_date)
-#         print("End date:", itinerary.end_date)
-#         print("People:", itinerary.people_quantity)
+        print("Trip name:", itinerary.name)
+        print("Destination:", itinerary.destination)
+        print("Start date:", itinerary.start_date)
+        print("End date:", itinerary.end_date)
+        print("People:", itinerary.people_quantity)
 
-#         print("\n--- Trip Items ---\n")
+        print("\n--- Trip Items ---\n")
 
-#         for i, item in enumerate(itinerary.trip_items):
+        for i, item in enumerate(itinerary.trip_items):
 
-#             print(f"Stop {i+1}")
-#             print("Time:", item.start_time)
-#             print("Duration:", item.duration)
-#             print("Location:", item.location_name)
-#             print("Place ID:", item.place_id)
-#             print("Note:", item.note)
-#             print("----------------------")
+            print(f"Stop {i+1}")
+            print("Time:", item.start_time)
+            print("Duration:", item.duration)
+            print("Location:", item.location_name)
+            print("Place ID:", item.place_id)
+            print("Note:", item.note)
+            print("----------------------")
 
-#         print("\n✅ Done\n")
+        print("\n✅ Done\n")

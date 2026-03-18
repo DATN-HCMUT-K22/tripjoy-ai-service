@@ -1,43 +1,61 @@
 """
-chat_graph.py - Chatbot để tương tác với người dùng về du lịch
+chat_graph.py - Context-aware chatbot
 """
 
 from ..llm.llm_vertex import VertexLLM
+from typing import List, Dict
+from ..models.models import ChatRequest, FinalItinerary
 
 
-def chat(message: str) -> str:
+def build_prompt(message: str, recent_messages: List[Dict], itinerary: FinalItinerary) -> str:
     """
-    Chatbot trả lời các câu hỏi về du lịch
-    
-    Args:
-        message: Tin nhắn từ người dùng
-    
-    Returns:
-        str: Phản hồi từ chatbot
+    Build prompt với context + memory
     """
-    llm = VertexLLM()
-    
+
+    # format recent chat
+    history_text = ""
+    for m in recent_messages:
+        role = "User" if m["role"] == "user" else "Assistant"
+        history_text += f"{role}: {m['content']}\n"
+
+    itinerary_text = ""
+    if itinerary:
+        itinerary_text = "\n".join([f"- {k}: {v}" for k, v in itinerary.items() if v])
+
     prompt = f"""
 Bạn là TripJoy AI - trợ lý du lịch trong ứng dụng chat nhóm.
 
 NGUYÊN TẮC TRẢ LỜI:
-- Trả lời ngắn gọn (tối đa 8–10 dòng).
-- Ưu tiên bullet point.
-- Không viết dạng bài blog dài.
-- Không dùng tiêu đề lớn (###).
-- Không dùng quá nhiều markdown.
-- Giọng điệu thân thiện, tự nhiên như đang chat.
-- Không lặp lại câu hỏi của người dùng.
-- Không lan man.
+- Trả lời ngắn gọn (tối đa 2–3 câu)
+- Tự nhiên như chat
+- Không lan man
 
-Bởi vì đây là context trong 1 cuộc hội thoại nhắn tin nhóm nên bạn hãy trả lời tự nhiên và ngắn gọn nhé
+THÔNG TIN CHUYẾN ĐI (itinerary):
+{itinerary_text if itinerary_text else "Chưa có"}
 
-Người dùng hỏi:
+LỊCH SỬ HỘI THOẠI GẦN:
+{history_text if history_text else "Không có"}
+
+CÂU HỎI HIỆN TẠI:
 {message}
 
 Trả lời:
 """
-    
+    return prompt
+
+
+def chat(chat_request: ChatRequest) -> str:
+    """
+    Chat có context + memory
+    """
+
+    llm = VertexLLM()
+
+    # lấy last 6 messages
+    recent_messages = chat_request.chat_history[-6:] if chat_request.chat_history else []
+
+    prompt = build_prompt(chat_request.message, recent_messages, chat_request.itinerary)
+
     try:
         response = llm.run(prompt)
         return response.strip()
