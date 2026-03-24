@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from datetime import date
 
-from ..models.models import TravelRequest, FinalItinerary, ChatRequest
+from ..models.models import TravelRequest, FinalItinerary, ChatRequest, ModifyItineraryRequest
 from ..graphs.itinerary_graph import generate_itinerary, modify_itinerary
 from ..graphs.notebook_graph import generate_notebook
 from ..graphs.chat_graph import chat
@@ -42,15 +42,16 @@ def generate_notebook_api(itinerary_data: FinalItinerary):
 
 
 @app.post("/modify-itinerary")
-def modify_itinerary_api(itinerary_data: FinalItinerary, unwanted_locations: list[str]):
+def modify_itinerary_api(payload: ModifyItineraryRequest):
     """
     API 3: Sửa lịch trình bằng cách thay thế các địa điểm không muốn đi
     
-    Nhận FinalItinerary + danh sách unwanted_locations, trả về FinalItinerary mới đã sửa
+    Nhận ModifyItineraryRequest (itinerary_data + unwanted_locations) trong body,
+    trả về FinalItinerary mới đã sửa
     """
     try:        
         # Sửa lịch trình
-        modified_itinerary = modify_itinerary(itinerary_data, unwanted_locations)
+        modified_itinerary = modify_itinerary(payload.itinerary_data, payload.unwanted_locations)
         
         if modified_itinerary:
             return modified_itinerary

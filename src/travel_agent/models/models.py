@@ -66,3 +66,8 @@ class ChatRequest:
     message: str
     chat_history: List[Dict]
     itinerary: FinalItinerary
+
+@dataclass
+class ModifyItineraryRequest:
+    itinerary_data: FinalItinerary
+    unwanted_locations: List[str]
