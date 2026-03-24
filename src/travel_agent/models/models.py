@@ -68,6 +68,6 @@ class ChatRequest:
     itinerary: FinalItinerary
 
 @dataclass
-class ModifyRequest:
-    itinerary: FinalItinerary
+class ModifyItineraryRequest:
+    itinerary_data: FinalItinerary
     unwanted_locations: List[str]
