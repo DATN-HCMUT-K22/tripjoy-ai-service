@@ -1,0 +1,16 @@
+# ============================================================
+# TripJoy AI Service — Dev / Test Dependencies
+# Install: pip install -r requirements-dev.txt
+# ============================================================
+
+# --- Testing ---
+pytest==8.3.4
+pytest-asyncio==0.24.0
+httpx==0.28.1                 # FastAPI TestClient
+
+# --- Code Quality ---
+ruff==0.8.4                   # Linter + formatter (replaces flake8 + black)
+mypy==1.13.0                  # Static type checker
+
+# --- Pre-commit Hooks ---
+pre-commit==4.0.1

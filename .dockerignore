@@ -1,0 +1,42 @@
+# ============================================================
+# .dockerignore — Loại trừ files không cần thiết cho Docker image
+# ============================================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Dev/test files
+requirements-dev.txt
+tests/
+docs/
+*.md
+
+# CI/CD
+.github/
+
+# Environment (KHÔNG bao giờ đưa vào image)
+.env
+*.env
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

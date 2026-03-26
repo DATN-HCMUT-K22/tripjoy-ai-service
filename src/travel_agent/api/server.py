@@ -9,7 +9,20 @@ from ..graphs.notebook_graph import generate_notebook
 from ..graphs.chat_graph import chat
 
 
-app = FastAPI(title="Travel AI Agent")
+app = FastAPI(
+    title="TripJoy AI Service",
+    description="AI-powered travel itinerary generation — Google Vertex AI (Gemini)",
+    version="1.0.0",
+)
+
+
+@app.get("/health", tags=["System"])
+def health_check():
+    """
+    Lightweight health check — required by Docker HEALTHCHECK & load balancers.
+    Returns 200 OK when service is running.
+    """
+    return {"status": "ok", "service": "tripjoy-ai-service", "version": "1.0.0"}
 
 
 @app.post("/generate-itinerary")
