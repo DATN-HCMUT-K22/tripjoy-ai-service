@@ -70,4 +70,5 @@ class ChatRequest:
 @dataclass
 class ModifyItineraryRequest:
     itinerary_data: FinalItinerary
-    unwanted_locations: List[str]
+    unwanted_locations: List[TripItem]
+    coordinate: Coordinate

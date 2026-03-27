@@ -65,7 +65,7 @@ def modify_itinerary_api(payload: ModifyItineraryRequest):
     """
     try:        
         # Sửa lịch trình
-        modified_itinerary = modify_itinerary(payload.itinerary_data, payload.unwanted_locations)
+        modified_itinerary = modify_itinerary(payload.itinerary_data, payload.unwanted_locations, payload.coordinate)
         
         if modified_itinerary:
             return modified_itinerary
