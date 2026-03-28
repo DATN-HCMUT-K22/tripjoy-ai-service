@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 
 @dataclass
@@ -34,20 +34,13 @@ class OrToolPlace:
     coordinate: Coordinate
 
 
-
-@dataclass
-class LocationTip:
-    location_name: str
-    tip: str
-
 @dataclass
 class TravelNotebook:
     name: str
-    weather_forecast: str        # Dự báo thời tiết chung
-    culture_etiquette: str       # Lưu ý văn hóa, ứng xử
-    emergency_contacts: str      # Số cảnh sát, cứu thương, đại sứ quán
-    packing_guide: str           # Nên mang quần áo gì    
-    location_specific_tips: List[LocationTip] = field(default_factory=list)
+    food: str
+    climate: str
+    culture: str  
+
 
 @dataclass
 class TripItem:
@@ -67,3 +60,15 @@ class FinalItinerary:
     themes: List[str]
     destination: str
     trip_items: List[TripItem]
+
+@dataclass
+class ChatRequest:
+    message: str
+    chat_history: List[Dict]
+    itinerary: FinalItinerary
+
+@dataclass
+class ModifyItineraryRequest:
+    itinerary_data: FinalItinerary
+    unwanted_locations: List[TripItem]
+    coordinate: Coordinate

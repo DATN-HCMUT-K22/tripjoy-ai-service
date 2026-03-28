@@ -4,9 +4,11 @@ notebook_graph.py - Tạo TravelNotebook từ FinalItinerary
 
 import json
 import re
+from typing import List
 
 from ..llm.llm_vertex import VertexLLM
-from ..models.models import FinalItinerary, TravelNotebook, LocationTip
+from ..models.models import FinalItinerary, TravelNotebook
+from ..tools.wiki_api import get_destination_info
 
 
 def safe_json_loads(raw: str):
@@ -30,119 +32,58 @@ def safe_json_loads(raw: str):
 
 
 def generate_notebook(itinerary: FinalItinerary) -> TravelNotebook:
-    """
-    Tạo TravelNotebook từ FinalItinerary
-    Bao gồm: thời tiết, văn hóa, emergency contacts, packing guide, location-specific tips
-    
-    Args:
-        itinerary: FinalItinerary object chứa thông tin chuyến đi
-    
-    Returns:
-        TravelNotebook: Hướng dẫn du lịch chi tiết
-    """
     llm = VertexLLM()
     
     print(f"\n--- Generating Travel Notebook ---")
     
-    # Lấy danh sách địa điểm từ trip_items
-    locations = []
-    if itinerary.trip_items:
-        locations = [
-            item.get("location_name", "")
-            for item in itinerary.trip_items
-            if item.get("location_name")
-        ]
-    
-    locations_text = ", ".join(set(locations[:10]))  # Unique locations
+    # Lấy thông tin từ Wikipedia
+    print(f"Fetching information from Wikipedia for {itinerary.destination}...")
+    wiki_info = get_destination_info(itinerary.destination)
     
     prompt = f"""
 Bạn là một Travel Guide chuyên nghiệp có kinh nghiệm du lịch tại Việt Nam.
 
-Tạo một Travel Notebook chi tiết cho chuyến du lịch sau:
+Thông tin chuyến đi:
 - Điểm đến: {itinerary.destination}
-- Thời gian: {itinerary.start_date} đến {itinerary.end_date}
 - Số người: {itinerary.people_quantity}
 - Ngân sách: {itinerary.budget_estimate}
-- Các địa điểm chính: {locations_text}
 
-Vui lòng cung cấp thông tin chi tiết dưới dạng JSON với cấu trúc sau:
+Thông tin từ Wikipedia về địa điểm du lịch {itinerary.destination}:
+- Ẩm thực: {wiki_info.get('food', 'N/A')}
+- Khí hậu: {wiki_info.get('climate', 'N/A')}
+- Văn hóa: {wiki_info.get('culture', 'N/A')}
+
+Nhiệm vụ của bạn là tạo một Travel Notebook cho chuyến du lịch dưới dạng JSON với cấu trúc sau:
 
 {{
-  "weather_forecast": "Mô tả chi tiết về thời tiết trong khoảng thời gian này, bao gồm nhiệt độ, độ ẩm, khả năng mưa, nên mang đồ gì",
-  "culture_etiquette": "Những quy tắc văn hóa, tập quán địa phương cần biết khi du lịch ở địa điểm này",
-  "emergency_contacts": "Danh sách các số điện thoại khẩn cấp quan trọng: bệnh viện, cảnh sát, đại sứ quán, v.v.",
-  "packing_guide": "Danh sách đồ vật cần thiết để mang theo, dựa trên thời tiết và hoạt động",
-  "location_specific_tips": [
-    {{
-      "location_name": "Tên địa điểm",
-      "tip": "Mẹo, lưu ý hoặc thông tin thú vị về địa điểm này"
-    }},
-    {{
-      "location_name": "Tên địa điểm",
-      "tip": "Mẹo, lưu ý hoặc thông tin thú vị về địa điểm này"
-    }}
-  ]
+  "food": "Giới thiệu về ẩm thực địa phương, các món ăn đặc trưng, nhà hàng nổi tiếng và những trải nghiệm ẩm thực không thể bỏ qua",
+  "climate": "Mô tả chi tiết về khí hậu: Hãy mô tả khí hậu vào thời điểm {itinerary.start_date} đến {itinerary.end_date} và đưa ra lời khuyên về trang phục và những thứ nên mang theo",
+  "culture": "Những đặc điểm văn hóa nổi bật, tập quán địa phương, quy tắc ứng xử, lễ hội và sự kiện quan trọng"
 }}
+
+Lưu ý:
+- Nếu thông tin từ wiki N/A ở field nào, hãy chủ động xây dựng nội dung cho field đó dựa vào các nguồn uy tín trên Internet
+- Còn nếu những field từ wiki có nội dung đầy đủ, hãy chủ động xây dựng nội dung field đó theo thông tin từ wiki nhé
 
 Trả về JSON HỢP LỆ, không có markdown code block.
 """
-
+    
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
         
-        # Parse location tips
-        location_tips = []
-        if isinstance(data.get("location_specific_tips"), list):
-            for tip_data in data.get("location_specific_tips", []):
-                try:
-                    location_tips.append(
-                        LocationTip(
-                            location_name=tip_data.get("location_name", ""),
-                            tip=tip_data.get("tip", "")
-                        )
-                    )
-                except Exception as e:
-                    print(f"⚠ Error parsing tip: {e}")
-        
         # Tạo TravelNotebook object
         notebook = TravelNotebook(
             name=f"Travel Notebook - {itinerary.destination}",
-            weather_forecast=data.get("weather_forecast", "N/A"),
-            culture_etiquette=data.get("culture_etiquette", "N/A"),
-            emergency_contacts=data.get("emergency_contacts", "N/A"),
-            packing_guide=data.get("packing_guide", "N/A"),
-            location_specific_tips=location_tips
+            food=data.get("food", "N/A"),
+            climate=data.get("climate", "N/A"),
+            culture=data.get("culture", "N/A")
         )
         
         print(f"✓ Travel Notebook generated")
-        print(f"  Location tips: {len(location_tips)}")
         
         return notebook
         
     except Exception as e:
         print(f"✗ Error generating notebook: {e}")
         return None
-
-
-def create_notebook(itinerary: FinalItinerary) -> TravelNotebook:
-    """
-    Main function: Tạo TravelNotebook từ FinalItinerary
-    
-    Args:
-        itinerary: FinalItinerary object
-    
-    Returns:
-        TravelNotebook: Hướng dẫn du lịch chi tiết
-    """
-    print("="*80)
-    print("CREATE TRAVEL NOTEBOOK")
-    print("="*80)
-    
-    notebook = generate_notebook(itinerary)
-    
-    print("="*80)
-    print(f"✓ Travel Notebook created successfully!")
-    print("="*80)
-    
-    return notebook

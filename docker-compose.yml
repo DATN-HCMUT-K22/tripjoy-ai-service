@@ -1,0 +1,45 @@
+services:
+  # TripJoy AI Service (FastAPI + Python)
+  tripjoy-ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime    # Chỉ build runtime stage (bỏ qua builder)
+    image: tripjoy-ai-service:${IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-tripjoy}-ai-service
+    env_file:
+      - .env             # Load all secrets từ .env file (không commit)
+    environment:
+      # Override hoặc supplement .env values nếu cần
+      - APP_RELOAD=false
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    volumes:
+      # Map file từ máy Windows vào thư mục /app/secrets/ của Linux container
+      - d:\devspace\datn\tripjoy-project\tripjoy-ai-service\credentials.json:/app/secrets/credentials.json:ro
+    networks:
+      - ai-network
+    restart: unless-stopped
+    # Depends on nothing — AI service is stateless
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s    # Cho thời gian load model
+      retries: 3
+
+networks:
+  ai-network:
+    name: ${COMPOSE_PROJECT_NAME:-tripjoy}-ai-network
+    driver: bridge
+    # Để kết nối với tripjoy-api (Spring Boot) ở host network hoặc shared network,
+    # thêm: external: true và dùng network name của tripjoy-api compose project.
+
+# Không cần volumes vì AI service là stateless (không lưu data)

@@ -3,7 +3,6 @@ import re
 from typing import List
 from datetime import date, datetime
 
-from ..tools.mapbox_places import MapboxPlacesTool
 from ..tools.google_places import search_nearby_places
 from ..llm.llm_vertex import VertexLLM
 from ..models.models import TravelRequest, FinalItinerary, OrToolPlace, Coordinate, TripItem
@@ -19,7 +18,7 @@ def places_to_text_block(places):
         )
 
         block = f"""
-Place {i}
+Place_id {p.id}
 Name: {p.displayName}
 Type: {", ".join(p.types)}
 Location: ({p.location.latitude}, {p.location.longitude})
@@ -48,6 +47,22 @@ Reviews:
 {reviews_text}
 """
 
+        blocks.append(block.strip())
+
+    return "\n\n".join(blocks)
+
+def trip_items_to_text(items: list[TripItem]) -> str:
+    blocks = []
+
+    for i, item in enumerate(items, start=1):
+        block = f"""
+Item {i}:
+- Start time: {item.start_time.isoformat()}
+- Duration: {item.duration} minutes
+- Location: {item.location_name}
+- Place ID: {item.place_id}
+- Note: {item.note}
+"""
         blocks.append(block.strip())
 
     return "\n\n".join(blocks)
@@ -98,106 +113,65 @@ def generate_itinerary(request: TravelRequest) -> FinalItinerary:
         
         # TODO: Bước 2: Xây dựng prompt để LLM chọn địa điểm từ danh sách
         prompt = f"""
-Tôi có danh sách các địa điểm mà chúng tôi dự định sẽ ghé thăm.
-{places_text}
-
-Tôi cần bạn chọn cho tôi những địa điểm từ danh sách trên để tôi ghé thăm những địa điểm đó từ ngày {request.start_date} đến ngày {request.end_date} và phải phù hợp với các tiêu chí sau: ngân sách {request.budget}, số lượng {request.people_quantity} người, chủ đề du lịch {", ".join(request.travel_type)}.
-
-Tôi chỉ cần bạn trả về 1 list chứa các số nguyên là id của từng địa điểm là được nhé.
-Yêu cầu trả về dạng JSON hợp lệ, có cấu trúc như sau:
-{{
-  "selected_place_ids": [0,1,2]
-}}
-"""
-        # Step 3: Gọi LLM để chọn địa điểm
-        print("\n--- Step 2: Asking LLM to choose places ---")
-
-        raw_response = llm.run(prompt)
-
-        result = safe_json_loads(raw_response)
-
-        place_indexes = result.get("selected_place_ids", [])
-
-        if not place_indexes:
-            print("⚠ LLM returned empty selection, using first 5 places")
-            place_indexes = list(range(min(5, len(nearby_places))))
-
-        # Map index → Place
-        selected_places = []
-
-        for idx in place_indexes:
-            if isinstance(idx, int) and 0 <= idx < len(nearby_places):
-                selected_places.append(nearby_places[idx])
-
-        print(f"\n✓ Selected {len(selected_places)} places")
-        
-        or_tool_place = []
-        for i, place in enumerate(selected_places):
-            or_tool_place.append(OrToolPlace(index=i, coordinate=place.location))
-
-        optimized_route = optimize_route(or_tool_place)
-        ordered_places = [selected_places[i] for i in optimized_route]
-
-        places_for_prompt = ordered_places_to_prompt(ordered_places)
-
-        prompt2 = f"""
 Bạn là một AI Travel Planner.
-
-Hãy tạo các TripItem cho lịch trình du lịch.
 
 Thông tin chuyến đi:
 
-Start date: {request.start_date}
+- Destination: {request.destination_name}
+- Start date: {request.start_date}
+- End date: {request.end_date}
+- Budget: {request.budget}
+- People: {request.people_quantity}
+- Travel themes: {", ".join(request.travel_type)}
 
-Danh sách địa điểm (đã tối ưu thứ tự di chuyển):
+Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 
-{places_for_prompt}
-
-Yêu cầu:
-
-- Mỗi địa điểm tạo ra 1 TripItem
-- start_time bắt đầu từ 09:00 ngày {request.start_date}
+Bước 1: Chọn các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi)
+Bước 2: Sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng
+Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
+- start_time bắt đầu từ {request.start_date}
 - Các địa điểm tiếp theo tăng dần theo thời gian
-- duration từ 60 đến 180 phút
+- Phân bố đều các địa điểm trong các ngày cho đến {request.end_date}
+- duration tính bằng phút
 - location_name lấy từ Name
 - place_id lấy từ Place ID
-- review là tóm tắt từ danh sách review của địa điểm (chuyển qua tiếng việt nhé)
+- review là tóm tắt từ danh sách review của địa điểm (viết bằng tiếng Việt) và đầy đủ ý từ các review gốc (bằng tiếng Anh) để tôi có thể hiểu rõ về địa điểm đó
 
-⚠️ Chỉ trả JSON hợp lệ.
-
-Format:
-
+⚠️ Chỉ trả về list các TripItem với JSON hợp lệ có Format như sau:
 {{
   "trip_items": [
     {{
       "start_time": "2026-05-01T09:00:00",
       "duration": 120,
-      "review": "tóm tắt từ danh sách review của địa điểm",
+      "review": "tóm tắt review bằng tiếng Việt",
       "location_name": "place name",
       "place_id": "place id"
     }}
   ]
 }}
 """
-        
-        print("\n--- Step 3: Generating itinerary ---")
+        print("\n--- Generating itinerary ---")
 
-        raw_response2 = llm.run(prompt2)
+        raw_response = llm.run(prompt)
 
-        result2 = safe_json_loads(raw_response2)
+        # print("\n=== RAW LLM RESPONSE ===\n")
+        # print(raw_response)
+        # print("\n========================\n")
+
+        result = safe_json_loads(raw_response)
 
         itinerary = FinalItinerary(
-        name=f"Trip to {request.destination_name}",
-        start_date=request.start_date,
-        end_date=request.end_date,
-        people_quantity=request.people_quantity,
-        budget_estimate=request.budget,
-        themes=request.travel_type,
-        destination=request.destination_name,
-        trip_items=[]
-    )
+            name=f"Trip to {request.destination_name}",
+            start_date=request.start_date,
+            end_date=request.end_date,
+            people_quantity=request.people_quantity,
+            budget_estimate=request.budget,
+            themes=request.travel_type,
+            destination=request.destination_name,
+            trip_items=[]
+        )
 
-        for item in result2.get("trip_items", []):
+        for item in result.get("trip_items", []):
             itinerary.trip_items.append(
                 TripItem(
                     start_time=datetime.fromisoformat(item["start_time"]),
@@ -207,6 +181,7 @@ Format:
                     place_id=item["place_id"]
                 )
             )
+
         return itinerary
 
     except Exception as e:
@@ -214,17 +189,8 @@ Format:
         return None
 
 
-def modify_itinerary(itinerary: FinalItinerary, unwanted_locations: list[str]) -> FinalItinerary:
-    """
-    Sửa lịch trình bằng cách thay thế các địa điểm không muốn đi bằng địa điểm khác
-    
-    Args:
-        itinerary: FinalItinerary object hoàn chỉnh
-        unwanted_locations: Danh sách tên địa điểm khách hàng không muốn đi
-    
-    Returns:
-        FinalItinerary: Lịch trình mới đã sửa
-    """
+def modify_itinerary(itinerary: FinalItinerary, unwanted_locations: List[TripItem], coordinate: Coordinate) -> FinalItinerary:
+
     llm = VertexLLM()
     
     print("="*80)
@@ -236,41 +202,23 @@ def modify_itinerary(itinerary: FinalItinerary, unwanted_locations: list[str]) -
         return itinerary
     
     print(f"\n--- Modifying Itinerary ---")
-    print(f"Unwanted locations: {unwanted_locations}")
     
-    # Xác định các trip item cần thay thế
-    trip_items_to_keep = []
-    trip_items_to_replace = []
-    
-    for item in itinerary.trip_items:
-        location_name = item.get("location_name", "")
-        if location_name in unwanted_locations:
-            trip_items_to_replace.append(item)
-        else:
-            trip_items_to_keep.append(item)
-    
-    print(f"Items to keep: {len(trip_items_to_keep)}")
-    print(f"Items to replace: {len(trip_items_to_replace)}")
-    
-    if not trip_items_to_replace:
-        print("⚠ No matching unwanted locations found")
-        return itinerary
-    
-    # Chuẩn bị thông tin cho prompt
-    kept_items_text = "\n".join([
-        f"- {item.get('start_time')}: {item.get('location_name')} (Duration: {item.get('duration')} mins)"
-        for item in trip_items_to_keep
-    ])
-    
-    replace_items_text = "\n".join([
-        f"- {item.get('start_time')}: {item.get('location_name')} (Duration: {item.get('duration')} mins, note: {item.get('note')})"
-        for item in trip_items_to_replace
-    ])
-    
+    nearby_places = search_nearby_places(
+        latitude=coordinate.latitude,
+        longitude=coordinate.longitude,
+        # included_types=request.travel_type
+        included_types=["tourist_attraction"]
+    )
+
+    places_text = places_to_text_block(nearby_places)
+
+    unwanted_locations_text = trip_items_to_text(unwanted_locations)
+
+    kept_locations = [item for item in itinerary.trip_items if item.location_name not in [loc.location_name for loc in unwanted_locations]]
+    kept_locations_text = trip_items_to_text(kept_locations)
+
     prompt = f"""
 Bạn là Travel AI Planner chuyên nghiệp.
-
-Hãy sửa lịch trình du lịch bằng cách thay thế các địa điểm không mong muốn bằng địa điểm khác tương tự.
 
 Thông tin chuyến đi:
 - Destination: {itinerary.destination}
@@ -279,34 +227,25 @@ Thông tin chuyến đi:
 - Thời gian: {itinerary.start_date} đến {itinerary.end_date}
 - Số người: {itinerary.people_quantity}
 
-Các trip item giữ nguyên (KHÔNG được thay đổi):
-{kept_items_text}
+Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 
-Các trip item cần thay thế (PHẢI thay thế bằng địa điểm khác tương tự):
-{replace_items_text}
+Bước 1: Chọn các địa điểm từ danh sách {places_text} để thay thế cho các địa điểm trong {unwanted_locations_text} và không được trùng với các địa điểm đã có sẵn trong lịch trình {kept_locations_text}. Hãy chọn những địa điểm phù hợp với thông tin chuyến đi và có thể thay thế tốt cho các địa điểm không muốn đi.
+Bước 2: Tạo TripItem cho từng địa điểm vừa được chọn thay thế. Quy tắc tạo TripItem như sau:
+- start_time và duration của các TripItem mới giữ nguyên như các địa điểm bị thay thế để đảm bảo lịch trình không bị xáo trộn quá nhiều
+- location_name lấy từ Name
+- place_id lấy từ Place ID
+- review là tóm tắt từ danh sách review của địa điểm (viết bằng tiếng Việt) và đầy đủ ý từ các review gốc (bằng tiếng Anh) để tôi có thể hiểu rõ về địa điểm đó
 
-YÊU CẦU:
-1. Chỉ thay thế các trip item trong danh sách "cần thay thế"
-2. Không thay đổi các trip item "giữ nguyên"
-3. Giữ nguyên start_time, duration, và cấu trúc của các trip item được thay thế
-4. Mỗi trip item thay thế phải có:
-   - start_time (giữ nguyên từ item cũ)
-   - duration (giữ nguyên từ item cũ)
-   - note (mô tả mới phù hợp với địa điểm mới)
-   - location_name (địa điểm mới, phải là địa điểm cụ thể tồn tại)
-5. Chỉ trả về JSON hợp lệ, không có markdown code block
-6. JSON phải chứa TẤT CẢ trip items (cả giữ nguyên và thay thế)
-
-JSON output:
+⚠️ Chỉ trả về list các TripItem với JSON hợp lệ có Format như sau:
 {{
   "trip_items": [
     {{
-      "start_time": "2025-02-01T08:00:00",
+      "start_time": "2026-05-01T09:00:00",
       "duration": 120,
-      "note": "Mô tả hoạt động",
-      "location_name": "Tên địa điểm"
-    }},
-    ...
+      "review": "tóm tắt review bằng tiếng Việt",
+      "location_name": "place name",
+      "place_id": "place id"
+    }}
   ]
 }}
 """
@@ -314,33 +253,33 @@ JSON output:
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
+        print("\n=== RAW LLM RESPONSE ===")
+        print(raw)
+        print("=== END RAW ===\n")
+
+        print("\n=== PARSED DATA ===")
+        print(json.dumps(data, indent=2, ensure_ascii=False))
+        print("=== END DATA ===\n")
         
-        new_trip_items = []
-        for item in data.get("trip_items", []):
-            new_trip_items.append({
-                "start_time": item.get("start_time"),
-                "duration": item.get("duration"),
-                "note": item.get("note"),
-                "location_name": item.get("location_name")
-            })
-        
-        # Tạo FinalItinerary mới với trip items đã sửa
-        modified_itinerary = FinalItinerary(
-            name=itinerary.name,
-            description=itinerary.description,
-            start_date=itinerary.start_date,
-            end_date=itinerary.end_date,
-            people_quantity=itinerary.people_quantity,
-            budget_estimate=itinerary.budget_estimate,
-            themes=itinerary.themes,
-            destination=itinerary.destination,
-            trip_items=new_trip_items
-        )
+        i = 0
+        unwanted_names = [loc.location_name for loc in unwanted_locations]
+        for idx, item in enumerate(itinerary.trip_items):
+            if item.location_name in unwanted_names:
+                # Thay thế bằng TripItem mới từ LLM
+                new_item = data["trip_items"][i]
+                itinerary.trip_items[idx] = TripItem(
+                    start_time=datetime.fromisoformat(new_item["start_time"]),
+                    duration=new_item["duration"],
+                    note=new_item["review"],
+                    location_name=new_item["location_name"],
+                    place_id=new_item["place_id"]
+                )
+                i += 1
         
         print(f"✓ Itinerary modified successfully")
-        print(f"  New trip items: {len(modified_itinerary.trip_items)}")
-        
-        return modified_itinerary
+        print(f"  New trip items: {len(itinerary.trip_items)}")
+
+        return itinerary
         
     except Exception as e:
         print(f"✗ Error modifying itinerary: {e}")
