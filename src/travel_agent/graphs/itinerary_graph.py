@@ -104,7 +104,6 @@ def generate_itinerary(request: TravelRequest) -> FinalItinerary:
 
     print(f"\n--- Generating Itinerary for {request.destination_name} ---")
 
-    # TODO: Bước 1: Gọi hàm search_nearby_places để lấy danh sách locations
     print("\n--- Step 1: Fetching places from Google Places API ---")
     
     try:
@@ -119,10 +118,7 @@ def generate_itinerary(request: TravelRequest) -> FinalItinerary:
         
         # Chuẩn bị danh sách places cho prompt
         places_text = places_to_text_block(nearby_places)
-        
-        # print(f"\nAvailable places:\n{places_text}\n")
-        
-        # TODO: Bước 2: Xây dựng prompt để LLM chọn địa điểm từ danh sách
+                
         prompt = f"""
 Bạn là một AI Travel Planner.
 
@@ -165,11 +161,17 @@ Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem nh
 
         raw_response = llm.run(prompt)
 
-        # print("\n=== RAW LLM RESPONSE ===\n")
-        # print(raw_response)
-        # print("\n========================\n")
+        print("\n=== RAW LLM RESPONSE ===\n")
+        print(raw_response)
+        print("\n========================\n")
 
         result = safe_json_loads(raw_response)
+
+        name_to_id = {p.displayName: p.id for p in nearby_places}
+
+        for item in result.get("trip_items", []):
+            item["place_id"] = name_to_id.get(item["location_name"])
+        
 
         itinerary = FinalItinerary(
             name=f"Trip to {request.destination_name}",
@@ -297,7 +299,7 @@ Bước 2: Tạo TripItem cho từng địa điểm vừa được chọn thay t
         return itinerary
 
 
-def suggest_location(itinerary: FinalItinerary, unwanted_location: TripItem, coordinate: Coordinate) -> FinalItinerary:
+def suggest_location(itinerary: FinalItinerary, unwanted_location: TripItem, coordinate: Coordinate) -> list[TripItem]:
 
     llm = VertexLLM()
     
@@ -322,7 +324,7 @@ def suggest_location(itinerary: FinalItinerary, unwanted_location: TripItem, coo
 
     unwanted_locations_text = trip_item_to_text(unwanted_location)
 
-    kept_locations = [item for item in itinerary.trip_items if item.location_name not in [loc.location_name for loc in unwanted_locations]]
+    kept_locations = [item for item in itinerary.trip_items if item.location_name != unwanted_location.location_name]
     kept_locations_text = trip_items_to_text(kept_locations)
 
     prompt = f"""
