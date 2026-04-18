@@ -81,7 +81,7 @@ Trả về JSON HỢP LỆ, không có markdown code block.
         )
         
         print(f"✓ Travel Notebook generated")
-        
+    
         return notebook
         
     except Exception as e:

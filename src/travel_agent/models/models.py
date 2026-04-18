@@ -72,3 +72,9 @@ class ModifyItineraryRequest:
     itinerary_data: FinalItinerary
     unwanted_locations: List[TripItem]
     coordinate: Coordinate
+
+@dataclass
+class SuggestLocationsRequest:
+    itinerary_data: FinalItinerary
+    unwanted_location: TripItem
+    coordinate: Coordinate

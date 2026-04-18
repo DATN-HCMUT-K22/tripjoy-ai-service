@@ -3,8 +3,8 @@ from pydantic import BaseModel
 from datetime import date
 
 
-from ..models.models import TravelRequest, FinalItinerary, ChatRequest, ModifyItineraryRequest
-from ..graphs.itinerary_graph import generate_itinerary, modify_itinerary
+from ..models.models import TravelRequest, FinalItinerary, ChatRequest, ModifyItineraryRequest, SuggestLocationsRequest
+from ..graphs.itinerary_graph import generate_itinerary, modify_itinerary, suggest_location
 from ..graphs.notebook_graph import generate_notebook
 from ..graphs.chat_graph import chat
 
@@ -74,20 +74,24 @@ def modify_itinerary_api(payload: ModifyItineraryRequest):
     except Exception as e:
         return {"error": f"Error modifying itinerary: {str(e)}"}
 
-
-@app.post("/chat")
-def chat_api(chat_request: ChatRequest):
+@app.post("/suggest-locations")
+def suggest_locations_api(payload: SuggestLocationsRequest):
     """
-    API 4: Chatbot du lịch
-    
-    Nhận câu hỏi từ người dùng, trả về phản hồi từ AI
+    API 4: Gợi ý các địa điểm thay thế cho các địa điểm không muốn đi
+
+    Nhận SuggestLocationsRequest (itinerary_data + unwanted_locations) trong body,
+    trả về danh sách các địa điểm gợi ý
     """
     try:
-        response = chat(chat_request)
-        
-        if response:
-            return {"message": response}
+        # Gợi ý các địa điểm
+        suggested_locations = suggest_location(payload.itinerary_data, payload.unwanted_location, payload.coordinate)
+
+        if suggested_locations:
+            return suggested_locations
         else:
-            return {"error": "Failed to get response"}
+            return {"error": "Failed to suggest locations"}
     except Exception as e:
-        return {"error": f"Error in chat: {str(e)}"}
+        return {"error": f"Error suggesting locations: {str(e)}"}
+    
+# @app.post("/chat")
+# def chat_api(payload: ChatRequest):
