@@ -93,3 +93,5 @@ def suggest_locations_api(payload: SuggestLocationsRequest):
     except Exception as e:
         return {"error": f"Error suggesting locations: {str(e)}"}
     
+# @app.post("/chat")
+# def chat_api(payload: ChatRequest):
