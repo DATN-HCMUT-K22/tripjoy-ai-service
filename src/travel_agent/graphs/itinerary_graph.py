@@ -67,6 +67,17 @@ Item {i}:
 
     return "\n\n".join(blocks)
 
+def trip_item_to_text(item: TripItem) -> str:
+    return f"""
+Item:
+- Start time: {item.start_time.isoformat()}
+- Duration: {item.duration} minutes
+- Location: {item.location_name}
+- Place ID: {item.place_id}
+- Note: {item.note}
+"""
+
+
 def safe_json_loads(raw: str):
     """
     Làm sạch output của LLM và parse JSON an toàn.
@@ -284,6 +295,97 @@ Bước 2: Tạo TripItem cho từng địa điểm vừa được chọn thay t
     except Exception as e:
         print(f"✗ Error modifying itinerary: {e}")
         return itinerary
+
+
+def suggest_location(itinerary: FinalItinerary, unwanted_location: TripItem, coordinate: Coordinate) -> FinalItinerary:
+
+    llm = VertexLLM()
+    
+    print("="*80)
+    print("SUGGEST LOCATION")
+    print("="*80)
+    
+    if not unwanted_location:
+        print("⚠ No locations to suggest")
+        return itinerary
+
+    print(f"\n--- Suggesting Locations ---")
+    
+    nearby_places = search_nearby_places(
+        latitude=coordinate.latitude,
+        longitude=coordinate.longitude,
+        # included_types=request.travel_type
+        included_types=["tourist_attraction"]
+    )
+
+    places_text = places_to_text_block(nearby_places)
+
+    unwanted_locations_text = trip_item_to_text(unwanted_location)
+
+    kept_locations = [item for item in itinerary.trip_items if item.location_name not in [loc.location_name for loc in unwanted_locations]]
+    kept_locations_text = trip_items_to_text(kept_locations)
+
+    prompt = f"""
+Bạn là Travel AI Planner chuyên nghiệp.
+
+Thông tin chuyến đi:
+- Destination: {itinerary.destination}
+- Themes: {", ".join(itinerary.themes)}
+- Budget: {itinerary.budget_estimate}
+- Thời gian: {itinerary.start_date} đến {itinerary.end_date}
+- Số người: {itinerary.people_quantity}
+
+Nhiệm vụ của bạn như sau:
+
+Chọn 5 địa điểm từ danh sách {places_text} để gợi ý thay thế cho địa điểm {unwanted_locations_text} và không được trùng với các địa điểm đã có sẵn trong lịch trình {kept_locations_text}. Hãy chọn những địa điểm phù hợp với thông tin chuyến đi và có thể thay thế tốt cho các địa điểm không muốn đi.
+
+⚠️ Chỉ trả về list các TripItem với JSON hợp lệ có Format như sau:
+{{
+  "trip_items": [
+    {{
+      "start_time": "2026-05-01T09:00:00",
+      "duration": 120,
+      "review": "tóm tắt review bằng tiếng Việt",
+      "location_name": "place name",
+      "place_id": "place id"
+    }}
+  ]
+}}
+"""
+    
+    try:
+        raw = llm.run(prompt)
+        data = safe_json_loads(raw)
+        print("\n=== RAW LLM RESPONSE ===")
+        print(raw)
+        print("=== END RAW ===\n")
+
+        print("\n=== PARSED DATA ===")
+        print(json.dumps(data, indent=2, ensure_ascii=False))
+        print("=== END DATA ===\n")
+        
+        new_items = data.get("trip_items", [])
+
+        trip_item_list = []
+
+        for item in new_items:
+            trip_item = TripItem(
+                start_time=datetime.fromisoformat(item["start_time"]),
+                duration=item["duration"],
+                note=item.get("review", ""),
+                location_name=item.get("location_name", ""),
+                place_id=item.get("place_id", "")
+            )
+            trip_item_list.append(trip_item)
+
+        print(f"✓ Successfully")
+
+        return trip_item_list
+
+    except Exception as e:
+        print(f"✗ Error suggesting trip item: {e}")
+        return None
+
 
 # if __name__ == "__main__":
 
