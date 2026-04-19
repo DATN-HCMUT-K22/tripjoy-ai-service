@@ -17,7 +17,7 @@ services:
       - "${APP_PORT:-8000}:8000"
     volumes:
       # Map file từ máy Windows vào thư mục /app/secrets/ của Linux container
-      - d:\devspace\datn\tripjoy-project\tripjoy-ai-service\credentials.json:/app/secrets/credentials.json:ro
+      - ./credentials.json:/app/secrets/credentials.json:ro
     networks:
       - ai-network
     restart: unless-stopped
