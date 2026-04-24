@@ -17,7 +17,7 @@ class TravelRequest():
     start_date: date
     end_date: date
     people_quantity: int
-
+    suggest_locations: Optional[List[str]] = None
 
 @dataclass
 class Place:
@@ -63,9 +63,9 @@ class FinalItinerary:
 
 @dataclass
 class ChatRequest:
+    conversation_id: str
     message: str
-    chat_history: List[Dict]
-    itinerary: FinalItinerary
+    itinerary: Optional[FinalItinerary] = None
 
 @dataclass
 class ModifyItineraryRequest:

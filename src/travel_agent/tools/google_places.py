@@ -125,6 +125,59 @@ def search_nearby_places(
 
     return list(all_places.values())
 
+def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
+    url = f"https://places.googleapis.com/v1/places/{place_id}"
+
+    headers = {
+        "X-Goog-Api-Key": GG_API_KEY,
+        # KHÔNG có space sau dấu phẩy
+        "X-Goog-FieldMask": (
+            "id,"
+            "types,"
+            "primaryType,"
+            "displayName,"
+            "location,"
+            "reviews"
+        ),
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        raise Exception(f"Google Places API error: {response.text}")
+
+    data = response.json()
+
+    # xử lý reviews
+    reviews_data = data.get("reviews", [])
+    review_texts = []
+
+    for r in reviews_data[:max_reviews]:
+        text = r.get("originalText", {}).get("text")
+        if text:
+            review_texts.append(text)
+
+    # location
+    location_data = data.get("location", {})
+
+    coordinate = Coordinate(
+        latitude=location_data.get("latitude"),
+        longitude=location_data.get("longitude")
+    )
+
+    # build object
+    place_obj = Place(
+        id=data.get("id"),
+        types=data.get("types", []),
+        location=coordinate,
+        displayName=data.get("displayName", {}).get("text"),
+        primaryType=data.get("primaryType"),
+        reviews=review_texts
+    )
+
+    return place_obj
+
+
 # if __name__ == "__main__":
 
 #     latitude = 11.9465
