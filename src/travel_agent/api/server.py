@@ -93,5 +93,16 @@ def suggest_locations_api(payload: SuggestLocationsRequest):
     except Exception as e:
         return {"error": f"Error suggesting locations: {str(e)}"}
     
-# @app.post("/chat")
-# def chat_api(payload: ChatRequest):
+@app.post("/chat")
+def chat_api(payload: ChatRequest):
+    """
+    API 5: Chat với TripJoy AI
+
+    Nhận ChatRequest (conversation_id + message + optional itinerary) trong body,
+    trả về phản hồi từ TripJoy AI
+    """
+    try:
+        response = chat(payload)
+        return response
+    except Exception as e:
+        return {"error": f"Error processing chat: {str(e)}"}
