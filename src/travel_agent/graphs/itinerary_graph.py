@@ -16,6 +16,7 @@ def places_to_text_block(places):
         block = f"""
     Name: {p.displayName}
     Type: {", ".join(p.types)}
+    Place ID: {p.id}
     """
         
         blocks.append(block.strip())
@@ -86,7 +87,7 @@ def generate_itinerary_without_suggest_locations(request: TravelRequest) -> Fina
     
     llm = VertexLLM()
 
-    print(f"\n--- Generating Itinerary for {request.destination_name} ---")
+    print(f"\n--- Generating Itinerary without suggestion for {request.destination_name} ---")
 
     print("\n--- Step 1: Fetching places from Google Places API ---")
     
@@ -112,7 +113,6 @@ QUY TẮC BẮT BUỘC:
 - Output phải bắt đầu bằng {{ và kết thúc bằng }}
 
 Thông tin chuyến đi:
-
 - Destination: {request.destination_name}
 - Start date: {request.start_date}
 - End date: {request.end_date}
@@ -120,16 +120,22 @@ Thông tin chuyến đi:
 - People: {request.people_quantity}
 - Travel themes: {", ".join(request.travel_type)}
 
-Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
+TOOL SẴN CÓ:
+- get_distance_between_places(origin_place_id, destination_place_id, travel_mode="DRIVE")
+  Trả về JSON:
+  {{
+    "distance_meters": <int>,
+    "duration_seconds": <int>
+  }}
 
+Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 Bước 1: Chọn các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi)
-Bước 2: Sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng
+Bước 2: Gọi tool get_distance_between_places để có dữ liệu về khoảng cách và thời gian di chuyển giữa các địa điểm và dựa vào đó sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng.
 Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
-- start_time bắt đầu từ {request.start_date}
-- Các địa điểm tiếp theo tăng dần theo thời gian
+- start_time của địa điểm đầu tiên bắt đầu từ {request.start_date}
+- start_time của các địa điểm tiếp theo bằng start_time của địa điểm trước đó + duration của địa điểm trước đó + thời gian di chuyển giữa 2 địa điểm (số liệu cụ thể từ tool mà bạn đã gọi).
 - Phân bố đều các địa điểm trong các ngày cho đến {request.end_date}
-- duration tính bằng phút
-- location_name lấy từ Name
+- duration tính bằng phút, location_name lấy từ Name
 
 Format:
 {{
@@ -167,7 +173,7 @@ Format:
         reviews_to_summarize = {item.location_name: reviews_map.get(item.location_name, []) for item in trip_items}
 
         reviews_text = reviews_to_text_block(reviews_to_summarize)
-        print(f"\n{reviews_text}\n")
+        # print(f"\n{reviews_text}\n")
 
         prompt2 = f"""
 Dữ liệu đầu vào: {reviews_text}
@@ -212,7 +218,7 @@ def generate_itinerary_with_suggest_locations(request: TravelRequest) -> FinalIt
     
     llm = VertexLLM()
 
-    print(f"\n--- Generating Itinerary for {request.destination_name} ---")
+    print(f"\n--- Generating Itinerary with suggestion for {request.destination_name} ---")
 
     print("\n--- Step 1: Fetching places from Google Places API ---")
     
@@ -259,8 +265,8 @@ Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 Bước 1: Chuyến đi này bắt buộc phải có những địa điểm nằm trong {suggest_text} vì đó là những địa điểm tôi muốn đi. Ngoài ra, bạn phải chọn thêm các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi).
 Bước 2: Sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng
 Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
-- start_time bắt đầu từ {request.start_date}
-- Các địa điểm tiếp theo tăng dần theo thời gian
+- start_time của địa điểm đầu tiên bắt đầu từ {request.start_date}
+- start_time của các địa điểm tiếp theo là start_time + duration + thời gian di chuyển của địa điểm trước đó.
 - Phân bố đều các địa điểm trong các ngày cho đến {request.end_date}
 - duration tính bằng phút
 - location_name lấy từ Name
@@ -305,7 +311,7 @@ Format:
         reviews_to_summarize = {item.location_name: reviews_map.get(item.location_name, []) for item in trip_items}
 
         reviews_text = reviews_to_text_block(reviews_to_summarize)
-        print(f"\n{reviews_text}\n")
+        # print(f"\n{reviews_text}\n")
 
         prompt2 = f"""
 Dữ liệu đầu vào: {reviews_text}

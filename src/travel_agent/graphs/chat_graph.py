@@ -29,7 +29,6 @@ NGUYÊN TẮC TRẢ LỜI:
 def chat(chat_request: ChatRequest) -> str:
     system_prompt = build_system_prompt(chat_request.conversation_id,chat_request.itinerary)
 
-    print(system_prompt, )
     return run_agent(
         message=chat_request.message,
         conversation_id=chat_request.conversation_id,

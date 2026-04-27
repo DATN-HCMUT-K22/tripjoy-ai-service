@@ -114,7 +114,7 @@ class VertexLLM:
                 FunctionDeclaration(
                     name=t["name"],
                     description=t["description"],
-                    parameters=t["parameters"],
+                    parameters=t["parameters"]
                 )
             )
         gemini_tools = [Tool(function_declarations=function_declarations)]

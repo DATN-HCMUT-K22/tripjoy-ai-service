@@ -177,6 +177,67 @@ def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
 
     return place_obj
 
+def get_distance_between_places(
+    origin_place_id: str,
+    destination_place_id: str,
+    travel_mode: str = "DRIVE"
+) -> dict:
+    """
+    Trả về khoảng cách (mét) và thời gian (giây) giữa 2 place_id
+    """
+
+    url = "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix"
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GG_API_KEY,
+        "X-Goog-FieldMask": "distanceMeters,duration,status,condition"
+    }
+
+    body = {
+        "origins": [
+            {
+                "waypoint": {
+                    "placeId": origin_place_id
+                }
+            }
+        ],
+        "destinations": [
+            {
+                "waypoint": {
+                    "placeId": destination_place_id
+                }
+            }
+        ],
+        "travelMode": travel_mode
+    }
+
+    response = requests.post(url, headers=headers, json=body)
+
+    if response.status_code != 200:
+        raise Exception(f"Routes API error: {response.text}")
+
+    data = response.json()
+
+    # API trả về list (dù chỉ có 1 route)
+    if not data:
+        raise Exception("No route found")
+
+    route = data[0]
+
+    if route.get("condition") != "ROUTE_EXISTS":
+        raise Exception(f"No valid route: {route}")
+
+    distance = route.get("distanceMeters")
+    duration_str = route.get("duration")  # ví dụ: "712s"
+
+    # convert "712s" -> 712
+    duration = int(duration_str.replace("s", "")) if duration_str else None
+
+    return {
+        "distance_meters": distance,
+        "duration_seconds": duration
+    }
 
 # if __name__ == "__main__":
 
