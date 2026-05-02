@@ -116,7 +116,7 @@ Thông tin chuyến đi:
 - Destination: {request.destination_name}
 - Start date: {request.start_date}
 - End date: {request.end_date}
-- Budget: {request.budget}
+- Budget: {request.budget} VND
 - People: {request.people_quantity}
 - Travel themes: {", ".join(request.travel_type)}
 
@@ -255,7 +255,7 @@ Thông tin chuyến đi:
 - Destination: {request.destination_name}
 - Start date: {request.start_date}
 - End date: {request.end_date}
-- Budget: {request.budget}
+- Budget: {request.budget} VND
 - People: {request.people_quantity}
 - Travel themes: {", ".join(request.travel_type)}
 
@@ -399,7 +399,7 @@ QUY TẮC BẮT BUỘC:
 Thông tin chuyến đi:
 - Destination: {itinerary.destination}
 - Themes: {", ".join(itinerary.themes)}
-- Budget: {itinerary.budget_estimate}
+- Budget: {itinerary.budget_estimate} VND
 - Thời gian: {itinerary.start_date} đến {itinerary.end_date}
 - Số người: {itinerary.people_quantity}
 
@@ -518,7 +518,7 @@ QUY TẮC BẮT BUỘC:
 Thông tin chuyến đi:
 - Destination: {itinerary.destination}
 - Themes: {", ".join(itinerary.themes)}
-- Budget: {itinerary.budget_estimate}
+- Budget: {itinerary.budget_estimate} VND
 - Thời gian: {itinerary.start_date} đến {itinerary.end_date}
 - Số người: {itinerary.people_quantity}
 
