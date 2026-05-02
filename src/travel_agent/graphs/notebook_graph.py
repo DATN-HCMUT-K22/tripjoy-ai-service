@@ -46,26 +46,26 @@ Bạn là một Travel Guide chuyên nghiệp có kinh nghiệm du lịch tại 
 Thông tin chuyến đi:
 - Điểm đến: {itinerary.destination}
 - Số người: {itinerary.people_quantity}
-- Ngân sách: {itinerary.budget_estimate}
+- Ngân sách: {itinerary.budget_estimate} VND
 
 Thông tin từ Wikipedia về địa điểm du lịch {itinerary.destination}:
 - Ẩm thực: {wiki_info.get('food', 'N/A')}
 - Khí hậu: {wiki_info.get('climate', 'N/A')}
 - Văn hóa: {wiki_info.get('culture', 'N/A')}
 
+QUY TẮC XÂY DỰNG TRAVEL NOTEBOOK:
+- Nếu thông tin từ wiki N/A ở field nào, hãy chủ động xây dựng nội dung cho field đó dựa vào các nguồn uy tín trên Internet
+- Còn nếu những field từ wiki có nội dung đầy đủ, hãy chủ động xây dựng nội dung field đó theo thông tin từ wiki nhé
+- Trả về JSON HỢP LỆ, không có markdown code block.
+
 Nhiệm vụ của bạn là tạo một Travel Notebook cho chuyến du lịch dưới dạng JSON với cấu trúc sau:
 
 {{
   "food": "Giới thiệu về ẩm thực địa phương, các món ăn đặc trưng, nhà hàng nổi tiếng và những trải nghiệm ẩm thực không thể bỏ qua",
   "climate": "Mô tả chi tiết về khí hậu: Hãy mô tả khí hậu vào thời điểm {itinerary.start_date} đến {itinerary.end_date} và đưa ra lời khuyên về trang phục và những thứ nên mang theo",
-  "culture": "Những đặc điểm văn hóa nổi bật, tập quán địa phương, quy tắc ứng xử, lễ hội và sự kiện quan trọng"
+  "culture": "Những đặc điểm văn hóa nổi bật, tập quán địa phương, quy tắc ứng xử, lễ hội và sự kiện quan trọng",
+  "emergency_contacts": "Thông tin về các số điện thoại khẩn cấp, bệnh viện gần nhất, đại sứ quán hoặc lãnh sự quán."
 }}
-
-Lưu ý:
-- Nếu thông tin từ wiki N/A ở field nào, hãy chủ động xây dựng nội dung cho field đó dựa vào các nguồn uy tín trên Internet
-- Còn nếu những field từ wiki có nội dung đầy đủ, hãy chủ động xây dựng nội dung field đó theo thông tin từ wiki nhé
-
-Trả về JSON HỢP LỆ, không có markdown code block.
 """
     
     try:
@@ -77,7 +77,8 @@ Trả về JSON HỢP LỆ, không có markdown code block.
             name=f"Travel Notebook - {itinerary.destination}",
             food=data.get("food", "N/A"),
             climate=data.get("climate", "N/A"),
-            culture=data.get("culture", "N/A")
+            culture=data.get("culture", "N/A"),
+            emergency_contacts=data.get("emergency_contacts", "N/A")
         )
         
         print(f"✓ Travel Notebook generated")

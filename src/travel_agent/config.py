@@ -87,6 +87,21 @@ class Settings(BaseSettings):
     app_reload: bool = Field(default=False, description="Chỉ True trong development")
     log_level: str = Field(default="INFO")
 
+    # ── OpenRouter (LLM Trust / Judge) ─────────────────────────
+    openrouter_api_key: str | None = Field(
+        default=None,
+        description="OpenRouter API key for llm_trust judge (OPENROUTER_API_KEY)",
+    )
+    openrouter_key: str | None = Field(
+        default=None,
+        description="Alias for OPENROUTER_API_KEY (legacy / fallback)",
+    )
+    openrouter_model: str = Field(
+        default="openai/gpt-4o-mini",
+        description="OpenRouter judge model id",
+    )
+
+    
     # ── Validators ────────────────────────────────────────────
     @field_validator("google_application_credentials", mode="before")
     @classmethod

@@ -13,7 +13,7 @@ class TravelRequest():
     destination_name: str
     coordinate: Coordinate
     travel_type: List[str]
-    budget: str
+    budget: int
     start_date: date
     end_date: date
     people_quantity: int
@@ -40,6 +40,7 @@ class TravelNotebook:
     food: str
     climate: str
     culture: str  
+    emergency_contacts: str
 
 
 @dataclass
@@ -56,7 +57,7 @@ class FinalItinerary:
     start_date: date
     end_date: date
     people_quantity: int
-    budget_estimate: str
+    budget_estimate: int
     themes: List[str]
     destination: str
     trip_items: List[TripItem]
@@ -78,3 +79,9 @@ class SuggestLocationsRequest:
     itinerary_data: FinalItinerary
     unwanted_location: TripItem
     coordinate: Coordinate
+
+@dataclass(frozen=True)
+class TrustScore:
+    overall: float
+    subscores: dict[str, float]
+    reasons: dict[str, str]
