@@ -5,11 +5,11 @@
 # === SECRETS — NEVER COMMIT (CRITICAL) ===
 .env
 .env.*
-!.env.example          # Ngoại lệ: .env.example là template, được commit
+!.env.example          
 
 # GCP Service Account Keys — tất cả dạng JSON credentials
 *.json
-!package.json          # Ngoại lệ nếu có (thường không có trong Python project)
+!package.json          
 gcp-*.json
 *-service-account*.json
 *credentials*.json

@@ -36,3 +36,6 @@ ortools==9.11.4210             # Google OR-Tools — TSP/VRP route optimization
 
 # --- Wikipedia Data ---
 wikipedia-api==0.7.1           # Fetch destination info for TravelNotebook
+
+# --- Database Connectivity (MCP Tool Context) ---
+psycopg2-binary==2.9.10
