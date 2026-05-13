@@ -1,0 +1,181 @@
+name: Deploy — Staging
+
+on:
+  push:
+    branches:
+      - staging
+
+concurrency:
+  group: ai-deploy-staging
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/tripjoy-ai-service
+
+jobs:
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dev dependencies
+        run: |
+          pip install ruff mypy pytest
+          pip install -r requirements.txt
+
+      - name: Run Ruff linter
+        run: ruff check src/
+
+      - name: Run Ruff formatter check
+        run: ruff format --check src/
+
+      - name: Run mypy type checker
+        run: mypy src/ --ignore-missing-imports
+        continue-on-error: true
+
+  build-and-push:
+    name: Build & Push Staging Image
+    runs-on: ubuntu-latest
+    needs: lint
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=staging
+            type=sha,prefix=staging-
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: runtime
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Staging EC2
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    environment: staging
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST_STAGING }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          timeout: 600s
+          script: |
+            set -e
+
+            echo "=== Deploying TripJoy AI Service Staging ==="
+
+            mkdir -p ~/tripjoy-ai-service-staging
+            cd ~/tripjoy-ai-service-staging
+
+            echo "Syncing repository..."
+            if [ -d ".git" ]; then
+              git fetch origin staging
+              git checkout staging
+              git pull origin staging
+            else
+              git clone -b staging https://github.com/${{ github.repository }}.git .
+            fi
+
+            echo "Writing .env..."
+            echo "${{ secrets.ENV_STAGING }}" | base64 -d > .env
+            echo "" >> .env
+            echo "IMAGE_TAG=staging" >> .env
+            echo "GHCR_OWNER=${{ github.repository_owner }}" >> .env
+            echo "BACKEND_NETWORK_NAME=tripjoy-staging-network" >> .env
+            echo "COMPOSE_PROJECT_NAME=tripjoy-staging" >> .env
+
+            echo "Writing GCP credentials..."
+            echo "${{ secrets.GCP_CREDENTIALS_JSON_STAGING }}" | base64 -d > credentials.json
+
+            echo "Checking backend staging network..."
+            docker network inspect tripjoy-staging-network >/dev/null 2>&1 || {
+              echo "ERROR: tripjoy-staging-network does not exist. Deploy backend staging first."
+              exit 1
+            }
+
+            echo "Logging in to GHCR..."
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "Pulling latest image..."
+            docker compose -f docker-compose.prod.yml pull tripjoy-ai-service
+
+            echo "Restarting service..."
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans tripjoy-ai-service
+
+            echo "Waiting for health..."
+            MAX_RETRIES=30
+            RETRY_COUNT=0
+            HEALTH="DOWN"
+
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              RESPONSE=$(curl -s http://127.0.0.1:8000/health || echo "CONNECTION_ERROR")
+              echo "Attempt $((RETRY_COUNT+1)): $RESPONSE"
+
+              if echo "$RESPONSE" | grep -Eiq '"status"[[:space:]]*:[[:space:]]*"?(ok|up)"?'; then
+                HEALTH="UP"
+                break
+              fi
+
+              sleep 5
+              RETRY_COUNT=$((RETRY_COUNT+1))
+            done
+
+            if [ "$HEALTH" != "UP" ]; then
+              echo "AI service did not become healthy."
+              docker ps --filter "name=tripjoy-staging-ai-service"
+              docker logs tripjoy-staging-ai-service --tail=100 || true
+              exit 1
+            fi
+
+            echo "Testing backend -> AI network access..."
+            docker exec tripjoy-staging-api sh -c "wget -qO- http://tripjoy-ai-service:8000/health || curl -s http://tripjoy-ai-service:8000/health"
+
+            echo "Cleaning dangling images..."
+            docker image prune -f
+
+            echo "Final status:"
+            docker compose -f docker-compose.prod.yml ps
+
+            echo "=== Staging AI deployment complete ==="

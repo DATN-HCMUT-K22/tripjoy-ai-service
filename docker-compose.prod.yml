@@ -1,0 +1,50 @@
+# ================================================================
+# docker-compose.prod.yml — TripJoy AI Service Deployment
+#
+# Dùng cho EC2 / GitHub Actions.
+# File local docker-compose.yml vẫn giữ nguyên để dev local.
+# ================================================================
+
+services:
+  tripjoy-ai-service:
+    image: ghcr.io/${GHCR_OWNER}/tripjoy-ai-service:${IMAGE_TAG:-staging}
+    container_name: ${COMPOSE_PROJECT_NAME:-tripjoy}-ai-service
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      APP_RELOAD: "false"
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+    # Chỉ expose local trên EC2, không public internet.
+    # Backend gọi qua Docker network: http://tripjoy-ai-service:8000
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"
+
+    volumes:
+      - ./credentials.json:/app/secrets/credentials.json:ro
+
+    networks:
+      backend:
+        aliases:
+          - tripjoy-ai-service
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+networks:
+  backend:
+    external: true
+    name: ${BACKEND_NETWORK_NAME:-tripjoy-staging-network}
