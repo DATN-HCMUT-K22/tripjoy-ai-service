@@ -23,7 +23,8 @@ class VertexLLM:
             location=settings.vertex_location,
         )
 
-        self.model = GenerativeModel(settings.vertex_model)
+        self.model_name = settings.vertex_model
+        self.model = GenerativeModel(self.model_name)
 
     def run(self, prompt: str) -> str:
         """Gửi prompt đến Gemini và trả về text response."""
@@ -175,7 +176,15 @@ class VertexLLM:
                 contents.append({"role": role, "parts": [{"text": m["content"]}]})
 
         # ── 4. Gọi Gemini ───────────────────────────────────────────────
-        response = self.model.generate_content(
+        # Nếu có system_instruction, ta cần tạo model có instruction đó
+        # (Gemini yêu cầu system_instruction nằm trong constructor của Model)
+        model_to_use = self.model
+        if system_instruction:
+            model_to_use = GenerativeModel(
+                self.model_name, system_instruction=system_instruction
+            )
+
+        response = model_to_use.generate_content(
             contents,
             tools=gemini_tools,
         )
