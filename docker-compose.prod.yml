@@ -7,7 +7,7 @@
 
 services:
   tripjoy-ai-service:
-    image: ghcr.io/${GHCR_OWNER}/tripjoy-ai-service:${IMAGE_TAG:-staging}
+    image: ${DOCKERHUB_USERNAME}/tripjoy-ai-service:${IMAGE_TAG:-staging}
     container_name: ${COMPOSE_PROJECT_NAME:-tripjoy}-ai-service
     restart: unless-stopped
 
