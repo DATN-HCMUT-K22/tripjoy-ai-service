@@ -118,14 +118,12 @@ class VertexLLM:
             )
         gemini_tools = [Tool(function_declarations=function_declarations)]
 
-        # ── 2. Tách system prompt ra khỏi messages ───────────────────────
-        system_instruction = None
+        # ── 2. Convert messages → Gemini contents ───────────────────────
         contents = []
 
         for m in messages:
-            # System prompt → dùng system_instruction riêng của Gemini
+            # Giữ behavior hiện tại: bỏ qua system message trong Gemini contents
             if m["role"] == "system":
-                system_instruction = m["content"]
                 continue
 
             # Tool result → Gemini dùng role "user" với part function_response
