@@ -1,11 +1,12 @@
-import os
 import uvicorn
 from dotenv import load_dotenv
 from pathlib import Path
 
 # Load .env từ root của project (nơi chứa .env)
 # Resolve absolute path để không phụ thuộc cwd khi chạy
-_PROJECT_ROOT = Path(__file__).parent.parent.parent  # main.py → travel_agent/ → src/ → tripjoy-ai-service/
+_PROJECT_ROOT = Path(
+    __file__
+).parent.parent.parent  # main.py → travel_agent/ → src/ → tripjoy-ai-service/
 load_dotenv(dotenv_path=_PROJECT_ROOT / ".env")
 
 # Import settings SAU load_dotenv để Pydantic đọc đúng env vars

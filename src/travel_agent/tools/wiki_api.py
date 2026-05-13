@@ -1,8 +1,7 @@
 import wikipediaapi
-from ..models.models import TravelNotebook
+
 
 def find_section_recursive(sections, keywords):
-
     for sec in sections:
         title = sec.title.lower().strip()
 
@@ -26,6 +25,7 @@ def find_section_recursive(sections, keywords):
 
     return None
 
+
 def get_destination_info(location: str):
     def fetch_from_wiki(language: str):
         wiki = wikipediaapi.Wikipedia(
@@ -44,30 +44,39 @@ def get_destination_info(location: str):
 
         # CLIMATE
         climate_titles = [
-            "Khí hậu", "Khí hậu và thời tiết",
-            "Climate", "Climate and weather"
+            "Khí hậu",
+            "Khí hậu và thời tiết",
+            "Climate",
+            "Climate and weather",
         ]
         climate = next(
-            (sec.text for title in climate_titles if (sec := page.section_by_title(title))),
-            ""
+            (
+                sec.text
+                for title in climate_titles
+                if (sec := page.section_by_title(title))
+            ),
+            "",
         )
 
         # CULTURE
         culture_titles = [
-            "Văn hóa", "Văn hoá",
-            "Culture", "Culture and society",
-            "Xã hội", "Đời sống"
+            "Văn hóa",
+            "Văn hoá",
+            "Culture",
+            "Culture and society",
+            "Xã hội",
+            "Đời sống",
         ]
         culture = next(
-            (sec.text for title in culture_titles if (sec := page.section_by_title(title))),
-            ""
+            (
+                sec.text
+                for title in culture_titles
+                if (sec := page.section_by_title(title))
+            ),
+            "",
         )
 
-        return {
-            "food": food or "",
-            "climate": climate or "",
-            "culture": culture or ""
-        }
+        return {"food": food or "", "climate": climate or "", "culture": culture or ""}
 
     # Ưu tiên tiếng Việt
     result_vi = fetch_from_wiki("vi")
@@ -79,8 +88,10 @@ def get_destination_info(location: str):
         if result_en:
             return {
                 "food": (result_vi["food"] if result_vi else "") or result_en["food"],
-                "climate": (result_vi["climate"] if result_vi else "") or result_en["climate"],
-                "culture": (result_vi["culture"] if result_vi else "") or result_en["culture"],
+                "climate": (result_vi["climate"] if result_vi else "")
+                or result_en["climate"],
+                "culture": (result_vi["culture"] if result_vi else "")
+                or result_en["culture"],
             }
 
     # Nếu có data tiếng Việt
@@ -88,14 +99,10 @@ def get_destination_info(location: str):
         return result_vi
 
     # fallback cuối cùng
-    return {
-        "food": "",
-        "climate": "",
-        "culture": ""
-    }
+    return {"food": "", "climate": "", "culture": ""}
+
 
 if __name__ == "__main__":
-
     result = get_destination_info("Đà Lạt")
 
     print("\n--- FOOD ---")

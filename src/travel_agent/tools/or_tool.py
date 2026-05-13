@@ -1,7 +1,6 @@
 from typing import List
 from math import radians, sin, cos, sqrt, atan2
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2
-from ..models.models import OrToolPlace, Coordinate
 
 
 def haversine_distance(lat1, lon1, lat2, lon2):
@@ -13,7 +12,10 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     dlat = radians(lat2 - lat1)
     dlon = radians(lon2 - lon1)
 
-    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+    a = (
+        sin(dlat / 2) ** 2
+        + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+    )
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     return R * c
@@ -28,7 +30,6 @@ def build_distance_matrix(places):
 
     for i in range(size):
         for j in range(size):
-
             if i == j:
                 matrix[i][j] = 0
                 continue
@@ -37,10 +38,7 @@ def build_distance_matrix(places):
             p2 = places[j].coordinate
 
             dist = haversine_distance(
-                p1.latitude,
-                p1.longitude,
-                p2.latitude,
-                p2.longitude
+                p1.latitude, p1.longitude, p2.latitude, p2.longitude
             )
 
             matrix[i][j] = int(dist * 1000)  # meters
@@ -66,14 +64,13 @@ def optimize_route(places) -> List[int]:
 
     manager = pywrapcp.RoutingIndexManager(
         len(distance_matrix),
-        1,   # 1 vehicle
-        0    # start node
+        1,  # 1 vehicle
+        0,  # start node
     )
 
     routing = pywrapcp.RoutingModel(manager)
 
     def distance_callback(from_index, to_index):
-
         from_node = manager.IndexToNode(from_index)
         to_node = manager.IndexToNode(to_index)
 
@@ -99,13 +96,13 @@ def optimize_route(places) -> List[int]:
     index = routing.Start(0)
 
     while not routing.IsEnd(index):
-
         node = manager.IndexToNode(index)
         route.append(places[node].index)
 
         index = solution.Value(routing.NextVar(index))
 
     return route
+
 
 # if __name__ == "__main__":
 

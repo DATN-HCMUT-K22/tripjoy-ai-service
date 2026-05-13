@@ -42,11 +42,14 @@ def _load_requests(path: Path) -> list[TravelRequest]:
 
     return requests
 
+
 def serialize(obj):
     from datetime import date, datetime
+
     if isinstance(obj, (date, datetime)):
         return obj.isoformat()
     raise TypeError(f"Type {type(obj)} not serializable")
+
 
 def main() -> None:
     # Load requests from adjacent request.json
@@ -58,15 +61,19 @@ def main() -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
     for i, req in enumerate(filtered_requests, start=30):
-        print(f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}")
+        print(
+            f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}"
+        )
 
         itinerary = generate_itinerary(req)
         if not itinerary:
-            raise ValueError(f"generate_itinerary returned None for {req.destination_name}")
+            raise ValueError(
+                f"generate_itinerary returned None for {req.destination_name}"
+            )
 
         payload = asdict(itinerary)
         pretty = json.dumps(payload, ensure_ascii=False, indent=2, default=serialize)
-        
+
         # Append with a blank line between records for readability
         with log_path.open("a", encoding="utf-8") as f:
             f.write(pretty)

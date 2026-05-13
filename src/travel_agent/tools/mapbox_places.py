@@ -38,4 +38,3 @@ class MapboxPlacesTool:
         res.raise_for_status()
 
         return res.json()
-

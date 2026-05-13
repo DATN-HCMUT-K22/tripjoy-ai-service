@@ -4,7 +4,6 @@ notebook_graph.py - Tạo TravelNotebook từ FinalItinerary
 
 import json
 import re
-from typing import List
 
 from ..llm.llm_vertex import VertexLLM
 from ..models.models import FinalItinerary, TravelNotebook
@@ -33,13 +32,13 @@ def safe_json_loads(raw: str):
 
 def generate_notebook(itinerary: FinalItinerary) -> TravelNotebook:
     llm = VertexLLM()
-    
-    print(f"\n--- Generating Travel Notebook ---")
-    
+
+    print("\n--- Generating Travel Notebook ---")
+
     # Lấy thông tin từ Wikipedia
     print(f"Fetching information from Wikipedia for {itinerary.destination}...")
     wiki_info = get_destination_info(itinerary.destination)
-    
+
     prompt = f"""
 Bạn là một Travel Guide chuyên nghiệp có kinh nghiệm du lịch tại Việt Nam.
 
@@ -67,24 +66,24 @@ Nhiệm vụ của bạn là tạo một Travel Notebook cho chuyến du lịch 
   "emergency_contacts": "Thông tin về các số điện thoại khẩn cấp, bệnh viện gần nhất, đại sứ quán hoặc lãnh sự quán."
 }}
 """
-    
+
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
-        
+
         # Tạo TravelNotebook object
         notebook = TravelNotebook(
             name=f"Travel Notebook - {itinerary.destination}",
             food=data.get("food", "N/A"),
             climate=data.get("climate", "N/A"),
             culture=data.get("culture", "N/A"),
-            emergency_contacts=data.get("emergency_contacts", "N/A")
+            emergency_contacts=data.get("emergency_contacts", "N/A"),
         )
-        
-        print(f"✓ Travel Notebook generated")
-    
+
+        print("✓ Travel Notebook generated")
+
         return notebook
-        
+
     except Exception as e:
         print(f"✗ Error generating notebook: {e}")
         return None

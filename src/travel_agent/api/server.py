@@ -1,10 +1,18 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from datetime import date
 
 
-from ..models.models import TravelRequest, FinalItinerary, ChatRequest, ModifyItineraryRequest, SuggestLocationsRequest
-from ..graphs.itinerary_graph import generate_itinerary, modify_itinerary, suggest_location
+from ..models.models import (
+    TravelRequest,
+    FinalItinerary,
+    ChatRequest,
+    ModifyItineraryRequest,
+    SuggestLocationsRequest,
+)
+from ..graphs.itinerary_graph import (
+    generate_itinerary,
+    modify_itinerary,
+    suggest_location,
+)
 from ..graphs.notebook_graph import generate_notebook
 from ..graphs.chat_graph import chat
 
@@ -31,7 +39,7 @@ def generate_itinerary_api(payload: TravelRequest):
     API 1: Tạo FinalItinerary từ TravelRequest
     """
     itinerary = generate_itinerary(payload)
-    
+
     if itinerary:
         return itinerary
     else:
@@ -42,7 +50,7 @@ def generate_itinerary_api(payload: TravelRequest):
 def generate_notebook_api(itinerary_data: FinalItinerary):
     """
     API 2: Tạo TravelNotebook từ FinalItinerary
-    
+
     Nhận FinalItinerary object và trả về TravelNotebook
     """
     try:
@@ -59,20 +67,23 @@ def generate_notebook_api(itinerary_data: FinalItinerary):
 def modify_itinerary_api(payload: ModifyItineraryRequest):
     """
     API 3: Sửa lịch trình bằng cách thay thế các địa điểm không muốn đi
-    
+
     Nhận ModifyItineraryRequest (itinerary_data + unwanted_locations) trong body,
     trả về FinalItinerary mới đã sửa
     """
-    try:        
+    try:
         # Sửa lịch trình
-        modified_itinerary = modify_itinerary(payload.itinerary_data, payload.unwanted_locations, payload.coordinate)
-        
+        modified_itinerary = modify_itinerary(
+            payload.itinerary_data, payload.unwanted_locations, payload.coordinate
+        )
+
         if modified_itinerary:
             return modified_itinerary
         else:
             return {"error": "Failed to modify itinerary"}
     except Exception as e:
         return {"error": f"Error modifying itinerary: {str(e)}"}
+
 
 @app.post("/suggest-locations")
 def suggest_locations_api(payload: SuggestLocationsRequest):
@@ -84,7 +95,9 @@ def suggest_locations_api(payload: SuggestLocationsRequest):
     """
     try:
         # Gợi ý các địa điểm
-        suggested_locations = suggest_location(payload.itinerary_data, payload.unwanted_location, payload.coordinate)
+        suggested_locations = suggest_location(
+            payload.itinerary_data, payload.unwanted_location, payload.coordinate
+        )
 
         if suggested_locations:
             return suggested_locations
@@ -92,7 +105,8 @@ def suggest_locations_api(payload: SuggestLocationsRequest):
             return {"error": "Failed to suggest locations"}
     except Exception as e:
         return {"error": f"Error suggesting locations: {str(e)}"}
-    
+
+
 @app.post("/chat")
 def chat_api(payload: ChatRequest):
     """

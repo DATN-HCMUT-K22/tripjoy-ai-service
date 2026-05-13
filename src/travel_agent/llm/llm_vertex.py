@@ -1,6 +1,4 @@
 import os
-import json
-from pathlib import Path
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, Tool, FunctionDeclaration
@@ -9,14 +7,15 @@ from travel_agent.config import get_settings
 
 
 class VertexLLM:
-
     def __init__(self):
         settings = get_settings()
 
         # Nếu có service account credentials thì set trước khi init vertexai
         # Pydantic đã validate là absolute path và file tồn tại
         if settings.google_application_credentials:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.google_application_credentials
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+                settings.google_application_credentials
+            )
 
         # Init Vertex AI SDK với project và location
         vertexai.init(
@@ -38,7 +37,7 @@ class VertexLLM:
             return response.candidates[0].content.parts[0].text
         except (IndexError, AttributeError):
             return ""
-    
+
     # def run_with_tools(self, messages, tools):
     #     """
     #     messages: [{"role": "...", "content": "..."}]
@@ -114,7 +113,7 @@ class VertexLLM:
                 FunctionDeclaration(
                     name=t["name"],
                     description=t["description"],
-                    parameters=t["parameters"]
+                    parameters=t["parameters"],
                 )
             )
         gemini_tools = [Tool(function_declarations=function_declarations)]
@@ -133,43 +132,47 @@ class VertexLLM:
             if m["role"] == "tool":
                 # Tìm tên tool từ message assistant liền trước
                 tool_name = None
-                for prev in reversed(messages[:messages.index(m)]):
+                for prev in reversed(messages[: messages.index(m)]):
                     if prev.get("tool_call"):
                         tool_name = prev["tool_call"]["name"]
                         break
 
-                contents.append({
-                    "role": "user",
-                    "parts": [{
-                        "function_response": {
-                            "name": tool_name,
-                            "response": {"result": m["content"]}
-                        }
-                    }]
-                })
+                contents.append(
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "function_response": {
+                                    "name": tool_name,
+                                    "response": {"result": m["content"]},
+                                }
+                            }
+                        ],
+                    }
+                )
                 continue
 
             # Tool call placeholder → Gemini dùng role "model" với part function_call
             if m.get("tool_call"):
-                contents.append({
-                    "role": "model",
-                    "parts": [{
-                        "function_call": {
-                            "name": m["tool_call"]["name"],
-                            "args": m["tool_call"]["arguments"]
-                        }
-                    }]
-                })
+                contents.append(
+                    {
+                        "role": "model",
+                        "parts": [
+                            {
+                                "function_call": {
+                                    "name": m["tool_call"]["name"],
+                                    "args": m["tool_call"]["arguments"],
+                                }
+                            }
+                        ],
+                    }
+                )
                 continue
 
             # Message thường (user / assistant)
             role = "user" if m["role"] == "user" else "model"
             if m.get("content"):
-                contents.append({
-                    "role": role,
-                    "parts": [{"text": m["content"]}]
-                })
-
+                contents.append({"role": role, "parts": [{"text": m["content"]}]})
 
         # ── 4. Gọi Gemini ───────────────────────────────────────────────
         response = self.model.generate_content(
@@ -184,12 +187,7 @@ class VertexLLM:
             part = candidate.content.parts[0]
             if hasattr(part, "function_call") and part.function_call.name:
                 fc = part.function_call
-                return {
-                    "tool_call": {
-                        "name": fc.name,
-                        "arguments": dict(fc.args)
-                    }
-                }
+                return {"tool_call": {"name": fc.name, "arguments": dict(fc.args)}}
         except (IndexError, AttributeError) as e:
             print(f"[run_with_tools] Lỗi parse function_call: {e}")
 

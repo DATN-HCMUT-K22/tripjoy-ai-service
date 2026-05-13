@@ -16,9 +16,8 @@ def _fetch_places(
     longitude: float,
     radius: int,
     included_types: List[str],
-    max_reviews: int
+    max_reviews: int,
 ) -> List[Place]:
-
     headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": GG_API_KEY,
@@ -57,7 +56,6 @@ def _fetch_places(
     results: List[Place] = []
 
     for place in places_data:
-
         reviews = place.get("reviews", [])
         review_texts = []
 
@@ -70,7 +68,7 @@ def _fetch_places(
 
         coordinate = Coordinate(
             latitude=location_data.get("latitude"),
-            longitude=location_data.get("longitude")
+            longitude=location_data.get("longitude"),
         )
 
         place_obj = Place(
@@ -79,7 +77,7 @@ def _fetch_places(
             location=coordinate,
             displayName=place.get("displayName", {}).get("text"),
             primaryType=place.get("primaryType"),
-            reviews=review_texts
+            reviews=review_texts,
         )
 
         results.append(place_obj)
@@ -92,9 +90,8 @@ def search_nearby_places(
     longitude: float,
     radius: int = 20000,
     included_types: List[str] = None,
-    max_reviews: int = 5
+    max_reviews: int = 5,
 ) -> List[Place]:
-
     if included_types is None:
         included_types = ["tourist_attraction"]
 
@@ -109,21 +106,21 @@ def search_nearby_places(
     ]
 
     all_places = {}
-    
-    for lat, lon in grid_centers:
 
+    for lat, lon in grid_centers:
         places = _fetch_places(
             latitude=lat,
             longitude=lon,
             radius=radius,
             included_types=included_types,
-            max_reviews=max_reviews
+            max_reviews=max_reviews,
         )
 
         for p in places:
             all_places[p.id] = p
 
     return list(all_places.values())
+
 
 def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
     url = f"https://places.googleapis.com/v1/places/{place_id}"
@@ -132,12 +129,7 @@ def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
         "X-Goog-Api-Key": GG_API_KEY,
         # KHÔNG có space sau dấu phẩy
         "X-Goog-FieldMask": (
-            "id,"
-            "types,"
-            "primaryType,"
-            "displayName,"
-            "location,"
-            "reviews"
+            "id," "types," "primaryType," "displayName," "location," "reviews"
         ),
     }
 
@@ -161,8 +153,7 @@ def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
     location_data = data.get("location", {})
 
     coordinate = Coordinate(
-        latitude=location_data.get("latitude"),
-        longitude=location_data.get("longitude")
+        latitude=location_data.get("latitude"), longitude=location_data.get("longitude")
     )
 
     # build object
@@ -172,15 +163,14 @@ def get_place_by_id(place_id: str, max_reviews: int = 5) -> Place:
         location=coordinate,
         displayName=data.get("displayName", {}).get("text"),
         primaryType=data.get("primaryType"),
-        reviews=review_texts
+        reviews=review_texts,
     )
 
     return place_obj
 
+
 def get_distance_between_places(
-    origin_place_id: str,
-    destination_place_id: str,
-    travel_mode: str = "DRIVE"
+    origin_place_id: str, destination_place_id: str, travel_mode: str = "DRIVE"
 ) -> dict:
     """
     Trả về khoảng cách (mét) và thời gian (giây) giữa 2 place_id
@@ -191,25 +181,13 @@ def get_distance_between_places(
     headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": GG_API_KEY,
-        "X-Goog-FieldMask": "distanceMeters,duration,status,condition"
+        "X-Goog-FieldMask": "distanceMeters,duration,status,condition",
     }
 
     body = {
-        "origins": [
-            {
-                "waypoint": {
-                    "placeId": origin_place_id
-                }
-            }
-        ],
-        "destinations": [
-            {
-                "waypoint": {
-                    "placeId": destination_place_id
-                }
-            }
-        ],
-        "travelMode": travel_mode
+        "origins": [{"waypoint": {"placeId": origin_place_id}}],
+        "destinations": [{"waypoint": {"placeId": destination_place_id}}],
+        "travelMode": travel_mode,
     }
 
     response = requests.post(url, headers=headers, json=body)
@@ -234,10 +212,8 @@ def get_distance_between_places(
     # convert "712s" -> 712
     duration = int(duration_str.replace("s", "")) if duration_str else None
 
-    return {
-        "distance_meters": distance,
-        "duration_seconds": duration
-    }
+    return {"distance_meters": distance, "duration_seconds": duration}
+
 
 # if __name__ == "__main__":
 

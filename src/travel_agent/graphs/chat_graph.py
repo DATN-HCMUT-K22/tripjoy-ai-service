@@ -3,13 +3,13 @@ from ..models.models import ChatRequest, FinalItinerary
 from typing import Optional
 
 
-def build_system_prompt(conversation_id: str, itinerary: Optional[FinalItinerary] = None) -> str:
+def build_system_prompt(
+    conversation_id: str, itinerary: Optional[FinalItinerary] = None
+) -> str:
     itinerary_text = ""
 
     if itinerary:
-        itinerary_text = "\n".join(
-            [f"- {k}: {v}" for k, v in itinerary.items() if v]
-        )
+        itinerary_text = "\n".join([f"- {k}: {v}" for k, v in itinerary.items() if v])
 
     return f"""
 Bạn là TripJoy AI - trợ lý du lịch trong ứng dụng chat nhóm.
@@ -27,10 +27,12 @@ NGUYÊN TẮC TRẢ LỜI:
 
 
 def chat(chat_request: ChatRequest) -> str:
-    system_prompt = build_system_prompt(chat_request.conversation_id,chat_request.itinerary)
+    system_prompt = build_system_prompt(
+        chat_request.conversation_id, chat_request.itinerary
+    )
 
     return run_agent(
         message=chat_request.message,
         conversation_id=chat_request.conversation_id,
-        system_prompt=system_prompt
+        system_prompt=system_prompt,
     )

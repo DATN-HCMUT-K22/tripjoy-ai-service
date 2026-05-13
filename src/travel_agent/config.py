@@ -15,7 +15,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Root của project (tripjoy-ai-service/)
 # Dùng để load .env từ đúng vị trí bất kể cwd khi chạy
-_PROJECT_ROOT = Path(__file__).parent.parent.parent  # src/travel_agent/ → src/ → tripjoy-ai-service/
+_PROJECT_ROOT = Path(
+    __file__
+).parent.parent.parent  # src/travel_agent/ → src/ → tripjoy-ai-service/
 
 
 class Settings(BaseSettings):
@@ -30,10 +32,10 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=str(_PROJECT_ROOT / ".env"),   # Load từ root, không phải src/
+        env_file=str(_PROJECT_ROOT / ".env"),  # Load từ root, không phải src/
         env_file_encoding="utf-8",
         case_sensitive=False,
-        extra="ignore",                          # Bỏ qua env vars không dùng (tránh crash)
+        extra="ignore",  # Bỏ qua env vars không dùng (tránh crash)
     )
 
     # ── Vertex AI / Gemini (BẮT BUỘC) ─────────────────────────
@@ -101,7 +103,6 @@ class Settings(BaseSettings):
         description="OpenRouter judge model id",
     )
 
-    
     # ── Validators ────────────────────────────────────────────
     @field_validator("google_application_credentials", mode="before")
     @classmethod

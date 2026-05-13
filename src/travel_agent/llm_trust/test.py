@@ -2,11 +2,10 @@ from datetime import datetime
 from pathlib import Path
 
 from ..models.models import TravelRequest, Coordinate
-from ..llm_trust.evaluator import generate_and_evaluate_itinerary, evaluate_output
+from ..llm_trust.evaluator import evaluate_output
 
 
 def main():
-
     req = TravelRequest(
         destination_name="Đà Lạt",
         coordinate=Coordinate(latitude=11.94, longitude=108.4583),
@@ -14,7 +13,7 @@ def main():
         budget=4000000,
         start_date=datetime(2026, 4, 30),
         end_date=datetime(2026, 5, 2),
-        people_quantity=2
+        people_quantity=2,
     )
 
     log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\eval_log.jsonl")
@@ -104,9 +103,7 @@ def main():
 """
 
     score = evaluate_output(
-        output_text=itinerary_text,
-        travel_request=req,
-        log_path=log_path
+        output_text=itinerary_text, travel_request=req, log_path=log_path
     )
     print(score)
 

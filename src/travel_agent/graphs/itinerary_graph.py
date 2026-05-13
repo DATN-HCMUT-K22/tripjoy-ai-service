@@ -1,33 +1,32 @@
 import json
 import re
 from typing import List
-from datetime import date, datetime
+from datetime import datetime
 
 from ..tools.google_places import search_nearby_places, get_place_by_id
 from ..llm.llm_vertex import VertexLLM
-from ..models.models import TravelRequest, FinalItinerary, OrToolPlace, Coordinate, TripItem
-from ..tools.or_tool import optimize_route
+from ..models.models import TravelRequest, FinalItinerary, Coordinate, TripItem
+
 
 def places_to_text_block(places):
     blocks = []
 
     for p in places:
-
         block = f"""
     Name: {p.displayName}
     Type: {", ".join(p.types)}
     Place ID: {p.id}
     """
-        
+
         blocks.append(block.strip())
 
     return "\n\n".join(blocks)
+
 
 def reviews_to_text_block(reviews):
     blocks = []
 
     for key in reviews:
-
         block = f"""
     {key}: {reviews[key]}
     """
@@ -82,28 +81,30 @@ def safe_json_loads(raw: str):
         return {}
 
 
-
-def generate_itinerary_without_suggest_locations(request: TravelRequest) -> FinalItinerary:
-    
+def generate_itinerary_without_suggest_locations(
+    request: TravelRequest,
+) -> FinalItinerary:
     llm = VertexLLM()
 
-    print(f"\n--- Generating Itinerary without suggestion for {request.destination_name} ---")
+    print(
+        f"\n--- Generating Itinerary without suggestion for {request.destination_name} ---"
+    )
 
     print("\n--- Step 1: Fetching places from Google Places API ---")
-    
+
     try:
         nearby_places = search_nearby_places(
             latitude=request.coordinate.latitude,
             longitude=request.coordinate.longitude,
             # included_types=request.travel_type
-            included_types=["tourist_attraction"]
+            included_types=["tourist_attraction"],
         )
-        
+
         print(f"✓ Found {len(nearby_places)} places")
-        
+
         # Chuẩn bị danh sách places cho prompt
         places_text = places_to_text_block(nearby_places)
-                
+
         prompt = f"""
 Bạn là một AI Travel Planner.
 
@@ -161,16 +162,19 @@ Format:
         for item in result.get("trip_items", []):
             trip_items.append(
                 TripItem(
-                    start_time = datetime.fromisoformat(item["start_time"]),
-                    duration = item["duration"],
-                    note = None,
-                    location_name = item["location_name"],
-                    place_id = name_to_id.get(item["location_name"])
+                    start_time=datetime.fromisoformat(item["start_time"]),
+                    duration=item["duration"],
+                    note=None,
+                    location_name=item["location_name"],
+                    place_id=name_to_id.get(item["location_name"]),
                 )
             )
-        
+
         reviews_map = {p.displayName: p.reviews for p in nearby_places}
-        reviews_to_summarize = {item.location_name: reviews_map.get(item.location_name, []) for item in trip_items}
+        reviews_to_summarize = {
+            item.location_name: reviews_map.get(item.location_name, [])
+            for item in trip_items
+        }
 
         reviews_text = reviews_to_text_block(reviews_to_summarize)
         # print(f"\n{reviews_text}\n")
@@ -195,7 +199,7 @@ Format:
 
         for item in trip_items:
             item.note = result2.get(item.location_name)
-        
+
         itinerary = FinalItinerary(
             name=f"Trip to {request.destination_name}",
             start_date=request.start_date,
@@ -204,7 +208,7 @@ Format:
             budget_estimate=request.budget,
             themes=request.travel_type,
             destination=request.destination_name,
-            trip_items=trip_items
+            trip_items=trip_items,
         )
 
         return itinerary
@@ -212,16 +216,17 @@ Format:
     except Exception as e:
         print(f"✗ Error generating itinerary: {e}")
         return None
-    
+
 
 def generate_itinerary_with_suggest_locations(request: TravelRequest) -> FinalItinerary:
-    
     llm = VertexLLM()
 
-    print(f"\n--- Generating Itinerary with suggestion for {request.destination_name} ---")
+    print(
+        f"\n--- Generating Itinerary with suggestion for {request.destination_name} ---"
+    )
 
     print("\n--- Step 1: Fetching places from Google Places API ---")
-    
+
     try:
         suggest_locations = []
         for loc in request.suggest_locations:
@@ -235,14 +240,14 @@ def generate_itinerary_with_suggest_locations(request: TravelRequest) -> FinalIt
             latitude=request.coordinate.latitude,
             longitude=request.coordinate.longitude,
             # included_types=request.travel_type
-            included_types=["tourist_attraction"]
+            included_types=["tourist_attraction"],
         )
-        
+
         print(f"✓ Found {len(nearby_places)} places")
-        
+
         # Chuẩn bị danh sách places cho prompt
         places_text = places_to_text_block(nearby_places)
-                
+
         prompt = f"""
 Bạn là một AI Travel Planner.
 
@@ -302,18 +307,21 @@ Format:
         for item in result.get("trip_items", []):
             trip_items.append(
                 TripItem(
-                    start_time = datetime.fromisoformat(item["start_time"]),
-                    duration = item["duration"],
-                    note = None,
-                    location_name = item["location_name"],
-                    place_id = name_to_id.get(item["location_name"])
+                    start_time=datetime.fromisoformat(item["start_time"]),
+                    duration=item["duration"],
+                    note=None,
+                    location_name=item["location_name"],
+                    place_id=name_to_id.get(item["location_name"]),
                 )
             )
-        
+
         reviews_map1 = {p.displayName: p.reviews for p in nearby_places}
         reviews_map2 = {p.displayName: p.reviews for p in suggest_locations}
         reviews_map = {**reviews_map1, **reviews_map2}
-        reviews_to_summarize = {item.location_name: reviews_map.get(item.location_name, []) for item in trip_items}
+        reviews_to_summarize = {
+            item.location_name: reviews_map.get(item.location_name, [])
+            for item in trip_items
+        }
 
         reviews_text = reviews_to_text_block(reviews_to_summarize)
         # print(f"\n{reviews_text}\n")
@@ -338,7 +346,7 @@ Format:
 
         for item in trip_items:
             item.note = result2.get(item.location_name)
-        
+
         itinerary = FinalItinerary(
             name=f"Trip to {request.destination_name}",
             start_date=request.start_date,
@@ -347,7 +355,7 @@ Format:
             budget_estimate=request.budget,
             themes=request.travel_type,
             destination=request.destination_name,
-            trip_items=trip_items
+            trip_items=trip_items,
         )
 
         return itinerary
@@ -358,34 +366,41 @@ Format:
 
 
 def generate_itinerary(request: TravelRequest) -> FinalItinerary:
-
     if TravelRequest.suggest_locations:
         return generate_itinerary_with_suggest_locations(request)
     else:
         return generate_itinerary_without_suggest_locations(request)
 
-def modify_itinerary(itinerary: FinalItinerary, unwanted_locations: List[TripItem], coordinate: Coordinate) -> FinalItinerary:
 
+def modify_itinerary(
+    itinerary: FinalItinerary,
+    unwanted_locations: List[TripItem],
+    coordinate: Coordinate,
+) -> FinalItinerary:
     llm = VertexLLM()
-    
+
     if not unwanted_locations:
         print("⚠ No locations to modify")
         return itinerary
-    
-    print(f"\n--- Modifying Itinerary ---")
-    
+
+    print("\n--- Modifying Itinerary ---")
+
     nearby_places = search_nearby_places(
         latitude=coordinate.latitude,
         longitude=coordinate.longitude,
         # included_types=request.travel_type
-        included_types=["tourist_attraction"]
+        included_types=["tourist_attraction"],
     )
 
     places_text = places_to_text_block(nearby_places)
 
     unwanted_locations_text = trip_items_to_text(unwanted_locations)
 
-    kept_locations = [item for item in itinerary.trip_items if item.location_name not in [loc.location_name for loc in unwanted_locations]]
+    kept_locations = [
+        item
+        for item in itinerary.trip_items
+        if item.location_name not in [loc.location_name for loc in unwanted_locations]
+    ]
     kept_locations_text = trip_items_to_text(kept_locations)
 
     prompt = f"""
@@ -421,16 +436,19 @@ Format:
   ]
 }}
 """
-    
+
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
-        
+
         name_to_id = {p.displayName: p.id for p in nearby_places}
         name_to_reviews = {p.displayName: p.reviews for p in nearby_places}
-        name_to_summarize = {item["location_name"]: name_to_reviews.get(item["location_name"], []) for item in data.get("trip_items", [])}
+        name_to_summarize = {
+            item["location_name"]: name_to_reviews.get(item["location_name"], [])
+            for item in data.get("trip_items", [])
+        }
         reviews_text = reviews_to_text_block(name_to_summarize)
-        
+
         prompt2 = f"""
 Dữ liệu đầu vào: {reviews_text}
 
@@ -453,11 +471,11 @@ Format:
         for item in data.get("trip_items", []):
             suggest_trip_items.append(
                 TripItem(
-                    start_time = datetime.fromisoformat(item["start_time"]),
-                    duration = item["duration"],
-                    note = data2.get(item["location_name"]),
-                    location_name = item["location_name"],
-                    place_id = name_to_id.get(item["location_name"])
+                    start_time=datetime.fromisoformat(item["start_time"]),
+                    duration=item["duration"],
+                    note=data2.get(item["location_name"]),
+                    location_name=item["location_name"],
+                    place_id=name_to_id.get(item["location_name"]),
                 )
             )
 
@@ -468,43 +486,48 @@ Format:
                 # Thay thế bằng TripItem mới từ LLM
                 new_item = suggest_trip_items[i]
                 itinerary.trip_items[idx] = TripItem(
-                    start_time = new_item.start_time,
-                    duration = new_item.duration,
-                    note = new_item.note,
-                    location_name = new_item.location_name,
-                    place_id = new_item.place_id
+                    start_time=new_item.start_time,
+                    duration=new_item.duration,
+                    note=new_item.note,
+                    location_name=new_item.location_name,
+                    place_id=new_item.place_id,
                 )
                 i += 1
-        
+
         return itinerary
-        
+
     except Exception as e:
         print(f"✗ Error modifying itinerary: {e}")
         return itinerary
 
 
-def suggest_location(itinerary: FinalItinerary, unwanted_location: TripItem, coordinate: Coordinate) -> list[TripItem]:
-
+def suggest_location(
+    itinerary: FinalItinerary, unwanted_location: TripItem, coordinate: Coordinate
+) -> list[TripItem]:
     llm = VertexLLM()
-    
+
     if not unwanted_location:
         print("⚠ No locations to suggest")
         return itinerary
 
-    print(f"\n--- Suggesting Locations ---")
-    
+    print("\n--- Suggesting Locations ---")
+
     nearby_places = search_nearby_places(
         latitude=coordinate.latitude,
         longitude=coordinate.longitude,
         # included_types=request.travel_type
-        included_types=["tourist_attraction"]
+        included_types=["tourist_attraction"],
     )
 
     places_text = places_to_text_block(nearby_places)
 
     unwanted_locations_text = trip_item_to_text(unwanted_location)
 
-    kept_locations = [item for item in itinerary.trip_items if item.location_name != unwanted_location.location_name]
+    kept_locations = [
+        item
+        for item in itinerary.trip_items
+        if item.location_name != unwanted_location.location_name
+    ]
     kept_locations_text = trip_items_to_text(kept_locations)
 
     prompt = f"""
@@ -537,16 +560,19 @@ Format:
   ]
 }}
 """
-    
+
     try:
         raw = llm.run(prompt)
         data = safe_json_loads(raw)
 
         name_to_id = {p.displayName: p.id for p in nearby_places}
         name_to_reviews = {p.displayName: p.reviews for p in nearby_places}
-        name_to_summarize = {item["location_name"]: name_to_reviews.get(item["location_name"], []) for item in data.get("trip_items", [])}
+        name_to_summarize = {
+            item["location_name"]: name_to_reviews.get(item["location_name"], [])
+            for item in data.get("trip_items", [])
+        }
         reviews_text = reviews_to_text_block(name_to_summarize)
-        
+
         prompt2 = f"""
 Dữ liệu đầu vào: {reviews_text}
 
@@ -569,11 +595,11 @@ Format:
         for item in data.get("trip_items", []):
             suggest_trip_items.append(
                 TripItem(
-                    start_time = datetime.fromisoformat(item["start_time"]),
-                    duration = item["duration"],
-                    note = data2.get(item["location_name"]),
-                    location_name = item["location_name"],
-                    place_id = name_to_id.get(item["location_name"])
+                    start_time=datetime.fromisoformat(item["start_time"]),
+                    duration=item["duration"],
+                    note=data2.get(item["location_name"]),
+                    location_name=item["location_name"],
+                    place_id=name_to_id.get(item["location_name"]),
                 )
             )
 
