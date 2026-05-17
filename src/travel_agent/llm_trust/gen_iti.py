@@ -61,7 +61,9 @@ def main() -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
     for i, req in enumerate(filtered_requests, start=1):
-        print(f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}")
+        print(
+            f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}"
+        )
 
         itinerary = generate_itinerary(req)
         if not itinerary:

@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 
+
 def prompt_template(input_data: dict, output_data: dict) -> str:
     return f"""
 Bạn là một hệ thống đánh giá (judge) nghiêm ngặt và khách quan.
@@ -59,6 +60,7 @@ HƯỚNG DẪN:
 - Trừ điểm nếu: vi phạm các tiêu chí
 """
 
+
 def main():
     request_path = Path(__file__).with_name("request.json")
     travel_requests = json.loads(request_path.read_text(encoding="utf-8"))
@@ -69,10 +71,8 @@ def main():
     log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\logs_gemini_pro.jsonl")
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
-
     with log_path.open("w", encoding="utf-8") as f:
-        for i in range (0,25):
-
+        for i in range(0, 25):
             input_data = travel_requests[i]
             output_data = travel_responses[i]
             prompt = prompt_template(input_data, output_data)
@@ -80,6 +80,7 @@ def main():
             f.write(f"===== PROMPT {i} =====\n")
             f.write(prompt)
             f.write("\n\n\n")
+
 
 if __name__ == "__main__":
     main()
