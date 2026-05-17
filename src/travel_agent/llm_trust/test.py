@@ -62,15 +62,15 @@ def main():
     request_path = Path(__file__).with_name("request.json")
     travel_requests = json.loads(request_path.read_text(encoding="utf-8"))
 
-    response_path = Path(__file__).with_name("response.json")
+    response_path = Path(__file__).with_name("response_gemini_pro.json")
     travel_responses = json.loads(response_path.read_text(encoding="utf-8"))
 
-    log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\logs.jsonl")
+    log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\logs_gemini_pro.jsonl")
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
 
     with log_path.open("w", encoding="utf-8") as f:
-        for i in range (0,50):
+        for i in range (0,25):
 
             input_data = travel_requests[i]
             output_data = travel_responses[i]

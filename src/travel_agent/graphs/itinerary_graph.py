@@ -6,7 +6,6 @@ from datetime import date, datetime
 from ..tools.google_places import search_nearby_places, get_place_by_id
 from ..llm.llm_vertex import VertexLLM
 from ..models.models import TravelRequest, FinalItinerary, OrToolPlace, Coordinate, TripItem
-from ..tools.or_tool import optimize_route
 
 def places_to_text_block(places):
     blocks = []

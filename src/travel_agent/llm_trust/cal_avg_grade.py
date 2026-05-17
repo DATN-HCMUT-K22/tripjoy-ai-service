@@ -10,7 +10,7 @@ class AvgGrade:
         self.avg_poi_relevance_budget = 0.0
 
 def main():
-    request_path = Path(__file__).with_name("grade.json")
+    request_path = Path(__file__).with_name("grade_pro_without_reason.json")
     travel_requests = json.loads(request_path.read_text(encoding="utf-8"))
 
     n = len(travel_requests)
