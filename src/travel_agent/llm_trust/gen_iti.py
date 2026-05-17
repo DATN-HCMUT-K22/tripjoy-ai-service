@@ -55,15 +55,13 @@ def main() -> None:
     # Load requests from adjacent request.json
     request_path = Path(__file__).with_name("request.json")
     travel_requests = _load_requests(request_path)
-    filtered_requests = travel_requests[29:]
+    filtered_requests = travel_requests[0:25]
 
-    log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\eval_log.jsonl")
+    log_path = Path(r"C:\Users\Admin\OneDrive\Desktop\eval_log2.jsonl")
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    for i, req in enumerate(filtered_requests, start=30):
-        print(
-            f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}"
-        )
+    for i, req in enumerate(filtered_requests, start=1):
+        print(f"\n[{i}/{len(filtered_requests)}] Generating itinerary for: {req.destination_name}")
 
         itinerary = generate_itinerary(req)
         if not itinerary:

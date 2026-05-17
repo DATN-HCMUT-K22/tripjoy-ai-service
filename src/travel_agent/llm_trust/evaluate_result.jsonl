@@ -1,0 +1,771 @@
+{
+"overall": 7.6,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.0,
+"poi_relevance_budget": 8.9
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm trải dài toàn đảo (Bãi Sao, Vinpearl Safari phía Bắc, Grand World, Suối Đá Bàn, Hàm Ninh) nhưng được sắp xếp trong cùng ngày mà không theo cụm rõ ràng, có dấu hiệu di chuyển zig-zag giữa Bắc - Nam - Đông đảo, làm giảm tính hợp lý không gian.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng thời gian di chuyển không được tính rõ, nhiều khoảng nghỉ rất ngắn (5–15 phút) giữa các điểm xa nhau như từ Grand World sang Suối Đá Bàn hoặc Vinpearl Safari. Điều này làm lịch trình khó khả thi thực tế.",
+"poi_relevance_travel_type": "Có nhiều bãi biển và hoạt động nghỉ dưỡng phù hợp (Bãi Trường, Bãi Sao, Sunset Sanato), nhưng thiếu rõ ràng hoạt động diving. Một số điểm như Safari, vườn tiêu, rượu sim không thực sự liên quan trực tiếp đến beach/resort/diving.",
+"poi_relevance_budget": "Ngân sách 15.000.000 VND cho 2 người trong 5 ngày là phù hợp với đa số hoạt động (tham quan, ăn uống, safari). Lịch trình không có hoạt động quá cao cấp vượt ngân sách nên nhìn chung hợp lý."
+}
+}
+
+
+{
+"overall": 7.6,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Lịch trình đi theo tuyến Hà Giang loop (Bắc Sum, Quản Bạ, Đồng Văn, Mã Pí Lèng, Du Già) tương đối hợp lý theo cung đường. Tuy nhiên có một số điểm quay lại khu vực gần Mã Pí Lèng sau khi đã di chuyển xuống Du Già (ngày 18–19), cho thấy dấu hiệu zig-zag nhẹ.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng nhiều khoảng cách giữa các điểm chỉ 1–30 phút dù địa hình miền núi phức tạp (ví dụ 10:45 → 12:00 hoặc 09:00 → 10:20). Không có tính toán rõ thời gian di chuyển dài, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Các điểm như đèo, hang động, thác nước, ruộng bậc thang, trekking đều rất phù hợp với adventure, trekking và nature. Lịch trình bám sát chủ đề trải nghiệm thiên nhiên và khám phá.",
+"poi_relevance_budget": "Ngân sách 5.000.000 VND cho 4 người trong 6 ngày là khá hạn chế so với số lượng điểm và thời gian dài. Lịch trình không cung cấp chi tiết chi phí nên khó đảm bảo hoàn toàn phù hợp ngân sách."
+}
+}
+
+
+{
+"overall": 8.0,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm ngày 1 như chợ Hội An, Chùa Cầu, nhà cổ Tấn Ký, sông Hoài, chợ đêm đều nằm trong phố cổ nên rất gần nhau. Ngày 2 có di chuyển ra làng gốm Thanh Hà và rừng dừa Bảy Mẫu nhưng vẫn hợp lý theo cụm. Không có zig-zag bất hợp lý rõ ràng.",
+"temporal_feasibility": "Không có chồng chéo thời gian và các khoảng nghỉ giữa các điểm tương đối hợp lý. Tuy nhiên một số khoảng di chuyển ngắn (ví dụ 30 phút giữa các điểm khác khu vực như làng gốm và rừng dừa) có thể hơi gấp và chưa thể hiện rõ thời gian di chuyển.",
+"poi_relevance_travel_type": "Các điểm như phố cổ, hội quán, nhà cổ, chợ, show Ký ức Hội An và các hoạt động như chợ đêm, thuyền hoa đăng rất phù hợp với culture, food và photography. Nhiều cơ hội chụp ảnh và trải nghiệm văn hóa địa phương.",
+"poi_relevance_budget": "Ngân sách 8 triệu cho 2 người tương đối phù hợp với các hoạt động như tham quan phố cổ, làng nghề, chợ, ăn uống. Tuy nhiên có các hoạt động tốn phí như show Ký ức Hội An và tour rừng dừa có thể chiếm chi phí đáng kể."
+}
+}
+
+{
+"overall": 7.1,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 7.5,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 24 các điểm trung tâm như Quảng trường, Crazy House khá gần nhau nhưng thêm Balava Chocolate House (ghi chú là xa trung tâm) gây lệch tuyến. Ngày 25 gom các điểm phía Bắc như Vườn hoa, Thung lũng Tình Yêu, Lang Biang tương đối hợp lý. Ngày 26 và 27 có các điểm xa trung tâm như Datanla, Đường hầm đất sét, Cầu Đất nhưng vẫn đi theo từng cụm, tuy nhiên có dấu hiệu di chuyển xa.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng nhiều khoảng cách giữa các điểm chỉ 5–15 phút (ví dụ 14:00 → 15:05 → 16:39 hoặc 09:00 → 10:37 → 12:46) chưa thể hiện rõ thời gian di chuyển, đặc biệt với các điểm xa như Lang Biang, Datanla, Cầu Đất. Một số lịch trình trong ngày khá dày.",
+"poi_relevance_travel_type": "Nhiều điểm phù hợp nature và honeymoon như Thung lũng Tình Yêu, Lang Biang, Cầu Đất, săn mây. Tuy nhiên có một số điểm mang tính giải trí hoặc gia đình như Datanla (trò chơi mạo hiểm), Balava Chocolate House không thực sự phù hợp với wellness.",
+"poi_relevance_budget": "Ngân sách 12 triệu cho 2 người tương đối phù hợp. Các điểm tham quan chủ yếu phí vừa phải, dù có một số nơi thu phí như Lang Biang, Datanla, Thung lũng Tình Yêu nhưng không có dấu hiệu vượt ngân sách."
+}
+}
+
+{
+"overall": 7.0,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 7.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Ngày 1 các điểm như Bãi Sau, Đồi Con Heo, Tượng Chúa nằm cùng khu vực phía Nam nên tương đối hợp lý. Ngày 2 và 3 có di chuyển giữa Bãi Trước, Thích Ca Phật Đài, Marina, Bãi Dâu nhưng vẫn theo từng cụm khu vực, không có zig-zag quá lớn.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng nhiều khoảng cách giữa các điểm rất ngắn (5–10 phút như 10:34, 10:59) không thể hiện rõ thời gian di chuyển. Một số hoạt động như leo Tượng Chúa (900 bậc) chỉ 120 phút có thể hơi gấp.",
+"poi_relevance_travel_type": "Có các điểm phù hợp beach và family như Bãi Sau, Bãi Trước, Marina. Tuy nhiên thiếu yếu tố food rõ ràng (ít điểm ăn uống cụ thể) và có một số điểm tâm linh, bảo tàng không thực sự phù hợp với family/beach.",
+"poi_relevance_budget": "Ngân sách 4.5 triệu cho 5 người là khá thấp nhưng các điểm phần lớn miễn phí hoặc phí thấp như bãi biển, chùa, điểm tham quan. Một số điểm có vé như bảo tàng, marina nhưng không quá cao nên vẫn tương đối phù hợp."
+}
+}
+
+{
+"overall": 8.1,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Ngày 20 các điểm như Đại Nội, Bảo tàng, Cung An Định và phố đi bộ đều nằm trong khu vực trung tâm nên hợp lý. Ngày 21 gom các điểm phía Nam như lăng Tự Đức, làng hương, chùa Từ Hiếu, lăng Khải Định theo tuyến tương đối hợp lý. Ngày 22 có chùa Thiên Mụ và cầu Thanh Toàn hơi lệch hướng nhưng không zig-zag quá lớn.",
+"temporal_feasibility": "Không có chồng chéo thời gian và có khoảng nghỉ giữa các điểm. Tuy nhiên một số khoảng di chuyển ngắn (ví dụ 11:03 → 13:07 → 14:52) giữa các điểm xa nhau chưa thể hiện rõ thời gian di chuyển, nhưng tổng thể vẫn tương đối khả thi.",
+"poi_relevance_travel_type": "Các điểm như Đại Nội, lăng tẩm, chùa, làng hương đều rất phù hợp với culture, spiritual và photography. Nhiều cơ hội chụp ảnh và trải nghiệm văn hóa, tâm linh đặc trưng Huế.",
+"poi_relevance_budget": "Ngân sách 7 triệu cho 3 người phù hợp với các điểm tham quan có vé như lăng tẩm (50k–150k) và nhiều điểm miễn phí như chùa. Không có hoạt động chi phí cao vượt mức."
+}
+}
+
+{
+"overall": 7.6,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 10 các điểm trung tâm như Nhà thờ Đá và Hàm Rồng gần nhau. Ngày 12 kết hợp Cát Cát và Mường Hoa hợp lý theo tuyến trekking. Tuy nhiên ngày 13 đi Thác Bạc rồi Ô Quy Hồ (cùng hướng Tây Bắc) là hợp lý nhưng các ngày trước không thể hiện rõ tuyến liên tục, có sự phân tán theo ngày.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng nhiều khoảng cách giữa các điểm rất ngắn (5–15 phút như 09:00 → 10:05 hoặc 10:23 sau Thác Bạc) chưa thể hiện thời gian di chuyển thực tế ở địa hình núi. Một số hoạt động dài như Fansipan 360 phút là hợp lý nhưng thiếu thời gian di chuyển tổng thể.",
+"poi_relevance_travel_type": "Phần lớn các điểm như Hàm Rồng, Mường Hoa, Cát Cát, Thác Bạc, Ô Quy Hồ đều phù hợp trekking, eco, nature. Tuy nhiên có một số điểm ít liên quan trekking như Nhà thờ Đá hoặc cáp treo Fansipan (ít tính trekking).",
+"poi_relevance_budget": "Ngân sách 6.5 triệu cho 2 người phù hợp với nhiều điểm tự nhiên chi phí thấp. Tuy nhiên có hoạt động giá cao như cáp treo Fansipan (ghi chú 'giá vé khá cao') có thể chiếm đáng kể ngân sách nhưng không có dấu hiệu vượt quá tổng thể."
+}
+}
+
+{
+"overall": 8.2,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 15 tập trung hoàn toàn trên du thuyền và các điểm trong vịnh như hang Sửng Sốt, hang Luồn nên rất hợp lý. Ngày 16 chuyển về đất liền với các điểm gần nhau như núi Bài Thơ, chùa Long Tiên, Sun Wheel, không có zig-zag lớn.",
+"temporal_feasibility": "Không có chồng chéo thời gian. Tuy nhiên một số khoảng chuyển tiếp rất sát (ví dụ 10:00 → 11:30 → 13:10 → 15:12 → 16:24) không thể hiện rõ thời gian di chuyển và nghỉ ngơi. Hoạt động leo núi Bài Thơ nguy hiểm nhưng chỉ 120 phút có thể hơi gấp.",
+"poi_relevance_travel_type": "Các hoạt động cruise, tham quan hang động, chèo kayak, ngắm cảnh đều rất phù hợp với cruise, nature, photography. Nhiều điểm có góc nhìn đẹp phục vụ chụp ảnh.",
+"poi_relevance_budget": "Ngân sách 20 triệu cho 2 người phù hợp với các hoạt động du thuyền qua đêm (thường chi phí cao). Các điểm còn lại chủ yếu chi phí vừa phải, không có dấu hiệu vượt ngân sách."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm ngày 20/11 (chợ nổi, bảo tàng, chùa Ông, chùa Muniransay) đều trong khu vực trung tâm nên khá hợp lý. Tuy nhiên ngày 21/11 có di chuyển từ Bình Thủy → Thiền viện Trúc Lâm → Mỹ Khánh → vườn Phi Yến, có dấu hiệu di chuyển xa và zig-zag giữa các khu ngoại ô.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình khá dày: ngày 20/11 bắt đầu từ 05:00 với tour 240 phút, sau đó liên tục di chuyển đến trưa. Một số khoảng thời gian chuyển tiếp ngắn (ví dụ 09:00 → 10:48 → 12:24 ngày 21/11) không thể hiện rõ thời gian di chuyển.",
+"poi_relevance_travel_type": "Các điểm phù hợp tốt với food (chợ nổi, làng du lịch), culture (bảo tàng, chùa, nhà cổ) và eco (vườn trái cây, chợ nổi). Phân bổ đa dạng và bám sát travel_type.",
+"poi_relevance_budget": "Nhiều điểm có chi phí thấp hoặc miễn phí (bảo tàng, chùa, chợ nổi), các điểm có vé (Mỹ Khánh ~139k, vườn trái cây) đều hợp lý với tổng ngân sách 5.500.000 cho 4 người."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 6.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm như Lăng Bác, Chùa Một Cột, Hoàng thành Thăng Long, Bảo tàng Mỹ thuật và Phố cổ đều nằm gần khu trung tâm, sắp xếp theo trình tự hợp lý, ít zig-zag. Ngày 16 và 17 cũng tập trung quanh khu phố cổ và trung tâm nên di chuyển thuận tiện.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch ngày 15 khá dày với nhiều điểm liên tiếp (08:00 → 17:35). Các khoảng chuyển tiếp ngắn (ví dụ 09:35 → 10:30, 10:40 → 11:50) không thể hiện rõ thời gian di chuyển. Ngoài ra lặp lại nhiều lần Phố cổ với thời lượng dài.",
+"poi_relevance_travel_type": "Một số điểm phù hợp shopping và nightlife như Phố cổ, phố bia, nhưng nhiều điểm thiên về văn hóa/lịch sử (Lăng Bác, bảo tàng, chùa) không phù hợp trực tiếp với travel_type 'business, shopping, nightlife'. Thiếu hoạt động liên quan business rõ ràng.",
+"poi_relevance_budget": "Phần lớn điểm tham quan chi phí thấp (bảo tàng, di tích, phố cổ), phù hợp ngân sách 9.000.000 cho 1 người. Tuy nhiên không có thông tin chi tiết về chi phí các hoạt động nightlife hoặc shopping nên mức độ phù hợp chưa hoàn toàn rõ ràng."
+}
+}
+
+{
+"overall": 8.75,
+"subscores": {
+"spatial_coherence": 9.0,
+"temporal_feasibility": 8.0,
+"poi_relevance_travel_type": 9.5,
+"poi_relevance_budget": 8.5
+},
+"reasons": {
+"spatial_coherence": "Các điểm như Hoa Lư, Tràng An, Tuyệt Tịnh Cốc, Tam Cốc - Bích Động, Hang Múa và Bái Đính đều nằm trong khu vực Ninh Bình và được sắp xếp theo cụm hợp lý, hạn chế zig-zag và tối ưu di chuyển giữa các điểm gần nhau.",
+"temporal_feasibility": "Không có chồng chéo thời gian và phân bổ theo ngày hợp lý. Tuy nhiên ngày 12/02 và 13/02 khá dày (nhiều hoạt động liên tiếp với thời gian chuyển tiếp ngắn như 11:10 → 15:15), không thể hiện rõ thời gian di chuyển giữa các điểm.",
+"poi_relevance_travel_type": "Tất cả các điểm đều phù hợp rất tốt với nature (Tràng An, Tam Cốc, Hang Múa), spiritual (Bái Đính, Hoa Lư) và photography (toàn bộ các điểm đều có cảnh quan đẹp). Mức độ phù hợp cao và nhất quán.",
+"poi_relevance_budget": "Các điểm chủ yếu là danh thắng tự nhiên và di tích với chi phí vé hợp lý (tham quan, đi thuyền, chùa), phù hợp với ngân sách 4.000.000 cho 2 người trong 3 ngày. Không có hoạt động chi phí cao vượt ngân sách."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 8.0,
+"poi_relevance_budget": 8.5
+},
+"reasons": {
+"spatial_coherence": "Ngày 20/06 các điểm (Tháp Đôi, chùa Long Khánh, bảo tàng) đều trong trung tâm nên hợp lý. Tuy nhiên ngày 21–23 có di chuyển giữa nhiều khu xa nhau như Ghềnh Ráng → Bãi Xép → Eo Gió → Kỳ Co → Đồi Cát → Hòn Khô, có dấu hiệu di chuyển xa và chưa tối ưu tuyến đường.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng một số khoảng chuyển tiếp ngắn (10:05 → 11:07, 10:06 → 14:21) không thể hiện rõ thời gian di chuyển. Ngoài ra các hoạt động biển và đảo (Kỳ Co 240 phút, Hòn Khô 240 phút) có thể cần thêm thời gian di chuyển nhưng không được thể hiện.",
+"poi_relevance_travel_type": "Các điểm biển như Bãi Xép, Kỳ Co, Eo Gió, Hòn Khô rất phù hợp với 'beach' và 'solo'. Tuy nhiên yếu tố 'food' chưa rõ ràng vì không có hoạt động ẩm thực cụ thể, và một số điểm văn hóa (bảo tàng, chùa) ít liên quan đến travel_type.",
+"poi_relevance_budget": "Nhiều điểm có chi phí thấp (bảo tàng 10k, Eo Gió 22k, chùa miễn phí). Các hoạt động biển/đảo có chi phí nhưng không có dấu hiệu vượt ngân sách 6.000.000 cho 1 người, nhìn chung phù hợp."
+}
+}
+
+{
+"overall": 6.0,
+"subscores": {
+"spatial_coherence": 6.0,
+"temporal_feasibility": 5.0,
+"poi_relevance_travel_type": 7.0,
+"poi_relevance_budget": 6.0
+},
+"reasons": {
+"spatial_coherence": "Lịch trình chủ yếu tập trung tại Đà Nẵng nhưng có ngày 30-04 di chuyển sang Hội An (Hoi An Market, Coconut Boat, An Bang Beach), gây phân tán không gian và khả năng di chuyển zig-zag giữa hai khu vực khác nhau.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng các hoạt động diễn ra sát nhau (ví dụ ngày 28-04 và 29-04) và không có thông tin tính thời gian di chuyển, đặc biệt giữa Đà Nẵng và Hội An, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Có nhiều điểm phù hợp như bãi biển (An Bang Beach, Nguyễn Tất Thành), nightlife (On The Radio Bar), và chụp ảnh/cảnh đẹp, nhưng yếu tố festival không được thể hiện rõ trong lịch trình.",
+"poi_relevance_budget": "Ngân sách 10,000,000 cho 3 người với nhiều hoạt động như công viên nước, bar, tham quan và di chuyển liên tỉnh có thể hợp lý nhưng không có dữ liệu chi phí cụ thể, nên khó đảm bảo tối ưu ngân sách."
+}
+}
+
+{
+"overall": 6.75,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 7.5,
+"poi_relevance_budget": 6.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều nằm trong khu vực Mũi Né (Sea Links, Mui Ne Beach, Fairy Stream, Fishing Village, Red Sand Dunes, Bàu Trắng), tuy nhiên ngày 16-07 có nhiều điểm liên tiếp trong thời gian ngắn (4 điểm liên tục) có thể gây di chuyển dày đặc.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch ngày 16-07 sắp xếp 4 địa điểm liên tục từ 09:00 đến 14:08 mà không có thông tin thời gian di chuyển, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Nhiều điểm phù hợp nature và resort (Bàu Trắng, Mui Ne Beach, Fairy Stream) và có yếu tố sport nhẹ (đồi cát, ATV), nhưng yếu tố sport chưa rõ ràng và nổi bật.",
+"poi_relevance_budget": "Ngân sách 8,500,000 cho 2 người với resort (Sea Links Golf), nhiều điểm tham quan và hoạt động là tương đối phù hợp, nhưng không có thông tin chi phí cụ thể để tối ưu ngân sách."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều thuộc khu vực Phong Nha (các hang động, suối, vườn quốc gia), tuy nhiên ngày 06-08 và 07-08 có nhiều điểm liên tiếp (Paradise Cave → Dark Cave → Mooc Spring; HaVa Valley → Elephant Cave → Waterfall) có thể gây di chuyển dày đặc.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng lịch trình một số ngày khá dày (ví dụ 06-08 có 3 hoạt động tổng 570 phút liên tục) và không có thông tin thời gian di chuyển, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Rất phù hợp với adventure, nature, eco: nhiều hang động (Phong Nha, Paradise, Dark Cave), hoạt động mạo hiểm (zipline, SUP), và thiên nhiên (Botanic Garden, Mooc Spring).",
+"poi_relevance_budget": "Ngân sách 11,000,000 cho 3 người với nhiều hoạt động như zipline, cave tours, SUP, và tham quan nhiều ngày có vẻ hợp lý, nhưng thiếu dữ liệu chi phí cụ thể để tối ưu ngân sách."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều nằm trong khu vực Tây Ninh như Tay Ninh Holy See, Sun World Ba Den Mountain, Ma Thiên Lãnh và Hồ Dầu Tiếng, không có dấu hiệu zig-zag bất hợp lý giữa các ngày.",
+"temporal_feasibility": "Không có chồng chéo thời gian và các hoạt động được phân bổ theo ngày rõ ràng, nhưng không có thông tin về thời gian di chuyển giữa các địa điểm (ví dụ từ Ma Thiên Lãnh đến Hồ Dầu Tiếng trong cùng ngày), có thể ảnh hưởng tính khả thi.",
+"poi_relevance_travel_type": "Lịch trình phù hợp tốt với travel_type: spiritual (Tay Ninh Holy See, Ba Den Mountain), trekking (Ma Thiên Lãnh), culture (công trình tôn giáo và cảnh quan địa phương).",
+"poi_relevance_budget": "Không có thông tin chi phí cụ thể cho từng hoạt động, nhưng các địa điểm chủ yếu là tham quan tự nhiên và tâm linh, không có dấu hiệu vượt quá ngân sách 3,000,000 VND."
+}
+}
+
+{
+"overall": 8.25,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm ngày 12/06 tập trung khu Mũi Né (Fishing Village, Fairy Stream, Red Sand Dunes), ngày 13–14 chuyển dần về trung tâm Phan Thiết (Bãi đá Ông Địa, Fish Sauce Museum, Dục Thanh School, Đồi Dương Beach), không có zig-zag bất hợp lý.",
+"temporal_feasibility": "Không có chồng chéo thời gian, các hoạt động có khoảng nghỉ (ví dụ 12/06 từ 11:36 đến 16:00). Tuy nhiên không đề cập thời gian di chuyển giữa các điểm (ví dụ 09:36 → 16:00 hoặc các điểm ngày 13), có thể ảnh hưởng tính thực tế.",
+"poi_relevance_travel_type": "Phù hợp tốt với family, beach, food: có nhiều bãi biển (Bãi đá Ông Địa, Đồi Dương), trải nghiệm văn hóa – ẩm thực (Fish Sauce Museum, Fishermen Show), và hoạt động nhẹ nhàng phù hợp gia đình.",
+"poi_relevance_budget": "Không có chi phí chi tiết nhưng các hoạt động chủ yếu là tham quan, bãi biển công cộng hoặc vé vừa phải, không có dấu hiệu vượt ngân sách 7,500,000 VND cho 4 người."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Nhiều địa điểm xoay quanh khu vực hồ Thác Bà (Đập Thác Bà, Núi Thở, Co Chà View, Thủy Tiên Sơn Động), tuy nhiên có sự phân tán khi xen kẽ các điểm như Ao Giời - Suối Tiên và Thác Kiên Thành, có thể tạo di chuyển dài giữa các khu vực.",
+"temporal_feasibility": "Không có chồng chéo thời gian và các hoạt động được sắp xếp theo thứ tự, nhưng không có thông tin về thời gian di chuyển giữa các điểm (ví dụ 09:00–13:00 rồi 14:35 hoạt động tiếp theo), có thể ảnh hưởng tính khả thi.",
+"poi_relevance_travel_type": "Phù hợp tốt với photography, nature, trekking: nhiều điểm thiên nhiên (thác, hồ, suối), trekking (Núi Thở, Ao Giời), và nhiều góc chụp ảnh (viewpoint, đảo, hang động).",
+"poi_relevance_budget": "Không có thông tin chi phí chi tiết, nhưng có đề cập chi phí thuyền, vé vào cổng và ăn uống (Co Chà View có thể đắt), nên có rủi ro ảnh hưởng ngân sách 5,500,000 VND."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 7.5,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm ngày 10–12 tập trung chủ yếu ở khu trung tâm Quận 1 (Ben Thanh Market, Bui Vien, War Remnants Museum, Independence Palace, Notre Dame, Book Street, Opera House), chỉ có Landmark 81 là xa hơn nhưng được xếp riêng, không có zig-zag rõ ràng.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng lịch ngày 11 có các điểm nối tiếp rất sát (09:00 → 11:03 → 12:34) mà không tính thời gian di chuyển, và ngày 12 có chuỗi hoạt động liên tục (09:00 → 10:01 → 10:41), làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Phù hợp một phần với shopping và nightlife (Ben Thanh Market, Bui Vien, Landmark 81), nhưng nhiều điểm thiên về lịch sử - văn hóa (War Remnants Museum, Independence Palace) không phù hợp rõ với business hoặc nightlife.",
+"poi_relevance_budget": "Một số điểm có chi phí cao được đề cập (Landmark 81, Bui Vien đồ uống đắt), nhưng phần lớn là tham quan công cộng hoặc chi phí thấp, không có dấu hiệu vượt ngân sách 12,000,000 VND."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm như Lang Co Bay, Lap An Lagoon, Bãi tắm Lăng Cô và Đầm Lập An đều thuộc khu vực Lăng Cô, tuy nhiên Đồi Cừu Hải Vân nằm gần Đà Nẵng tạo ra một điểm di chuyển xa hơn, làm giảm nhẹ tính liền mạch không gian.",
+"temporal_feasibility": "Không có chồng chéo thời gian, tuy nhiên lịch trình không thể hiện rõ thời gian di chuyển giữa các điểm (ví dụ giữa Lap An Lagoon và Farma ostryg chỉ cách 34 phút). Một số ngày có ít hoạt động (ngày 20, 23), phân bổ thời gian chưa tối ưu.",
+"poi_relevance_travel_type": "Các điểm đến như bãi biển, đầm phá, vịnh và khu thiên nhiên phù hợp tốt với nature và resort; các hoạt động thư giãn như tắm biển, ngắm cảnh phù hợp với wellness.",
+"poi_relevance_budget": "Ngân sách 18,000,000 cho 2 người trong 4 ngày là hợp lý, các hoạt động chủ yếu là tham quan thiên nhiên, ăn uống hải sản, không có hoạt động quá đắt đỏ, tuy nhiên không có thông tin chi tiết chi phí nên chưa thể đạt điểm tối đa."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm như Thác Dải Yếm, Đồi thông Bản Áng, Đồi chè Trái Tim, Na Ka Plum Valley và các điểm khác đều thuộc khu vực Mộc Châu, tuy nhiên lịch trình ngày 11/02 di chuyển qua nhiều điểm liên tiếp (08:30 → 14:09) có thể tạo zig-zag nhẹ và thiếu nhóm cụm rõ ràng.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng các điểm ngày 11/02 cách nhau rất sát (ví dụ 08:30 → 09:53 → 11:14) mà không có thời gian di chuyển rõ ràng. Tổng 4–5 điểm trong buổi sáng và trưa có thể gây quá tải lịch trình.",
+"poi_relevance_travel_type": "Các điểm như đồi chè, thung lũng mận, thác nước, đồng cỏ và cầu kính đều phù hợp mạnh với nature, eco và photography, đặc biệt nhiều điểm có mô tả chụp ảnh đẹp.",
+"poi_relevance_budget": "Một số điểm có chi phí thấp (20-30k, miễn phí), nhưng cũng có điểm giá cao như Bạch Long glass bridge và Trại Hoa Vàng. Với ngân sách 3,500,000 cho 3 người trong 3 ngày, mức chi này có thể hơi hạn chế nhưng vẫn khả thi."
+}
+}
+
+{
+"overall": 7.0,
+"subscores": {
+"spatial_coherence": 6.5,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 6.5
+},
+"reasons": {
+"spatial_coherence": "Phần lớn địa điểm nằm trên đảo Nam Du như Bãi Cây Mến, Cột cờ Nam Du, Hải Đăng Nam Du, Hòn Dầu, tuy nhiên có sự di chuyển sang Hòn Sơn (Bè NaKa Sea) và các đảo khác (Hòn Dầu, Hòn Hai Bờ Đập) làm giảm tính tập trung và có thể gây zig-zag giữa các đảo.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng các hoạt động trong ngày 20/04 và 21/04 diễn ra liên tục với khoảng cách thời gian ngắn (ví dụ 13:15 → 14:25 → 15:30 → 17:30) mà không thể hiện thời gian di chuyển. Ngoài ra có hoạt động di chuyển giữa đảo (22/04) nhưng không có thời gian cụ thể.",
+"poi_relevance_travel_type": "Các địa điểm như bãi biển, mũi đảo, hòn đảo nhỏ và điểm ngắm cảnh rất phù hợp với beach, nature và photography; một số hoạt động như tour đảo và khám phá cũng phù hợp với adventure.",
+"poi_relevance_budget": "Một số hoạt động có chi phí thấp (bãi biển, check-in), nhưng cũng có các điểm được mô tả là 'khá đắt đỏ' hoặc có 'phí ẩn' (KDL Hòn Hai Bờ Đập) và hoạt động di chuyển giữa đảo, trong khi ngân sách 4,500,000 cho 4 người trong 3 ngày là khá hạn chế."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm trong từng ngày có xu hướng gom nhóm hợp lý (ví dụ ngày 15-05 gồm Bảo tàng, Dinh Chúa Đảo, Trại Phú Hải). Tuy nhiên vẫn có sự di chuyển giữa nhiều loại địa hình khác nhau (di tích, trekking Sở Rẫy, bãi biển) trong cùng ngày, có thể gây zig-zag nhẹ.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng lịch trình khá dày (ngày 15-05 có 4 điểm liên tiếp từ 09:00 đến 16:13). Không có dữ liệu về thời gian di chuyển giữa các điểm và một số hoạt động như trekking (Sở Rẫy, Bãi Đất Thắm đi bộ 3km) có thể cần nhiều thời gian hơn.",
+"poi_relevance_travel_type": "Các điểm như Bảo tàng, Trại Phú Hải, Dinh Chúa Đảo phù hợp với history; Chùa Vân Sơn, Miếu Bà Phi Yến phù hợp spiritual; các bãi biển và trekking (Bãi Nhát, Bãi Đất Thắm, Sở Rẫy) phù hợp resort và trải nghiệm thiên nhiên.",
+"poi_relevance_budget": "Một số điểm có chi phí thấp hoặc miễn phí (Chùa Vân Sơn, trekking), nhưng cũng có các hoạt động tốn phí như vé tham quan, vé vườn quốc gia, trekking, và di chuyển. Tuy nhiên không có dấu hiệu vượt ngân sách 12,000,000 nên nhìn chung là phù hợp."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 05-03 các điểm như Trung Nguyên Coffee Village, Bảo tàng, Nhà Đày, Nhà thờ và chợ được sắp xếp khá gần trong khu vực thành phố. Tuy nhiên, ngày 06-03 và 07-03 có sự kết hợp giữa làng văn hóa, resort và thác/nature spots có thể gây di chuyển zig-zag nhẹ.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình khá dày (ngày 05-03 có 5 điểm liên tục từ 09:00 đến 18:30). Không có thông tin thời gian di chuyển giữa các điểm và một số điểm như thác hoặc khu sinh thái có thể cần thêm thời gian.",
+"poi_relevance_travel_type": "Các điểm như Bảo tàng, Nhà Đày, làng Ako Dhong phù hợp culture; các thác, khu sinh thái, resort phù hợp nature; chợ và làng cà phê phù hợp food. Phù hợp tốt với travel_type.",
+"poi_relevance_budget": "Nhiều điểm có chi phí thấp hoặc vừa phải (bảo tàng, làng văn hóa, thác), một số nơi có dịch vụ như resort hoặc khu du lịch nhưng không có dấu hiệu vượt ngân sách 6,000,000 nên nhìn chung phù hợp."
+}
+}
+
+{
+"overall": 8.0,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm trong từng ngày được sắp xếp khá hợp lý theo khu vực đảo (ví dụ ngày 10-07 gồm Dốc phượt, Gành Hang, Bãi Triều Dương). Tuy nhiên vẫn có một số khả năng di chuyển zig-zag nhẹ do nhiều điểm ven biển và rải rác quanh đảo.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình khá dày, đặc biệt ngày 10-07 và 11-07 có nhiều điểm liên tiếp với khoảng nghỉ và di chuyển không được tính rõ. Một số hoạt động như di chuyển giữa các điểm ven đảo có thể mất thời gian.",
+"poi_relevance_travel_type": "Các điểm như bãi biển, Gành Hang, Vũng Phật, Bãi Cạn rất phù hợp beach và adventure; các điểm check-in, cảnh quan phù hợp solo và photography trải nghiệm cá nhân.",
+"poi_relevance_budget": "Có các hoạt động chi phí thấp (tham quan tự nhiên, làng chài) và một số hoạt động có phí như tour lặn san hô nhưng được mô tả là 'giá phải chăng'. Không có dấu hiệu vượt ngân sách 4,000,000 nên phù hợp."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm trong từng ngày có xu hướng gom theo khu vực Pù Luông (Bản Đôn, Kho Mường, Thác Hiêu...), không có bằng chứng rõ ràng về việc di chuyển zig-zag bất hợp lý, nhưng thiếu thông tin khoảng cách cụ thể nên không thể đánh giá tối ưu hoàn toàn.",
+"temporal_feasibility": "Nhiều hoạt động có khoảng cách thời gian rất sát nhau, ví dụ 14:00 (90 phút) kết thúc ~15:30 nhưng điểm tiếp theo bắt đầu 15:34, hoặc 10:30 (120 phút) kết thúc ~12:30 nhưng hoạt động tiếp theo bắt đầu 12:42. Không có thông tin về thời gian di chuyển nên khả năng thiếu thực tế.",
+"poi_relevance_travel_type": "Các điểm như thác, hang động, bản làng, cung đường trekking (Thác Hiêu, Hang Dơi, Kho Mường, cung đường chữ S) phù hợp cao với nature và trekking; một số điểm thư giãn như quán cà phê và trải nghiệm bè tre hỗ trợ yếu tố resort.",
+"poi_relevance_budget": "Nhiều điểm có chi phí thấp hoặc miễn phí (cung đường chữ S, săn mây, cọn nước, hang động), một số hoạt động có giá hợp lý như bè tre 70-80k/người, phù hợp với ngân sách 5.500.000 cho 2 người."
+}
+}
+
+{
+"overall": 8.0,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm được nhóm hợp lý theo khu vực: ngày 12 tập trung quanh Tuy Hòa (bãi biển, tháp, bờ kè), ngày 13 gom cụm Gành Đá Đĩa - Gành Ông - Gành Bà - Hải Đăng Gành Đèn, ngày 14 các điểm xa hơn như Vực Hòm, Mũi Yến, Bãi Tiên. Không thấy dấu hiệu di chuyển zig-zag bất hợp lý.",
+"temporal_feasibility": "Lịch trình có nhiều khoảng thời gian sát nhau, ví dụ 10:05 sau hoạt động 120 phút kết thúc ~10:00, hoặc 11:36 sau 90 phút (~11:35), cho thấy gần như không có thời gian di chuyển. Các ngày khác cũng tương tự với khoảng nghỉ rất ngắn giữa các điểm.",
+"poi_relevance_travel_type": "Hầu hết địa điểm phù hợp cao với nature, photography, beach như Gành Đá Đĩa, Gành Ông, Bãi Tiên, Vực Hòm, Tuy Hòa Beach, Hải Đăng Gành Đèn, đều là cảnh quan tự nhiên và điểm chụp ảnh nổi bật.",
+"poi_relevance_budget": "Nhiều điểm tham quan tự nhiên, không đề cập chi phí cao; một số điểm miễn phí hoặc chi phí thấp (bãi biển, gành đá, lookout). Không có hoạt động cao cấp nên phù hợp với ngân sách 5.000.000 cho 3 người."
+}
+}
+
+{
+"overall": 8.0,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm được sắp xếp theo cụm hợp lý: ngày 15 trong trung tâm Đồng Văn (chợ, phố cổ), ngày 16 theo tuyến Thẩm Mã - Pao - Lũng Cú - Lô Lô Chải, ngày 17 theo cung Mã Pì Lèng - Nho Quế, ngày 18 quay lại khu Đồng Văn. Không có dấu hiệu zig-zag bất hợp lý.",
+"temporal_feasibility": "Nhiều mốc thời gian rất sát nhau và gần như không có thời gian di chuyển, ví dụ 08:40 (30 phút) kết thúc ~09:10 nhưng điểm tiếp theo 09:11, hoặc 10:31 (90 phút) kết thúc ~12:01 nhưng điểm tiếp theo 12:51. Một số khoảng nghỉ có nhưng không nhất quán, thiếu tính toán rõ ràng thời gian di chuyển.",
+"poi_relevance_travel_type": "Các điểm như Mã Pì Lèng, Hẻm Tu Sản, Dốc Thẩm Mã, Lũng Cú, làng dân tộc phù hợp cao với adventure, nature và culture; nhiều điểm văn hóa như chợ, phố cổ, làng Lô Lô Chải tăng tính phù hợp.",
+"poi_relevance_budget": "Các hoạt động chủ yếu là tham quan tự nhiên và văn hóa, chi phí thấp hoặc trung bình (cà phê, vé tham quan, tour thuyền), không có hoạt động cao cấp, phù hợp với ngân sách 6.000.000 cho 2 người."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 6.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 2026-01-25 các điểm (Miếu Bà Chúa Xứ, Chùa Tây An, Lăng Thoại Ngọc Hầu, Chùa Hang, Cáp treo Núi Sam) đều tập trung quanh Núi Sam nên hợp lý. Tuy nhiên ngày 2026-01-26 kết hợp Rừng tràm Trà Sư với Làng Chăm Đa Phước và Jamuil Azhar Mosque có thể nằm khác khu vực nhưng không có thông tin khoảng cách nên bị trừ nhẹ.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng các khoảng cách giữa các điểm rất ngắn (ví dụ 11:01 → 12:03 → 13:13 ngày 2026-01-25) không thể hiện rõ thời gian di chuyển. Ngày 2026-01-26 cũng chuyển từ Rừng tràm Trà Sư (180 phút) sang Làng Chăm lúc 12:30 mà không tính thời gian đi lại.",
+"poi_relevance_travel_type": "Lịch trình phù hợp tốt với 'spiritual' (Miếu Bà, chùa, mosque), 'culture' (Làng Chăm, chợ, lăng), và 'eco' (Rừng tràm Trà Sư, làng bè). Các điểm đều bám sát chủ đề.",
+"poi_relevance_budget": "Ngân sách 3,000,000 cho 4 người trong 3 ngày khá thấp trong khi lịch trình có nhiều hoạt động có chi phí như cáp treo Núi Sam và tham quan Rừng tràm Trà Sư (đi thuyền). Không có chi tiết chi phí nên khả năng vượt ngân sách là cao."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 2026-07-05 các điểm tham quan có vẻ gần nhau nhưng có dấu hiệu zig-zag giữa nhiều viewpoint khác nhau. Ngày 2026-07-06 kết hợp Eco Floating Stay Cai Beo với Hang Luồn, Hang Tối và Bãi tắm Vạn Bội (thuộc khu vịnh) là hợp lý theo cụm, nhưng có việc quay lại Eco Floating Stay lúc 16:55 gây lặp lại không tối ưu.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng thiếu rõ ràng về thời gian di chuyển giữa các điểm (ví dụ 09:35 → 15:00 ngày 2026-07-05 có khoảng trống lớn không giải thích; ngày 2026-07-06 di chuyển liên tục giữa các hang và bãi biển mà không tính thời gian đi thuyền). Ngoài ra, việc quay lại cùng địa điểm trong ngày chưa hợp lý.",
+"poi_relevance_travel_type": "Các điểm rất phù hợp với 'beach' (Bãi tắm Tùng Thu, Vạn Bội), 'adventure' (Hang Luồn, Hang Tối, trekking Vườn Quốc gia), và 'sport' (kayak, trekking). Lịch trình bám sát chủ đề tốt.",
+"poi_relevance_budget": "Ngân sách 7,000,000 cho 5 người trong 4 ngày là khá hạn chế, nhưng các hoạt động chủ yếu là tham quan tự nhiên. Tuy nhiên, một số trải nghiệm như kayak, lưu trú nổi (Eco Floating Stay) và tham quan vịnh có thể phát sinh chi phí đáng kể, nên vẫn có rủi ro vượt ngân sách."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 8.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm ngày 2026-06-20 và 2026-06-21 (Hồ Tràm, Hồ Cốc, Xuyên Mộc) tương đối gần nhau và đi theo cụm hợp lý. Tuy nhiên ngày 2026-06-21 di chuyển giữa nhiều resort và bãi biển khác nhau trong ngày có thể gây zig-zag nhẹ.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng các khoảng di chuyển giữa các điểm (ví dụ 12:15 → 14:45 hoặc 12:25 → 15:28) không thể hiện rõ thời gian di chuyển. Một số hoạt động kéo dài liên tục (3h + 3h + 2.5h) có thể gây quá tải.",
+"poi_relevance_travel_type": "Lịch trình phù hợp tốt với 'resort' (Venezia Beach, Ho Coc Park Resort), 'wellness' (MERMAID WELLNESS XM), và 'family' (bãi tắm, resort, hoạt động nhẹ nhàng). Tuy nhiên có một số điểm như thác và chùa ít liên quan trực tiếp đến wellness/resort.",
+"poi_relevance_budget": "Ngân sách 15,000,000 cho 4 người trong 3 ngày phù hợp với các hoạt động resort, wellness và ăn uống. Các điểm như resort và wellness center có chi phí nhưng không quá dày đặc nên nhìn chung hợp lý."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 7.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm trong cùng ngày tương đối gần nhau như Quảng trường Đại Đoàn Kết → Chùa Minh Thành → Nông trại Cối Xay Gió, và Biển Hồ Pleiku → Biển Hồ chè. Không thấy zig-zag rõ ràng giữa các khu vực xa, tuy nhiên không có thông tin cụ thể về khoảng cách nên vẫn có rủi ro di chuyển giữa các điểm ngoại thành như Chư Đăng Ya.",
+"temporal_feasibility": "Thời gian giữa các điểm rất sát, ví dụ 15:00 kết thúc → 15:08 bắt đầu hoặc 16:38 → 16:53, gần như không có thời gian di chuyển. Ngoài ra, các điểm cách xa như Biển Hồ và Biển Hồ chè hoặc Chư Đăng Ya không có buffer di chuyển, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Các điểm như Biển Hồ Pleiku, Biển Hồ chè, Chư Đăng Ya phù hợp với nature và solo. Tuy nhiên yếu tố food gần như không được thể hiện rõ ràng trong itinerary, chỉ có đề cập nhẹ đến cà phê địa phương.",
+"poi_relevance_budget": "Các địa điểm chủ yếu là tham quan tự nhiên, chùa, quảng trường, bảo tàng, phù hợp với ngân sách 4.5 triệu cho 1 người. Không có hoạt động cao cấp hoặc chi phí lớn được đề cập, nên tương đối phù hợp."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm tham quan trong cùng ngày được nhóm hợp lý theo khu vực như La Pán Tẩn, Mâm Xôi, Mâm Xôi bé trong ngày 12/09 và các điểm gần Khau Phạ trong ngày 10/09. Không có dấu hiệu zig-zag rõ ràng giữa các khu vực xa.",
+"temporal_feasibility": "Thời gian giữa các điểm khá sát, ví dụ 09:00 → 10:45 hoặc 09:00 → 09:51, gần như không có buffer cho di chuyển. Ngoài ra các điểm địa hình khó như Sống Lưng Khủng Long hoặc Rừng trúc có thể cần nhiều thời gian hơn nhưng không được tính đến.",
+"poi_relevance_travel_type": "Hầu hết các điểm đều phù hợp với photography, nature và trekking như ruộng bậc thang, viewpoint, thác nước, và các cung đường trekking. Nội dung ghi chú cũng nhấn mạnh chụp ảnh và cảnh quan thiên nhiên.",
+"poi_relevance_budget": "Một số điểm có chi phí phát sinh như dù lượn, vé vào cửa (20.000–40.000 VNĐ), thuê xe hoặc trekking, nhưng không có ước tính tổng chi phí cụ thể. Với nhiều hoạt động trải nghiệm như dù lượn, có khả năng ảnh hưởng ngân sách 5 triệu nhưng không có dữ liệu chi tiết để xác nhận hoàn toàn."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 5.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Các điểm chủ yếu xoay quanh khu vực Hồ Ba Bể như Vườn Quốc gia Ba Bể, Hang Puông, Thác Đầu Đẳng, Ao Tiên, nên nhìn chung có tính tập trung. Tuy nhiên có sự lặp lại điểm (Ba Be information center, Vườn Quốc gia Ba Bể) và chưa thể hiện rõ thứ tự tối ưu di chuyển.",
+"temporal_feasibility": "Có vấn đề rõ ràng về thời gian: một hoạt động có duration = 0 (09:00 ngày 23/05), và các khoảng cách giữa các điểm rất sát như 09:45 → 11:30 hoặc 13:40 → 14:40 mà không tính thời gian di chuyển. Không có buffer cho di chuyển bằng thuyền hoặc đường rừng.",
+"poi_relevance_travel_type": "Các điểm như Vườn Quốc gia Ba Bể, Hang Puông, Thác Đầu Đẳng, Ao Tiên, thôn Khuổi Tích đều phù hợp với eco, nature và cruise (có nhắc đến thuyền, kayak, hồ). Nội dung ghi chú cũng nhấn mạnh thiên nhiên và trải nghiệm sinh thái.",
+"poi_relevance_budget": "Các hoạt động chủ yếu là tham quan tự nhiên, thuyền, kayak và homestay, được mô tả là giá hợp lý. Không có hoạt động cao cấp, phù hợp với ngân sách 4 triệu cho 3 người, dù không có bảng chi phí chi tiết."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Các điểm ngày 25/08 (Thác Bản Giốc, Quây Sơn, kayak Nasan Green) và ngày 26/08 (Động Ngườm Ngao, Thác Cò Là) đều nằm trong cùng khu vực Trùng Khánh nên hợp lý, không có zig-zag rõ ràng. Tuy nhiên các ngày sau như Hồ Bản Việt tách riêng, chưa thể hiện rõ tối ưu tuyến đường tổng thể.",
+"temporal_feasibility": "Khoảng thời gian giữa các điểm khá sát, ví dụ 13:00 → 13:10 hoặc 12:10 → 12:20, gần như không có thời gian di chuyển. Ngoài ra các điểm cách nhau bằng đường núi (hang động, thác) nhưng không có buffer di chuyển, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Hầu hết các điểm đều phù hợp với nature, photography, adventure như thác nước, hang động, kayak, làng đá, hồ tự nhiên. Ghi chú cũng nhấn mạnh trải nghiệm khám phá và chụp ảnh.",
+"poi_relevance_budget": "Các hoạt động có chi phí như vé hang (195k), kayak, thuyền nhưng được mô tả là giá hợp lý. Không có hoạt động cao cấp, nhìn chung phù hợp ngân sách 6.5 triệu cho 2 người, dù không có tổng chi phí chi tiết."
+}
+}
+
+{
+"overall": 6.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 6.0,
+"poi_relevance_budget": 6.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm ngày 15/04 nằm liên tiếp trong trung tâm Long Xuyên (bảo tàng, nhà thờ, chùa, hội quán, di tích) nên có tính liền mạch cao, ít zig-zag. Tuy nhiên, ngày 16 có di chuyển sang Cù lao Tân Thuận Đông và các điểm khác nhưng không thể hiện rõ tính gần nhau.",
+"temporal_feasibility": "Lịch trình không bị chồng chéo thời gian, nhưng các điểm được xếp sát nhau (ví dụ 08:00 → 09:36 → 10:25 → 11:12 → 12:02) mà không có thời gian di chuyển rõ ràng. Một số khoảng nghỉ dài (12:47 đến 17:00) không được giải thích.",
+"poi_relevance_travel_type": "Phù hợp tốt với 'culture' (bảo tàng, chùa, di tích) nhưng yếu ở 'food' (chỉ có chợ địa phương) và không có hoạt động nào liên quan đến 'business'.",
+"poi_relevance_budget": "Ngân sách và chi phí không được thể hiện cụ thể trong lịch trình, chỉ có mô tả giá rẻ ở một số điểm như chợ và vườn trái cây nên khó đánh giá chính xác mức phù hợp."
+}
+}
+
+{
+"overall": 6.25,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 7.0,
+"poi_relevance_budget": 4.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm như FLC Sầm Sơn, quảng trường biển, phố đi bộ, Sun World và biển Sầm Sơn đều thuộc khu vực Sầm Sơn nên tương đối gần nhau và không có dấu hiệu zig-zag rõ ràng.",
+"temporal_feasibility": "Không có chồng chéo thời gian, nhưng lịch trình xếp sát nhau (14:00 → 15:00 → 17:10) mà không thể hiện thời gian di chuyển. Một số điểm lặp lại nhiều lần (FLC Sầm Sơn) làm giảm tính hợp lý phân bổ thời gian.",
+"poi_relevance_travel_type": "Phù hợp với 'beach' và 'family' (biển, công viên nước, quảng trường), và có yếu tố 'nightlife' (phố đi bộ buổi tối). Tuy nhiên, nhiều hoạt động bị lặp lại tại FLC Sầm Sơn thay vì đa dạng hóa trải nghiệm.",
+"poi_relevance_budget": "Ngân sách 6,000,000 cho 6 người là thấp, trong khi lịch trình bao gồm nhiều hoạt động tại FLC Sầm Sơn (khu nghỉ dưỡng 5 sao) và công viên Sun World, nhưng không có thông tin chi phí cụ thể để chứng minh sự phù hợp."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm chủ yếu nằm trong khu vực Ninh Thuận (Tháp Chàm, Vườn Nho Thái An, Mỹ Hòa, Núi Chúa, Vĩnh Hy), tuy nhiên có dấu hiệu di chuyển trải dài (từ trung tâm đến Vĩnh Hy, rồi lại về An Hòa, Nam Cương) mà không thể hiện rõ tuyến hợp lý.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình ngày 21/07 khá dày (liên tục 08:00 → 09:07 → 10:47 → 12:12 → 13:20) mà không có thời gian di chuyển rõ ràng giữa các điểm cách xa như Mỹ Hòa, Núi Chúa và Vĩnh Hy.",
+"poi_relevance_travel_type": "Lịch trình phù hợp tốt với 'nature' (vịnh, biển, vườn quốc gia, đồi cát), 'culture' (Tháp Chàm, bảo tàng) và có yếu tố 'sport' (lướt ván diều, xe jeep trên cát).",
+"poi_relevance_budget": "Ngân sách và chi phí không được chi tiết, nhưng có đề cập nhiều điểm giá phải chăng (vườn nho miễn phí, vé vào cửa hợp lý, đồng muối, biển), nên nhìn chung có khả năng phù hợp với budget."
+}
+}
+
+{
+"overall": 7.5,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm như Chợ Hà Tiên, Đình Thần Thành Hoàng, Tam Bảo Tự, Chùa Phù Dung nằm trong cùng khu vực trung tâm; ngày 2 các điểm Thạch Động, Núi Đá Dựng, Mũi Nai cũng cùng khu vực ngoại ô nên khá hợp lý, không có dấu hiệu zig-zag lớn.",
+"temporal_feasibility": "Các hoạt động liên tiếp cách nhau rất ngắn (ví dụ 09:00 → 10:31:30 → 11:17:30) nhưng không có thời gian di chuyển rõ ràng; một số khoảng nghỉ dài (11:17:30 → 13:20:30) không được giải thích; không có chồng chéo nhưng thiếu tính toán thời gian di chuyển.",
+"poi_relevance_travel_type": "Các điểm như chùa (Tam Bảo Tự, Phù Dung), di tích (Đình Thần), hang động (Thạch Động), và bãi biển Mũi Nai phù hợp rõ ràng với travel_type spiritual, history và beach.",
+"poi_relevance_budget": "Một số ghi chú đề cập vé rẻ hoặc hợp lý (Thạch Động, các chùa miễn phí), không có hoạt động đắt đỏ rõ ràng; tuy nhiên thiếu thông tin chi phí tổng thể nên chưa đánh giá tối ưu hoàn toàn."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm trong ngày 1 (bảo tàng Khmer, chùa Dơi, Hồ Nước Ngọt, Liên Hoa Bảo Tháp) đều trong khu vực Sóc Trăng; ngày 2 (các chùa và Cồn Mỹ Phước) và ngày 3 cũng theo cụm hợp lý, không có dấu hiệu zig-zag rõ ràng.",
+"temporal_feasibility": "Các hoạt động nối tiếp nhau với khoảng cách thời gian rất ngắn (ví dụ 09:00 → 10:08 → 11:48 → 12:53) nhưng không có thông tin về thời gian di chuyển; không có chồng chéo nhưng thiếu tính toán thời gian thực tế.",
+"poi_relevance_travel_type": "Các điểm như chùa Khmer (Chùa Dơi, Chùa Bốn Mặt, Chùa Chén Kiểu), bảo tàng Khmer và Cồn Mỹ Phước phù hợp rõ ràng với travel_type spiritual, culture và food (Liên Hoa Bảo Tháp, vựa dừa).",
+"poi_relevance_budget": "Một số địa điểm có chi phí thấp hoặc miễn phí (chùa, bảo tàng), mua đặc sản giá phải chăng (dừa sáp); tuy nhiên có địa điểm bị phản ánh tăng giá và chất lượng kém (ẩm thực vườn nho), làm giảm độ phù hợp ngân sách."
+}
+}
+
+{
+"overall": 7.0,
+"subscores": {
+"spatial_coherence": 6.5,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 8.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Ngày 1 tập trung ở Tuy Phong (làng chài, cano ra đảo) là hợp lý, ngày 2 quanh khu Cổ Thạch và Vĩnh Hảo; tuy nhiên ngày 3 chuyển sang Tanyoli và Mũi Dinh (khu vực khác) cho thấy phạm vi di chuyển rộng, có dấu hiệu phân tán địa lý.",
+"temporal_feasibility": "Các hoạt động nối tiếp sát nhau (08:00 → 09:00; 07:30 → 09:02 → 10:33) nhưng không có thời gian di chuyển; không có chồng chéo nhưng thiếu tính toán thực tế di chuyển và nghỉ ngơi.",
+"poi_relevance_travel_type": "Nhiều điểm phù hợp với adventure, beach, diving như tour cano ra đảo, bãi biển, hoạt động ngoài trời (Tanyoli), bãi đá và bãi biển; phù hợp tốt với chủ đề.",
+"poi_relevance_budget": "Một số hoạt động có thể tốn chi phí (cano 360 phút, khu du lịch Tanyoli) nhưng không có thông tin chi phí chi tiết; các điểm khác như bãi biển miễn phí giúp cân bằng, nhìn chung phù hợp mức trung bình."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều thuộc khu vực Điện Biên Phủ như Đồi A1, Hầm De Castries, Cầu Mường Thanh, Cánh đồng Mường Thanh và các tượng đài, cho thấy sự tập trung địa lý tốt và không có dấu hiệu di chuyển zig-zag bất hợp lý.",
+"temporal_feasibility": "Không có chồng chéo thời gian, tuy nhiên các khoảng cách giữa các điểm rất sát (ví dụ 10:05 → 11:10 → 12:50 ngày 07-05) mà không tính thời gian di chuyển, đặc biệt với nhiều điểm tham quan khác nhau nên tính khả thi thời gian bị giảm.",
+"poi_relevance_travel_type": "Lịch trình phù hợp rất tốt với travel_type culture và history (Đồi A1, Hầm De Castries, Tượng đài chiến thắng) và có yếu tố nature như Cánh đồng Mường Thanh và điểm ngắm cảnh Tà Lèng, đáp ứng đầy đủ các mục tiêu.",
+"poi_relevance_budget": "Các địa điểm có chi phí thấp (vé tham quan khoảng 20k, dịch vụ tắm khoáng 150k), không có hoạt động đắt đỏ nên phù hợp với ngân sách 7,000,000 cho 2 người."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.5,
+"poi_relevance_budget": 7.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều nằm trong khu vực Măng Đen (Kon Tum) và có tính liên kết cao như rừng thông, thác, suối, hồ và các điểm săn mây. Không có dấu hiệu zig-zag xa bất hợp lý, tuy nhiên một số điểm như Hồ Thủy điện Thượng Kon Tum và Đồi cỏ có ghi chú là đường xa/khó đi, có thể ảnh hưởng nhẹ đến tính tối ưu di chuyển.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình khá dày trong ngày 10/12 với 4 điểm liên tiếp cách nhau rất sát (chỉ vài phút giữa các điểm) mà không tính rõ thời gian di chuyển. Một số địa điểm có đường khó đi (Suối đá tảng, Hồ Thủy điện) nhưng không được phân bổ thêm thời gian di chuyển, làm giảm tính khả thi.",
+"poi_relevance_travel_type": "Các điểm tham quan rất phù hợp với loại hình nature, wellness, resort: nhiều địa điểm thiên nhiên (thác, suối, rừng, hồ), không gian yên bình (hành hương, săn mây) và trải nghiệm thư giãn. Ghi chú cũng nhấn mạnh thiền, thư giãn và cảnh quan, phù hợp cao.",
+"poi_relevance_budget": "Ngân sách 6.500.000 VND cho 2 người trong 4 ngày không có thông tin chi tiết chi phí từng hoạt động. Các điểm chủ yếu là tham quan thiên nhiên (chi phí thấp), nhưng có đề cập thuê thuyền, homestay, di chuyển khó có thể phát sinh chi phí. Do thiếu dữ liệu cụ thể nên chỉ đánh giá ở mức khá."
+}
+}
+
+{
+"overall": 7.25,
+"subscores": {
+"spatial_coherence": 7.5,
+"temporal_feasibility": 8.0,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 4.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm chủ yếu xoay quanh Bến Tre và khu vực lân cận như Cồn Phụng, Cồn Thới Sơn, Coco Happy Farm. Tuy nhiên có việc di chuyển qua lại nhiều lần về Ben Tre Riverside Resort giữa các hoạt động (ngày 25, 26, 27), tạo zig-zag không tối ưu.",
+"temporal_feasibility": "Lịch trình có phân bổ thời gian rõ ràng, không chồng chéo và có tính thời gian di chuyển giữa các điểm. Các khoảng thời gian tham quan (90–180 phút) hợp lý với loại hình điểm đến. Một số thời gian di chuyển rất ngắn (6–10 phút) nhưng vẫn được tính nên nhìn chung khả thi.",
+"poi_relevance_travel_type": "Các điểm như Lan Vương, Cồn Phụng, Cồn Thới Sơn, Coco Happy Farm và các nhà hàng sinh thái đều phù hợp cao với eco, food, family. Hoạt động đa dạng: trải nghiệm sông nước, ẩm thực, vui chơi gia đình.",
+"poi_relevance_budget": "Ngân sách 3.000.000 VND cho 5 người trong 3 ngày là rất thấp so với việc ở resort nhiều lần và tham gia nhiều khu du lịch, ăn uống và di chuyển. Không có chi tiết chi phí nhưng với số lượng người và hoạt động, khả năng vượt ngân sách cao."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 6.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 7.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm trong từng ngày tương đối gần nhau (Tam Đường, Sin Suối Hồ, Ô Quy Hồ, Sa Pa) và đi theo cụm hợp lý. Tuy nhiên vẫn có khả năng di chuyển qua lại giữa các khu vực núi khác nhau (ví dụ ngày 02 và 03) mà không thể hiện rõ khoảng cách, nên chưa tối ưu hoàn toàn.",
+"temporal_feasibility": "Không có chồng chéo thời gian nhưng lịch trình không tính rõ thời gian di chuyển giữa các điểm (ví dụ từ Pu Sam Cap đến Sì Thâu Chải chỉ có 5 phút nghỉ giữa hai hoạt động, hoặc các điểm ngày 04 cách nhau xa nhưng chỉ nghỉ vài phút). Điều này làm giảm tính khả thi thực tế.",
+"poi_relevance_travel_type": "Các điểm như hang động, thác nước, bản làng, dù lượn và cầu kính đều rất phù hợp với adventure, photography và nature. Lịch trình nhất quán với chủ đề đã chọn.",
+"poi_relevance_budget": "Ngân sách 5.500.000 VND cho 2 người trong 4 ngày có thể phù hợp với các điểm tham quan (đa số phí thấp), nhưng một số hoạt động như dù lượn hoặc cầu kính có thể tốn kém mà không có ước tính chi phí chi tiết, nên chưa chắc chắn hoàn toàn."
+}
+}
+
+{
+"overall": 8.5,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.0,
+"poi_relevance_budget": 9.0
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm được gom theo khu vực hợp lý: ngày 18 tập trung trung tâm (Nhà Công tử, Phước Đức Cổ Miếu), ngày 19 đi các điểm ven biển và xa hơn (Quan Âm Phật Đài, Xiêm Cán, điện gió), hạn chế zig-zag. Tuy nhiên vẫn có khả năng di chuyển giữa các điểm xa nhau trong cùng ngày mà không tối ưu hoàn toàn.",
+"temporal_feasibility": "Không có chồng chéo thời gian và các hoạt động có khoảng nghỉ giữa các điểm. Tuy nhiên thời gian di chuyển giữa các điểm (ví dụ từ vườn chim đến điện gió hoặc giữa các chùa) không được tính rõ, và khoảng cách nghỉ khá ngắn (1–2 phút), làm giảm tính thực tế.",
+"poi_relevance_travel_type": "Lịch trình phù hợp cao với culture, photography, food: có nhiều điểm văn hóa (chùa, nhà cổ), điểm chụp ảnh (điện gió, vườn chim), và có đề cập ăn uống tại vườn sinh thái. Phù hợp với chủ đề đã chọn.",
+"poi_relevance_budget": "Ngân sách 4.500.000 VND cho 2 người trong 3 ngày là hợp lý với các điểm tham quan chủ yếu phí thấp (chùa, vườn, nhà cổ). Lịch trình không có hoạt động chi phí cao rõ ràng nên phù hợp ngân sách."
+}
+}
+
+{
+"overall": 7.75,
+"subscores": {
+"spatial_coherence": 8.0,
+"temporal_feasibility": 7.0,
+"poi_relevance_travel_type": 9.5,
+"poi_relevance_budget": 6.5
+},
+"reasons": {
+"spatial_coherence": "Các địa điểm đều thuộc khu vực Quảng Bình (Phong Nha, Hang Én, Động Tối), không có dấu hiệu zig-zag rõ ràng và tương đối cùng vùng địa lý. Tuy nhiên không có thông tin cụ thể về vị trí Hang Én trek nên chưa thể đánh giá tối ưu hoàn toàn.",
+"temporal_feasibility": "Không có chồng chéo thời gian và các hoạt động được phân bổ theo ngày hợp lý. Tuy nhiên lịch trình không thể hiện thời gian di chuyển giữa các điểm (ví dụ từ Phong Nha đến điểm trekking hoặc sang Động Tối), và các ngày trekking kéo dài 600 phút liên tục mà không mô tả chi tiết nghỉ ngơi.",
+"poi_relevance_travel_type": "Các hoạt động như trekking Hang Én 2 ngày, khám phá hang động, zipline và bơi trong Động Tối rất phù hợp với adventure, trekking và nature. Lịch trình bám sát chủ đề.",
+"poi_relevance_budget": "Ngân sách 12.000.000 VND cho 3 người trong 4 ngày có thể hạn chế đối với tour Hang Én (thường là hoạt động chi phí cao), nhưng lịch trình không cung cấp chi phí chi tiết nên khó xác nhận hoàn toàn tính phù hợp."
+}
+}
+
+{
+"overall": 8.4,
+"subscores": {
+"spatial_coherence": 8.5,
+"temporal_feasibility": 7.5,
+"poi_relevance_travel_type": 9.5,
+"poi_relevance_budget": 8.0
+},
+"reasons": {
+"spatial_coherence": "Các điểm trong ngày 20 tập trung gần nhau (Chùa Âng, Bảo tàng Khmer), ngày 21 và 22 cũng đi theo cụm hợp lý (các chùa Khmer, làng văn hóa, Cồn Chim, Mỹ Long). Không có zig-zag rõ ràng, nhưng vẫn có khả năng di chuyển giữa các điểm xa hơn mà không thể hiện tối ưu tuyến đường.",
+"temporal_feasibility": "Không có chồng chéo thời gian, các hoạt động được phân bổ hợp lý theo ngày. Tuy nhiên thời gian di chuyển giữa các điểm thường chỉ cách vài phút (ví dụ 09:30 → 09:33), không thực tế và không tính rõ khoảng cách di chuyển.",
+"poi_relevance_travel_type": "Các điểm như chùa Khmer, bảo tàng, làng văn hóa, Cồn Chim đều rất phù hợp với spiritual, culture và eco. Lịch trình thể hiện rõ trải nghiệm văn hóa và sinh thái địa phương.",
+"poi_relevance_budget": "Ngân sách 3.500.000 VND cho 2 người trong 3 ngày phù hợp với các điểm tham quan chủ yếu miễn phí hoặc chi phí thấp (chùa, bảo tàng, làng sinh thái). Tuy nhiên một số trải nghiệm như Cồn Chim có thể phát sinh chi phí nhưng không có chi tiết cụ thể."
+}
+}
+
+
