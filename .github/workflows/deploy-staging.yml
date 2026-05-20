@@ -153,7 +153,7 @@ jobs:
             echo "IMAGE_TAG=staging" >> .env
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
             echo "BACKEND_NETWORK_NAME=tripjoy-staging-network" >> .env
-            echo "COMPOSE_PROJECT_NAME=tripjoy-staging" >> .env
+            echo "COMPOSE_PROJECT_NAME=tripjoy-ai-staging" >> .env
 
             echo "Writing GCP credentials..."
             echo "${{ secrets.GCP_CREDENTIALS_JSON_STAGING }}" | base64 -d > credentials.json
@@ -200,8 +200,8 @@ jobs:
 
             if [ "$HEALTH" != "UP" ]; then
               echo "AI service did not become healthy."
-              docker ps --filter "name=tripjoy-staging-ai-service"
-              docker logs tripjoy-staging-ai-service --tail=100 || true
+              docker ps --filter "name=tripjoy-ai-staging-ai-service"
+              docker logs tripjoy-ai-staging-ai-service --tail=100 || true
               exit 1
             fi
 
