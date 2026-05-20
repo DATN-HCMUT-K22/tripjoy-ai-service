@@ -48,23 +48,23 @@ class TravelNotebook:
 
 @dataclass
 class TripItem:
-    start_time: datetime
-    duration: int
-    note: str
-    location_name: str
-    place_id: str
+    start_time: Optional[datetime] = None
+    duration: Optional[int] = None
+    note: Optional[str] = None
+    location_name: Optional[str] = None
+    place_id: Optional[str] = None
 
 
 @dataclass
 class FinalItinerary:
-    name: str
-    start_date: date
-    end_date: date
-    people_quantity: int
-    budget_estimate: int
-    themes: List[str]
-    destination: str
-    trip_items: List[TripItem]
+    name: Optional[str] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    people_quantity: Optional[int] = None
+    budget_estimate: Optional[int] = None
+    themes: Optional[List[str]] = None
+    destination: Optional[str] = None
+    trip_items: Optional[List[TripItem]] = None
 
 
 @dataclass
