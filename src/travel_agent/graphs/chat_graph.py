@@ -34,7 +34,6 @@ def build_system_prompt(
                         time_str = item.start_time.strftime("%d/%m/%Y %H:%M")
                     else:
                         time_str = str(item.start_time)
-
                 location = (
                     item.location_name
                     if item.location_name
