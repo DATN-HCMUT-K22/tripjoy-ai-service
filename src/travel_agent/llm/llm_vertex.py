@@ -1,6 +1,4 @@
 import os
-import json
-from pathlib import Path
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, Tool, FunctionDeclaration
@@ -9,14 +7,15 @@ from travel_agent.config import get_settings
 
 
 class VertexLLM:
-
     def __init__(self):
         settings = get_settings()
 
         # Nếu có service account credentials thì set trước khi init vertexai
         # Pydantic đã validate là absolute path và file tồn tại
         if settings.google_application_credentials:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.google_application_credentials
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+                settings.google_application_credentials
+            )
 
         # Init Vertex AI SDK với project và location
         vertexai.init(
@@ -38,7 +37,7 @@ class VertexLLM:
             return response.candidates[0].content.parts[0].text
         except (IndexError, AttributeError):
             return ""
-    
+
     def run_with_tools(self, messages, tools):
         """
         messages: [{"role": "...", "content": "..."}]
@@ -66,10 +65,12 @@ class VertexLLM:
             if m.get("tool_call"):
                 continue  # skip tool call placeholder
 
-            contents.append({
-                "role": role,
-                "parts": [{"text": m["content"]}] if m["content"] else []
-            })
+            contents.append(
+                {
+                    "role": role,
+                    "parts": [{"text": m["content"]}] if m["content"] else [],
+                }
+            )
 
         # 🔥 Call Gemini với tools
         response = self.model.generate_content(
@@ -86,22 +87,13 @@ class VertexLLM:
             if hasattr(part, "function_call") and part.function_call:
                 fc = part.function_call
 
-                return {
-                    "tool_call": {
-                        "name": fc.name,
-                        "arguments": dict(fc.args)
-                    }
-                }
+                return {"tool_call": {"name": fc.name, "arguments": dict(fc.args)}}
 
         except Exception:
             pass
 
         # 🔥 CASE 2: trả lời bình thường
         try:
-            return {
-                "content": candidate.content.parts[0].text
-            }
-        except:
-            return {
-                "content": ""
-            }
+            return {"content": candidate.content.parts[0].text}
+        except (IndexError, AttributeError):
+            return {"content": ""}
