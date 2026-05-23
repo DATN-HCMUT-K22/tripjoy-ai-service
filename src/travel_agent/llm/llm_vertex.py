@@ -183,11 +183,7 @@ class VertexLLM:
         # ── 5. CASE 1: LLM muốn gọi tool ────────────────────────────────
         try:
             part = candidate.content.parts[0]
-            if (
-                hasattr(part, "function_call")
-                and part.function_call
-                and part.function_call.name
-            ):
+            if hasattr(part, "function_call") and part.function_call.name:
                 fc = part.function_call
                 return {"tool_call": {"name": fc.name, "arguments": dict(fc.args)}}
         except (IndexError, AttributeError) as e:
