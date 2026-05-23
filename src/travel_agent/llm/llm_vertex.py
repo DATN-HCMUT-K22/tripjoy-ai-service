@@ -1,4 +1,6 @@
 import os
+import json
+from pathlib import Path
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, Tool, FunctionDeclaration
@@ -7,15 +9,14 @@ from travel_agent.config import get_settings
 
 
 class VertexLLM:
+
     def __init__(self):
         settings = get_settings()
 
         # Nếu có service account credentials thì set trước khi init vertexai
         # Pydantic đã validate là absolute path và file tồn tại
         if settings.google_application_credentials:
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-                settings.google_application_credentials
-            )
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.google_application_credentials
 
         # Init Vertex AI SDK với project và location
         vertexai.init(
@@ -37,76 +38,14 @@ class VertexLLM:
             return response.candidates[0].content.parts[0].text
         except (IndexError, AttributeError):
             return ""
-
-    # def run_with_tools(self, messages, tools):
-    #     """
-    #     messages: [{"role": "...", "content": "..."}]
-    #     tools: tool schema dạng dict
-    #     """
-
-    #     # 🔧 Convert tools → Gemini format
-    #     function_declarations = []
-    #     for t in tools:
-    #         function_declarations.append(
-    #             FunctionDeclaration(
-    #                 name=t["name"],
-    #                 description=t["description"],
-    #                 parameters=t["parameters"],
-    #             )
-    #         )
-
-    #     gemini_tools = [Tool(function_declarations=function_declarations)]
-
-    #     # 🔧 Convert messages → Gemini format
-    #     contents = []
-    #     for m in messages:
-    #         role = "user" if m["role"] == "user" else "model"
-
-    #         if m.get("tool_call"):
-    #             continue  # skip tool call placeholder
-
-    #         contents.append({
-    #             "role": role,
-    #             "parts": [{"text": m["content"]}] if m["content"] else []
-    #         })
-
-    #     # 🔥 Call Gemini với tools
-    #     response = self.model.generate_content(
-    #         contents,
-    #         tools=gemini_tools,
-    #     )
-
-    #     candidate = response.candidates[0]
-
-    #     # 🔥 CASE 1: LLM muốn gọi tool
-    #     try:
-    #         part = candidate.content.parts[0]
-
-    #         if hasattr(part, "function_call") and part.function_call:
-    #             fc = part.function_call
-
-    #             return {
-    #                 "tool_call": {
-    #                     "name": fc.name,
-    #                     "arguments": dict(fc.args)
-    #                 }
-    #             }
-
-    #     except Exception:
-    #         pass
-
-    #     # 🔥 CASE 2: trả lời bình thường
-    #     try:
-    #         return {
-    #             "content": candidate.content.parts[0].text
-    #         }
-    #     except:
-    #         return {
-    #             "content": ""
-    #         }
-
+    
     def run_with_tools(self, messages, tools):
-        # ── 1. Convert tools → Gemini FunctionDeclaration ──────────────
+        """
+        messages: [{"role": "...", "content": "..."}]
+        tools: tool schema dạng dict
+        """
+
+        # 🔧 Convert tools → Gemini format
         function_declarations = []
         for t in tools:
             function_declarations.append(
@@ -116,63 +55,23 @@ class VertexLLM:
                     parameters=t["parameters"],
                 )
             )
+
         gemini_tools = [Tool(function_declarations=function_declarations)]
 
-        # ── 2. Convert messages → Gemini contents ───────────────────────
+        # 🔧 Convert messages → Gemini format
         contents = []
-
         for m in messages:
-            # Giữ behavior hiện tại: bỏ qua system message trong Gemini contents
-            if m["role"] == "system":
-                continue
-
-            # Tool result → Gemini dùng role "user" với part function_response
-            if m["role"] == "tool":
-                # Tìm tên tool từ message assistant liền trước
-                tool_name = None
-                for prev in reversed(messages[: messages.index(m)]):
-                    if prev.get("tool_call"):
-                        tool_name = prev["tool_call"]["name"]
-                        break
-
-                contents.append(
-                    {
-                        "role": "user",
-                        "parts": [
-                            {
-                                "function_response": {
-                                    "name": tool_name,
-                                    "response": {"result": m["content"]},
-                                }
-                            }
-                        ],
-                    }
-                )
-                continue
-
-            # Tool call placeholder → Gemini dùng role "model" với part function_call
-            if m.get("tool_call"):
-                contents.append(
-                    {
-                        "role": "model",
-                        "parts": [
-                            {
-                                "function_call": {
-                                    "name": m["tool_call"]["name"],
-                                    "args": m["tool_call"]["arguments"],
-                                }
-                            }
-                        ],
-                    }
-                )
-                continue
-
-            # Message thường (user / assistant)
             role = "user" if m["role"] == "user" else "model"
-            if m.get("content"):
-                contents.append({"role": role, "parts": [{"text": m["content"]}]})
 
-        # ── 4. Gọi Gemini ───────────────────────────────────────────────
+            if m.get("tool_call"):
+                continue  # skip tool call placeholder
+
+            contents.append({
+                "role": role,
+                "parts": [{"text": m["content"]}] if m["content"] else []
+            })
+
+        # 🔥 Call Gemini với tools
         response = self.model.generate_content(
             contents,
             tools=gemini_tools,
@@ -180,22 +79,29 @@ class VertexLLM:
 
         candidate = response.candidates[0]
 
-        # ── 5. CASE 1: LLM muốn gọi tool ────────────────────────────────
+        # 🔥 CASE 1: LLM muốn gọi tool
         try:
             part = candidate.content.parts[0]
-            if (
-                hasattr(part, "function_call")
-                and part.function_call
-                and part.function_call.name
-            ):
-                fc = part.function_call
-                return {"tool_call": {"name": fc.name, "arguments": dict(fc.args)}}
-        except (IndexError, AttributeError) as e:
-            print(f"[run_with_tools] Lỗi parse function_call: {e}")
 
-        # ── 6. CASE 2: Trả lời bình thường ──────────────────────────────
+            if hasattr(part, "function_call") and part.function_call:
+                fc = part.function_call
+
+                return {
+                    "tool_call": {
+                        "name": fc.name,
+                        "arguments": dict(fc.args)
+                    }
+                }
+
+        except Exception:
+            pass
+
+        # 🔥 CASE 2: trả lời bình thường
         try:
-            return {"content": candidate.content.parts[0].text}
-        except (IndexError, AttributeError) as e:
-            print(f"[run_with_tools] Lỗi parse text response: {e}")
-            return {"content": ""}
+            return {
+                "content": candidate.content.parts[0].text
+            }
+        except:
+            return {
+                "content": ""
+            }
