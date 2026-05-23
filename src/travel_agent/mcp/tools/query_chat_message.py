@@ -8,11 +8,11 @@ def get_chat_message(conversation_id: str):
     cur.execute(
         """
         SELECT 
-            u.full_name AS sender_name, 
+            COALESCE(u.full_name, 'Trợ lý AI') AS sender_name, 
             m.message_content, 
             m.created_at AS sent_at
         FROM public.chat_message m
-        JOIN public.users u 
+        LEFT JOIN public.users u 
             ON m.sender_id = u.id
         WHERE m.conversation_id = %s
         ORDER BY m.created_at ASC
@@ -25,7 +25,20 @@ def get_chat_message(conversation_id: str):
     cur.close()
     conn.close()
 
-    return rows
+    if not rows:
+        return "Không có tin nhắn nào trong cuộc trò chuyện này."
+
+    formatted_messages = []
+    for r in rows:
+        sender = r.get("sender_name") or "Trợ lý AI"
+        content = r.get("message_content") or ""
+        sent_at = r.get("sent_at")
+        time_str = (
+            sent_at.strftime("%Y-%m-%d %H:%M:%S") if sent_at else "Không rõ thời gian"
+        )
+        formatted_messages.append(f"[{time_str}] {sender}: {content}")
+
+    return "\n".join(formatted_messages)
 
 
 def get_distance_between_places(
