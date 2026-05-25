@@ -3,6 +3,7 @@ import re
 from typing import List
 from datetime import date, datetime
 
+from ..agent.agent import run_itinerary_agent
 from ..tools.google_places import search_nearby_places, get_place_by_id
 from ..llm.llm_vertex import VertexLLM
 from ..models.models import TravelRequest, FinalItinerary, OrToolPlace, Coordinate, TripItem
@@ -149,7 +150,7 @@ Format:
 """
         print("\n--- Generating itinerary ---")
 
-        raw = llm.run(prompt)
+        raw = run_itinerary_agent(prompt)
         result = safe_json_loads(raw)
         # print(raw_response)
 
@@ -288,7 +289,7 @@ Format:
 """
         print("\n--- Generating itinerary ---")
 
-        raw = llm.run(prompt)
+        raw = run_itinerary_agent(prompt)
         result = safe_json_loads(raw)
         # print(raw_response)
 
