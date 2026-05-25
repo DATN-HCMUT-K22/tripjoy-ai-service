@@ -368,7 +368,6 @@ Format:
 
 
 def generate_itinerary(request: TravelRequest) -> FinalItinerary:
-
     if request.suggest_locations:
         return generate_itinerary_with_suggest_locations(request)
     else:
