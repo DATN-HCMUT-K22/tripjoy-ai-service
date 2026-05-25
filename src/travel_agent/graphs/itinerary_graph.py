@@ -477,19 +477,27 @@ Format:
                 try:
                     parsed_start_time = datetime.fromisoformat(start_time_val)
                 except Exception as ex:
-                    print(f"⚠ Warning: Could not parse start_time '{start_time_val}': {ex}")
+                    print(
+                        f"⚠ Warning: Could not parse start_time '{start_time_val}': {ex}"
+                    )
             suggest_trip_items.append(
                 TripItem(
                     start_time=parsed_start_time,
                     duration=item.get("duration"),
-                    note=data2.get(item.get("location_name")) if item.get("location_name") else None,
+                    note=data2.get(item.get("location_name"))
+                    if item.get("location_name")
+                    else None,
                     location_name=item.get("location_name"),
-                    place_id=name_to_id.get(item.get("location_name")) if item.get("location_name") else None,
+                    place_id=name_to_id.get(item.get("location_name"))
+                    if item.get("location_name")
+                    else None,
                 )
             )
 
         i = 0
-        unwanted_names = [loc.location_name for loc in unwanted_locations if loc.location_name]
+        unwanted_names = [
+            loc.location_name for loc in unwanted_locations if loc.location_name
+        ]
         for idx, item in enumerate(itinerary.trip_items):
             if item.location_name and item.location_name in unwanted_names:
                 # Thay thế bằng TripItem mới từ LLM nếu có sẵn
@@ -504,7 +512,9 @@ Format:
                     )
                     i += 1
                 else:
-                    print(f"⚠ Warning: No replacement available for {item.location_name} (index {i})")
+                    print(
+                        f"⚠ Warning: No replacement available for {item.location_name} (index {i})"
+                    )
 
         return itinerary
 
