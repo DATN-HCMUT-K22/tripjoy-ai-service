@@ -471,30 +471,40 @@ Format:
 
         suggest_trip_items = []
         for item in data.get("trip_items", []):
+            start_time_val = item.get("start_time")
+            parsed_start_time = None
+            if start_time_val:
+                try:
+                    parsed_start_time = datetime.fromisoformat(start_time_val)
+                except Exception as ex:
+                    print(f"⚠ Warning: Could not parse start_time '{start_time_val}': {ex}")
             suggest_trip_items.append(
                 TripItem(
-                    start_time=datetime.fromisoformat(item["start_time"]),
-                    duration=item["duration"],
-                    note=data2.get(item["location_name"]),
-                    location_name=item["location_name"],
-                    place_id=name_to_id.get(item["location_name"]),
+                    start_time=parsed_start_time,
+                    duration=item.get("duration"),
+                    note=data2.get(item.get("location_name")) if item.get("location_name") else None,
+                    location_name=item.get("location_name"),
+                    place_id=name_to_id.get(item.get("location_name")) if item.get("location_name") else None,
                 )
             )
 
         i = 0
-        unwanted_names = [loc.location_name for loc in unwanted_locations]
+        unwanted_names = [loc.location_name for loc in unwanted_locations if loc.location_name]
         for idx, item in enumerate(itinerary.trip_items):
-            if item.location_name in unwanted_names:
-                # Thay thế bằng TripItem mới từ LLM
-                new_item = suggest_trip_items[i]
-                itinerary.trip_items[idx] = TripItem(
-                    start_time=new_item.start_time,
-                    duration=new_item.duration,
-                    note=new_item.note,
-                    location_name=new_item.location_name,
-                    place_id=new_item.place_id,
-                )
-                i += 1
+            if item.location_name and item.location_name in unwanted_names:
+                # Thay thế bằng TripItem mới từ LLM nếu có sẵn
+                if i < len(suggest_trip_items):
+                    new_item = suggest_trip_items[i]
+                    itinerary.trip_items[idx] = TripItem(
+                        start_time=new_item.start_time,
+                        duration=new_item.duration,
+                        note=new_item.note,
+                        location_name=new_item.location_name,
+                        place_id=new_item.place_id,
+                    )
+                    i += 1
+                else:
+                    print(f"⚠ Warning: No replacement available for {item.location_name} (index {i})")
 
         return itinerary
 
