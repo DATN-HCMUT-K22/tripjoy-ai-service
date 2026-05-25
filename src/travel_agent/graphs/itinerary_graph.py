@@ -5,6 +5,7 @@ from datetime import date, datetime
 
 from ..tools.google_places import search_nearby_places, get_place_by_id
 from ..llm.llm_vertex import VertexLLM
+from ..agent.agent import run_agent
 from ..models.models import TravelRequest, FinalItinerary, OrToolPlace, Coordinate, TripItem
 
 def places_to_text_block(places):
@@ -119,17 +120,9 @@ Thông tin chuyến đi:
 - People: {request.people_quantity}
 - Travel themes: {", ".join(request.travel_type)}
 
-TOOL SẴN CÓ:
-- get_distance_between_places(origin_place_id, destination_place_id, travel_mode="DRIVE")
-  Trả về JSON:
-  {{
-    "distance_meters": <int>,
-    "duration_seconds": <int>
-  }}
-
 Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 Bước 1: Chọn các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi)
-Bước 2: Gọi tool get_distance_between_places để có dữ liệu về khoảng cách và thời gian di chuyển giữa các địa điểm và dựa vào đó sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng.
+Bước 2: Gọi tool get_distance_between_places_tool để có dữ liệu về khoảng cách và thời gian di chuyển giữa các địa điểm và dựa vào đó sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng.
 Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
 - start_time của địa điểm đầu tiên bắt đầu từ {request.start_date}
 - start_time của các địa điểm tiếp theo bằng start_time của địa điểm trước đó + duration của địa điểm trước đó + thời gian di chuyển giữa 2 địa điểm (số liệu cụ thể từ tool mà bạn đã gọi).
@@ -149,7 +142,7 @@ Format:
 """
         print("\n--- Generating itinerary ---")
 
-        raw = llm.run(prompt)
+        raw = run_agent(prompt)
         result = safe_json_loads(raw)
         # print(raw_response)
 
@@ -258,17 +251,9 @@ Thông tin chuyến đi:
 - People: {request.people_quantity}
 - Travel themes: {", ".join(request.travel_type)}
 
-TOOL SẴN CÓ:
-- get_distance_between_places(origin_place_id, destination_place_id, travel_mode="DRIVE")
-  Trả về JSON:
-  {{
-    "distance_meters": <int>,
-    "duration_seconds": <int>
-  }}
-
 Nhiệm vụ của bạn là làm theo thứ tự từng bước sau:
 Bước 1: Chuyến đi này bắt buộc phải có những địa điểm nằm trong {suggest_text} vì đó là những địa điểm tôi muốn đi. Ngoài ra, bạn phải chọn thêm các địa điểm từ danh sách {places_text} để tôi có thể tham quan trong chuyến đi này (dựa trên thông tin chuyến đi).
-Bước 2: Gọi tool get_distance_between_places để có dữ liệu về khoảng cách và thời gian di chuyển giữa các địa điểm và dựa vào đó sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng.
+Bước 2: Gọi tool get_distance_between_places_tool để có dữ liệu về khoảng cách và thời gian di chuyển giữa các địa điểm và dựa vào đó sắp xếp các địa điểm để tối ưu quãng đường di chuyển giữa chúng.
 Bước 3: Tạo TripItem cho từng địa điểm. Quy tắc tạo TripItem như sau:
 - start_time của địa điểm đầu tiên bắt đầu từ {request.start_date}
 - start_time của các địa điểm tiếp theo bằng start_time của địa điểm trước đó + duration của địa điểm trước đó + thời gian di chuyển giữa 2 địa điểm (số liệu cụ thể từ tool mà bạn đã gọi).
@@ -288,7 +273,7 @@ Format:
 """
         print("\n--- Generating itinerary ---")
 
-        raw = llm.run(prompt)
+        raw = run_agent(prompt)
         result = safe_json_loads(raw)
         # print(raw_response)
 

@@ -3,7 +3,7 @@ from ..models.models import ChatRequest, FinalItinerary
 from typing import Optional
 
 
-def build_system_prompt(conversation_id: str, itinerary: Optional[FinalItinerary] = None) -> str:
+def build_system_prompt(conversation_id: str, message: str, itinerary: Optional[FinalItinerary] = None) -> str:
     itinerary_text = ""
 
     if itinerary:
@@ -17,20 +17,39 @@ Bạn là TripJoy AI - trợ lý du lịch trong ứng dụng chat nhóm.
 THÔNG TIN CHUYẾN ĐI:
 {itinerary_text if itinerary_text else "Người dùng không cung cấp thông tin chuyến đi."}
 
-CÔNG CỤ BẠN CÓ: get_chat_message(conversation_id): lấy lịch sử hội thoại
+CONVERSATION ID HIỆN TẠI:
+{conversation_id}
 
-NGUYÊN TẮC TRẢ LỜI:
-- Trước khi trả lời, phải luôn luôn gọi tool get_chat_message(conversation_id) để hiểu context cuộc hội thoại, sau đó mới trả lời người dùng.
-- Trả lời ngắn gọn, tự nhiên như chat nhóm, không lan man, không bịa thông tin.
-- Trả lời như một người bạn đang chat trong group.
+Bạn KHÔNG có quyền truy cập lịch sử chat
+nếu chưa gọi tool.
+
+TOOLS:
+- get_chat_message_tool(conversation_id)
+
+QUY TẮC BẮT BUỘC:
+
+Nếu người dùng hỏi:
+- lịch sử chat
+- tóm tắt hội thoại
+- mọi người đã nói gì
+- cuộc trò chuyện trước đó
+- context nhóm
+
+THÌ PHẢI gọi:
+
+get_chat_message_tool(
+    conversation_id="{conversation_id}"
+)
+
+trước khi trả lời.
+
+Không được tự suy đoán dữ liệu chat.
 """
 
-
 def chat(chat_request: ChatRequest) -> str:
-    system_prompt = build_system_prompt(chat_request.conversation_id,chat_request.itinerary)
+    system_prompt = build_system_prompt(chat_request.conversation_id, chat_request.message, chat_request.itinerary)
 
     return run_agent(
-        message=chat_request.message,
-        conversation_id=chat_request.conversation_id,
-        system_prompt=system_prompt
+        system_prompt=system_prompt,
+        user_message=chat_request.message
     )

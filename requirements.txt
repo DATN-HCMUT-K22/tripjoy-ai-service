@@ -18,6 +18,8 @@ python-dotenv==1.0.1
 google-cloud-aiplatform==1.70.0
 google-auth==2.36.0
 vertexai                       # Gemini 1.5 Flash via Vertex AI
+google-genai==1.18.0
+
 
 # --- LangGraph & LangChain ---
 langgraph==1.0.4
@@ -39,3 +41,6 @@ wikipedia-api==0.7.1           # Fetch destination info for TravelNotebook
 
 # --- MCP (Model Context Protocol) & Database ---
 psycopg2-binary==2.9.9         # PostgreSQL adapter for Python (used in MCP tools)
+
+mcp==1.9.4
+

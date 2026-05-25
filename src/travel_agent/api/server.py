@@ -26,12 +26,12 @@ def health_check():
 
 
 @app.post("/generate-itinerary")
-def generate_itinerary_api(payload: TravelRequest):
+async def generate_itinerary_api(payload: TravelRequest):
     """
     API 1: Tạo FinalItinerary từ TravelRequest
     """
-    itinerary = generate_itinerary(payload)
-    
+    itinerary = await generate_itinerary(payload)
+
     if itinerary:
         return itinerary
     else:
@@ -94,7 +94,7 @@ def suggest_locations_api(payload: SuggestLocationsRequest):
         return {"error": f"Error suggesting locations: {str(e)}"}
     
 @app.post("/chat")
-def chat_api(payload: ChatRequest):
+async def chat_api(payload: ChatRequest):
     """
     API 5: Chat với TripJoy AI
 
@@ -102,7 +102,7 @@ def chat_api(payload: ChatRequest):
     trả về phản hồi từ TripJoy AI
     """
     try:
-        response = chat(payload)
+        response = await chat(payload)
         return response
     except Exception as e:
         return {"error": f"Error processing chat: {str(e)}"}
