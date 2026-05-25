@@ -233,6 +233,7 @@ def generate_itinerary_with_suggest_locations(request: TravelRequest) -> FinalIt
             place = get_place_by_id(loc)
             if place:
                 suggest_locations.append(place)
+                print(f"✓ Found suggested location: {place.displayName}")
 
         suggest_text = places_to_text_block(suggest_locations)
 
@@ -295,6 +296,7 @@ Format:
         print("\n--- Generating itinerary ---")
 
         raw = llm.run(prompt)
+        print(f"Raw LLM output:\n{raw}\n")
         result = safe_json_loads(raw)
         # print(raw_response)
 
@@ -366,7 +368,8 @@ Format:
 
 
 def generate_itinerary(request: TravelRequest) -> FinalItinerary:
-    if TravelRequest.suggest_locations:
+
+    if request.suggest_locations:
         return generate_itinerary_with_suggest_locations(request)
     else:
         return generate_itinerary_without_suggest_locations(request)
