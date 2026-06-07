@@ -3,13 +3,18 @@ from ..models.models import ChatRequest, FinalItinerary
 from typing import Optional
 
 
+import dataclasses
+
+
 def build_system_prompt(
     conversation_id: str, itinerary: Optional[FinalItinerary] = None
 ) -> str:
     itinerary_text = ""
 
     if itinerary:
-        itinerary_text = "\n".join([f"- {k}: {v}" for k, v in itinerary.items() if v])
+        itinerary_text = "\n".join(
+            [f"- {k}: {v}" for k, v in dataclasses.asdict(itinerary).items() if v]
+        )
 
     return f"""
 Bạn là TripJoy AI - trợ lý du lịch trong ứng dụng chat nhóm.

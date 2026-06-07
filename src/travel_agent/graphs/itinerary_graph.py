@@ -230,6 +230,8 @@ def generate_itinerary_with_suggest_locations(request: TravelRequest) -> FinalIt
     try:
         suggest_locations = []
         for loc in request.suggest_locations:
+            if loc.startswith("gmap:"):
+                loc = loc[5:]
             place = get_place_by_id(loc)
             if place:
                 suggest_locations.append(place)
@@ -366,7 +368,7 @@ Format:
 
 
 def generate_itinerary(request: TravelRequest) -> FinalItinerary:
-    if TravelRequest.suggest_locations:
+    if request.suggest_locations:
         return generate_itinerary_with_suggest_locations(request)
     else:
         return generate_itinerary_without_suggest_locations(request)
